@@ -1,0 +1,24 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Matrix Field Preview plugin for Craft CMS
+ *
+ * MatrixFieldPreviewUtility Utility Content
+ *
+ * @author    Timmy O'Mahony 
+ * @copyright Copyright (c) 2020 Timmy O'Mahony 
+ * @link      https://weareferal.com
+ * @package   MatrixFieldPreview
+ * @since     1.0.0
+ */
+#}
+
+<h1>MatrixFieldPreviewUtility</h1>
+
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@weareferal/matrixfieldpreview/assetbundles/matrixfieldpreviewutilityutility/dist', true) ~ '/img/MatrixFieldPreviewUtility-icon.svg' %}
+
+<img src="{{ iconUrl }}" height="64" width="64" />
+
+<p>Your Utility content goes here</p>
+
+<p>{{ someVar }}</p>

@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Matrix Field Preview plugin for Craft CMS 3.x
+ *
+ * Matrix Field Preview Settings.twig
+ *
+ * @author    Timmy O'Mahony 
+ * @copyright Copyright (c) 2020 Timmy O'Mahony 
+ * @link      https://weareferal.com
+ * @package   MatrixFieldPreview
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("weareferal\\matrixfieldpreview\\assetbundles\\matrixfieldpreview\\MatrixFieldPreviewAsset") %}
+
+{{ forms.textField({
+    label: 'Some Field',
+    instructions: 'Enter some setting here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: settings['someAttribute']})
+}}
