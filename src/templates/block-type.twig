@@ -1,0 +1,31 @@
+{% requireAdmin %}
+
+{% set crumbs = [
+    { label: "Settings"|t('app'), url: url('settings') },
+    { label: "Plugins"|t('app'), url: url('settings/plugins') },
+    { label: plugin.name, url: url('settings/plugins/' ~ plugin.id) }
+] %}
+
+{% set fullPageForm = true %}
+
+{% extends "_layouts/cp" %}
+
+{% set title = model.blockType.name %}
+{% set docTitle = title ~ ' - ' ~ plugin.name ~ ' - ' ~ "Plugins"|t('app') %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+    {{ csrfInput() }}
+    {{ actionInput('matrix-field-preview/settings/block-type', {blockTypeId: model.blockType.id}) }}
+
+    {{ forms.textField({
+        first: true,
+        label: "Description"|t(plugin.id),
+        instructions: "A short description of this matrix block"|t(plugin.id),
+        id: "description",
+        name: "description",
+        value: model.description,
+        errors: model.getErrors("description")
+    }) }}
+{% endblock %}

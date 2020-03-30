@@ -1,26 +1,77 @@
-{# @var craft \craft\web\twig\variables\CraftVariable #}
-{#
-/**
- * Matrix Field Preview plugin for Craft CMS 3.x
- *
- * Matrix Field Preview Settings.twig
- *
- * @author    Timmy O'Mahony 
- * @copyright Copyright (c) 2020 Timmy O'Mahony 
- * @link      https://weareferal.com
- * @package   MatrixFieldPreview
- * @since     1.0.0
- */
-#}
-
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("weareferal\\matrixfieldpreview\\assetbundles\\matrixfieldpreview\\MatrixFieldPreviewAsset") %}
+{# 
+    Adapted from:
+    https://github.com/craftcms/cms/blob/develop/src/templates/settings/users/settings.html
+ #}
+{% set allVolumes = craft.app.volumes.getAllVolumes() %}
+{% set volumeList = [] %}
+{% for volume in allVolumes %}
+    {% set volumeList = volumeList|merge([{'value': volume.uid, 'label': volume.name}]) %}
+{% endfor %}
 
-{{ forms.textField({
-    label: 'Some Field',
-    instructions: 'Enter some setting here.',
-    id: 'someAttribute',
-    name: 'someAttribute',
-    value: settings['someAttribute']})
-}}
+{% macro assetLocationInput(volumeOptions, volumeUid, subpath) %}
+    {% from "_includes/forms" import select, text %}
+    <div class="flex">
+        <div>
+            {{ select({
+                id: 'previewVolumeUid',
+                name: 'previewVolumeUid',
+                options: volumeOptions,
+                value: volumeUid,
+            }) }}
+        </div>
+        <div class="flex-grow">
+            {{ text({
+                id: 'previewSubpath',
+                class: 'ltr',
+                name: 'previewSubpath',
+                value: subpath,
+                placeholder: "path/to/subfolder"|t('app')
+            }) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% from _self import assetLocationInput %}
+
+{% if volumeList %}
+    {{ forms.field({
+        first: true,
+        label: "Preview Image Location"|t('app'),
+        instructions: "Where do you want to store matrix field preview images?"|t('matrix-field-preview')
+    }, assetLocationInput(volumeList, settings.previewVolumeUid, settings.previewSubpath)) }}
+{% else %}
+    {{ forms.field({
+        first: true,
+        label: "Preview Image Location"|t('app')
+    }, '<p class="error">' ~ "No volumes exist yet."|t('app') ~ '</p>') }}
+{% endif %}
+<div class="field">
+    <div class="heading">
+        <label>{{ "Configure your matrix blocks"|t('matrix-field-preview') }}</label>
+        <div class="instructions"><p>Click a matrix block below to configure its description and preview image</p></div>
+    </div>
+    {% if blockTypes | length <= 0 %}
+        <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
+    {% else %}
+        <table id="fields" class="data fullwidth">
+            <tbody>
+                {% for blockType in blockTypes %}
+                    <tr data-id="{{ loop.index }}" data-name="{{ blockType.name }}">
+                        <td scope="row" data-title="Name">
+                            <a href="{{ actionUrl('matrix-field-preview/settings/block-type', {
+                                blockTypeId: blockType.id
+                            }) }}">{{ blockType.name }}</a>
+                        </td>
+                        <td style="text-align: right;" data-title="Add/Remove">
+                            {# <a href="{{ actionUrl('matrix-field-preview/settings/block-type', {
+                                blockTypeId: blockType.id
+                            }) }}" class="btn small submit">Add Preview</a> #}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>

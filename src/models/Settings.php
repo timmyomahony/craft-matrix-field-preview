@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matrix Field Preview plugin for Craft CMS 3.x
  *
@@ -9,8 +10,6 @@
  */
 
 namespace weareferal\matrixfieldpreview\models;
-
-use weareferal\matrixfieldpreview\MatrixFieldPreview;
 
 use Craft;
 use craft\base\Model;
@@ -31,18 +30,8 @@ use craft\base\Model;
  */
 class Settings extends Model
 {
-    // Public Properties
-    // =========================================================================
-
-    /**
-     * Some field model attribute
-     *
-     * @var string
-     */
-    public $someAttribute = 'Some Default';
-
-    // Public Methods
-    // =========================================================================
+    public $previewVolumeUid = null;
+    public $previewSubpath = null;
 
     /**
      * Returns the validation rules for attributes.
@@ -57,8 +46,8 @@ class Settings extends Model
     public function rules()
     {
         return [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
+            [['previewVolumeUid', 'previewSubpath'], 'string'],
+            [['previewVolumeUid'], 'required'],
         ];
     }
 }

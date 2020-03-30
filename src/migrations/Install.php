@@ -15,6 +15,10 @@ use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use Craft;
 use craft\config\DbConfig;
 use craft\db\Migration;
+use craft\helpers\Json;
+use craft\db\Table;
+use craft\db\Query;
+use craft\fields\Matrix;
 
 /**
  * Matrix Field Preview Install Migration
@@ -85,6 +89,7 @@ class Install extends Migration
         return true;
     }
 
+
     // Protected Methods
     // =========================================================================
 
@@ -108,9 +113,10 @@ class Install extends Migration
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                // Custom columns in the table
+                    // Custom columns in the table
+                    'blockTypeId' => $this->integer()->notNull(),
                     'siteId' => $this->integer()->notNull(),
-                    'some_field' => $this->string(255)->notNull()->defaultValue(''),
+                    'description' => $this->string(1024)->notNull()->defaultValue(''),
                 ]
             );
         }
@@ -129,11 +135,11 @@ class Install extends Migration
         $this->createIndex(
             $this->db->getIndexName(
                 '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
-                'some_field',
+                'description',
                 true
             ),
             '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
-            'some_field',
+            'description',
             true
         );
         // Additional commands depending on the db driver
@@ -152,12 +158,22 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-    // matrixfieldpreview_matrixfieldpreviewrecord table
+        // matrixfieldpreview_matrixfieldpreviewrecord table
         $this->addForeignKey(
             $this->db->getForeignKeyName('{{%matrixfieldpreview_matrixfieldpreviewrecord}}', 'siteId'),
             '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
             'siteId',
             '{{%sites}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_matrixfieldpreviewrecord}}', 'blockTypeId'),
+            '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
+            'blockTypeId',
+            '{{%matrixblocktypes}}',
             'id',
             'CASCADE',
             'CASCADE'

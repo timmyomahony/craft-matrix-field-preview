@@ -2,7 +2,6 @@
     "name": "weareferal/matrix-field-preview",
     "description": "Gives you the ability to configure a preview for all your matrix field blocks, giving your clients a better publishing experience.",
     "type": "craft-plugin",
-    "version": "1.0.0",
     "keywords": [
         "craft",
         "cms",

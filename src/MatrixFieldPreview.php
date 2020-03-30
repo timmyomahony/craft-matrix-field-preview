@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matrix Field Preview plugin for Craft CMS 3.x
  *
@@ -10,8 +11,9 @@
 
 namespace weareferal\matrixfieldpreview;
 
-use weareferal\matrixfieldpreview\services\MatrixFieldPreviewService as MatrixFieldPreviewServiceService;
+use weareferal\matrixfieldpreview\services\MatrixFieldPreviewService;
 use weareferal\matrixfieldpreview\models\Settings;
+use weareferal\matrixfieldpreview\fields\MatrixWithPreview;
 use weareferal\matrixfieldpreview\utilities\MatrixFieldPreviewUtility as MatrixFieldPreviewUtilityUtility;
 
 use Craft;
@@ -22,6 +24,12 @@ use craft\web\UrlManager;
 use craft\services\Utilities;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\fields\Assets;
+use craft\fields\Matrix;
+use craft\services\Fields;
+use craft\elements\MatrixBlock;
+use craft\helpers\ArrayHelper;
+use craft\helpers\UrlHelper;
 
 use yii\base\Event;
 
@@ -39,7 +47,7 @@ use yii\base\Event;
  * @package   MatrixFieldPreview
  * @since     1.0.0
  *
- * @property  MatrixFieldPreviewServiceService $matrixFieldPreviewService
+ * @property  MatrixFieldPreviewService $matrixFieldPreviewService
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -85,32 +93,60 @@ class MatrixFieldPreview extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        // Register our services
+        $this->setComponents([
+            'matrixService' => MatrixFieldPreviewService::class
+        ]);
+
+        // Register our custom matrix field
+        // Event::on(
+        //     Fields::class,
+        //     Fields::EVENT_REGISTER_FIELD_TYPES,
+        //     function(RegisterComponentTypesEvent $event) {
+        //         // ArrayHelper::remove($event->types, Matrix::class);
+        //         $event->types[] = MatrixWithPreview::class;
+        //     });
+
+
+
+
+
+
         // Register our site routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['siteActionTrigger1'] = 'matrix-field-preview/default';
-            }
-        );
+        // Event::on(
+        //     UrlManager::class,
+        //     UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+        //     function (RegisterUrlRulesEvent $event) {
+        //         $event->rules['siteActionTrigger1'] = 'matrix-field-preview/default';
+        //     }
+        // );
 
         // Register our CP routes
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['cpActionTrigger1'] = 'matrix-field-preview/default/do-something';
+                $event->rules = array_merge(
+                    $event->rules,
+                    [
+                        // 'matrix-field-preview' => 'matrix-field-preview/settings/dashboard',
+                        // 'matrix-field-preview/settings' => 'matrix-field-preview/settings/dashboard',
+                        // 'matrix-field-preview/settings-save' => 'matrix-field-preview/settings/dashboard-save',
+                        'matrix-field-preview/settings/block-type/<blockTypeId:\d>' => 'matrix-field-preview/settings/block-type-view',
+                        'matrix-field-preview/settings/block-type/<blockTypeId:\d>/save' => 'matrix-field-preview/settings/block-type-save'
+                    ]
+                );
             }
         );
 
         // Register our utilities
-        Event::on(
-            Utilities::class,
-            Utilities::EVENT_REGISTER_UTILITY_TYPES,
-            function (RegisterComponentTypesEvent $event) {
-                $event->types[] = MatrixFieldPreviewUtilityUtility::class;
-            }
-        );
+        // Event::on(
+        //     Utilities::class,
+        //     Utilities::EVENT_REGISTER_UTILITY_TYPES,
+        //     function (RegisterComponentTypesEvent $event) {
+        //         $event->types[] = MatrixFieldPreviewUtilityUtility::class;
+        //     }
+        // );
 
         // Do something after we're installed
         Event::on(
@@ -118,29 +154,32 @@ class MatrixFieldPreview extends Plugin
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function (PluginEvent $event) {
                 if ($event->plugin === $this) {
-                    // We were just installed
+
+
+                    // Find all matrix fields and add a "previewEnabled" key
+                    // to their JSON settings in the fields table
                 }
             }
         );
 
-/**
- * Logging in Craft involves using one of the following methods:
- *
- * Craft::trace(): record a message to trace how a piece of code runs. This is mainly for development use.
- * Craft::info(): record a message that conveys some useful information.
- * Craft::warning(): record a warning message that indicates something unexpected has happened.
- * Craft::error(): record a fatal error that should be investigated as soon as possible.
- *
- * Unless `devMode` is on, only Craft::warning() & Craft::error() will log to `craft/storage/logs/web.log`
- *
- * It's recommended that you pass in the magic constant `__METHOD__` as the second parameter, which sets
- * the category to the method (prefixed with the fully qualified class name) where the constant appears.
- *
- * To enable the Yii debug toolbar, go to your user account in the AdminCP and check the
- * [] Show the debug toolbar on the front end & [] Show the debug toolbar on the Control Panel
- *
- * http://www.yiiframework.com/doc-2.0/guide-runtime-logging.html
- */
+        /**
+         * Logging in Craft involves using one of the following methods:
+         *
+         * Craft::trace(): record a message to trace how a piece of code runs. This is mainly for development use.
+         * Craft::info(): record a message that conveys some useful information.
+         * Craft::warning(): record a warning message that indicates something unexpected has happened.
+         * Craft::error(): record a fatal error that should be investigated as soon as possible.
+         *
+         * Unless `devMode` is on, only Craft::warning() & Craft::error() will log to `craft/storage/logs/web.log`
+         *
+         * It's recommended that you pass in the magic constant `__METHOD__` as the second parameter, which sets
+         * the category to the method (prefixed with the fully qualified class name) where the constant appears.
+         *
+         * To enable the Yii debug toolbar, go to your user account in the AdminCP and check the
+         * [] Show the debug toolbar on the front end & [] Show the debug toolbar on the Control Panel
+         *
+         * http://www.yiiframework.com/doc-2.0/guide-runtime-logging.html
+         */
         Craft::info(
             Craft::t(
                 'matrix-field-preview',
@@ -151,32 +190,16 @@ class MatrixFieldPreview extends Plugin
         );
     }
 
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * Creates and returns the model used to store the plugin’s settings.
-     *
-     * @return \craft\base\Model|null
-     */
     protected function createSettingsModel()
     {
         return new Settings();
     }
 
-    /**
-     * Returns the rendered settings HTML, which will be inserted into the content
-     * block on the settings page.
-     *
-     * @return string The rendered settings HTML
-     */
-    protected function settingsHtml(): string
+    protected function settingsHtml()
     {
-        return Craft::$app->view->renderTemplate(
-            'matrix-field-preview/settings',
-            [
-                'settings' => $this->getSettings()
-            ]
-        );
+        return Craft::$app->getView()->renderTemplate('matrix-field-preview/settings', [
+            'settings' => $this->getSettings(),
+            'blockTypes' => Craft::$app->matrix->getAllBlockTypes()
+        ]);
     }
 }

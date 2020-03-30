@@ -11,6 +11,8 @@
 namespace weareferal\matrixfieldpreview\services;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
+use weareferal\matrixfieldpreview\records\MatrixFieldPreviewRecord;
+// use weareferal\matrixfieldpreview\models\MatrixFieldPreviewModel;
 
 use Craft;
 use craft\base\Component;
@@ -30,26 +32,15 @@ use craft\base\Component;
  */
 class MatrixFieldPreviewService extends Component
 {
-    // Public Methods
-    // =========================================================================
+    public function getByBlockTypeId($blockTypeId) {
+        $record = MatrixFieldPreviewRecord::findOne([
+            'blockTypeId' => $blockTypeId
+        ]);
 
-    /**
-     * This function can literally be anything you want, and you can have as many service
-     * functions as you want
-     *
-     * From any other plugin file, call it like this:
-     *
-     *     MatrixFieldPreview::$plugin->matrixFieldPreviewService->exampleService()
-     *
-     * @return mixed
-     */
-    public function exampleService()
-    {
-        $result = 'something';
-        // Check our Plugin's settings for `someAttribute`
-        if (MatrixFieldPreview::$plugin->getSettings()->someAttribute) {
+        if (! $record) {
+            return null;
         }
 
-        return $result;
+        return $record;
     }
 }

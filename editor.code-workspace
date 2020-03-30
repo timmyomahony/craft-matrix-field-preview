@@ -1,0 +1,42 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "/Users/timmyomahony/Repositories/craft-test"
+    }
+  ],
+  "settings": {
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false,
+    "editor.formatOnSave": true,
+    "[html]": {
+      "editor.formatOnSave": false
+    },
+    "[twig]": {
+      "editor.formatOnSave": false
+    },
+    "[scss]": {
+      "editor.tabSize": 2
+    },
+    "[css]": {
+      "editor.tabSize": 2
+    },
+    "[js]": {
+      "editor.tabSize": 2
+    },
+    "prettier.htmlWhitespaceSensitivity": "ignore",
+    "logViewer.watch": [
+      {
+        "title": "Console.log",
+        "pattern": "/users/timmyomahony/repositories/craft-test/storage/logs/web.log"
+      },
+      {
+        "title": "Web.log",
+        "pattern": "/users/timmyomahony/repositories/craft-test/storage/logs/console.log"
+      }
+    ]
+  }
+}
