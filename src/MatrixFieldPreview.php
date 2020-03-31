@@ -11,7 +11,8 @@
 
 namespace weareferal\matrixfieldpreview;
 
-use weareferal\matrixfieldpreview\services\MatrixFieldPreviewService;
+use weareferal\matrixfieldpreview\services\PreviewService;
+use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\fields\MatrixWithPreview;
 use weareferal\matrixfieldpreview\utilities\MatrixFieldPreviewUtility as MatrixFieldPreviewUtilityUtility;
@@ -47,7 +48,7 @@ use yii\base\Event;
  * @package   MatrixFieldPreview
  * @since     1.0.0
  *
- * @property  MatrixFieldPreviewService $matrixFieldPreviewService
+ * @property  PreviewService $previewService
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -95,7 +96,8 @@ class MatrixFieldPreview extends Plugin
 
         // Register our services
         $this->setComponents([
-            'matrixService' => MatrixFieldPreviewService::class
+            'previewService' => PreviewService::class,
+            'previewImageService' => PreviewImageService::class
         ]);
 
         // Register our custom matrix field
@@ -122,22 +124,20 @@ class MatrixFieldPreview extends Plugin
         // );
 
         // Register our CP routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules = array_merge(
-                    $event->rules,
-                    [
-                        // 'matrix-field-preview' => 'matrix-field-preview/settings/dashboard',
-                        // 'matrix-field-preview/settings' => 'matrix-field-preview/settings/dashboard',
-                        // 'matrix-field-preview/settings-save' => 'matrix-field-preview/settings/dashboard-save',
-                        'matrix-field-preview/settings/block-type/<blockTypeId:\d>' => 'matrix-field-preview/settings/block-type-view',
-                        'matrix-field-preview/settings/block-type/<blockTypeId:\d>/save' => 'matrix-field-preview/settings/block-type-save'
-                    ]
-                );
-            }
-        );
+        // Event::on(
+        //     UrlManager::class,
+        //     UrlManager::EVENT_REGISTER_CP_URL_RULES,
+        //     function (RegisterUrlRulesEvent $event) {
+        //         $event->rules = array_merge(
+        //             $event->rules,
+        //             [
+        //                 #'matrix-field-previews/block-type/<blockTypeId:\d>' => 'matridx-field-preview/block-type/block-type',
+        //                 'matrix-field-preview/upload-preview-image' => 'matrix-field-preview/preview-image/upload-preview-image',
+        //                 'matrix-field-preview/delete-preview-image' => 'matrix-field-preview/preview-image/delete-preview-image'
+        //             ]
+        //         );
+        //     }
+        // );
 
         // Register our utilities
         // Event::on(

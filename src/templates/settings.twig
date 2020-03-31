@@ -60,14 +60,9 @@
                 {% for blockType in blockTypes %}
                     <tr data-id="{{ loop.index }}" data-name="{{ blockType.name }}">
                         <td scope="row" data-title="Name">
-                            <a href="{{ actionUrl('matrix-field-preview/settings/block-type', {
+                            <a href="{{ actionUrl('matrix-field-preview/preview', {
                                 blockTypeId: blockType.id
                             }) }}">{{ blockType.name }}</a>
-                        </td>
-                        <td style="text-align: right;" data-title="Add/Remove">
-                            {# <a href="{{ actionUrl('matrix-field-preview/settings/block-type', {
-                                blockTypeId: blockType.id
-                            }) }}" class="btn small submit">Add Preview</a> #}
                         </td>
                     </tr>
                 {% endfor %}

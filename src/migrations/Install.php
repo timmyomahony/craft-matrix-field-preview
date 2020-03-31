@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matrix Field Preview plugin for Craft CMS 3.x
  *
@@ -102,12 +103,12 @@ class Install extends Migration
     {
         $tablesCreated = false;
 
-    // matrixfieldpreview_matrixfieldpreviewrecord table
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_matrixfieldpreviewrecord}}');
+        // matrixfieldpreview_previewrecord table
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_previewrecord}}');
         if ($tableSchema === null) {
             $tablesCreated = true;
             $this->createTable(
-                '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
+                '{{%matrixfieldpreview_previewrecord}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
@@ -115,6 +116,7 @@ class Install extends Migration
                     'uid' => $this->uid(),
                     // Custom columns in the table
                     'blockTypeId' => $this->integer()->notNull(),
+                    'previewImageId' => $this->integer(),
                     'siteId' => $this->integer()->notNull(),
                     'description' => $this->string(1024)->notNull()->defaultValue(''),
                 ]
@@ -131,14 +133,14 @@ class Install extends Migration
      */
     protected function createIndexes()
     {
-    // matrixfieldpreview_matrixfieldpreviewrecord table
+        // matrixfieldpreview_previewrecord table
         $this->createIndex(
             $this->db->getIndexName(
-                '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
+                '{{%matrixfieldpreview_previewrecord}}',
                 'description',
                 true
             ),
-            '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
+            '{{%matrixfieldpreview_previewrecord}}',
             'description',
             true
         );
@@ -158,10 +160,10 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-        // matrixfieldpreview_matrixfieldpreviewrecord table
+        // matrixfieldpreview_previewrecord table
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_matrixfieldpreviewrecord}}', 'siteId'),
-            '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'siteId'),
+            '{{%matrixfieldpreview_previewrecord}}',
             'siteId',
             '{{%sites}}',
             'id',
@@ -170,10 +172,20 @@ class Install extends Migration
         );
 
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_matrixfieldpreviewrecord}}', 'blockTypeId'),
-            '{{%matrixfieldpreview_matrixfieldpreviewrecord}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'blockTypeId'),
+            '{{%matrixfieldpreview_previewrecord}}',
             'blockTypeId',
             '{{%matrixblocktypes}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'previewImageId'),
+            '{{%matrixfieldpreview_previewrecord}}',
+            'previewImageId',
+            '{{%assets}}',
             'id',
             'CASCADE',
             'CASCADE'
@@ -196,7 +208,7 @@ class Install extends Migration
      */
     protected function removeTables()
     {
-    // matrixfieldpreview_matrixfieldpreviewrecord table
-        $this->dropTableIfExists('{{%matrixfieldpreview_matrixfieldpreviewrecord}}');
+        // matrixfieldpreview_previewrecord table
+        $this->dropTableIfExists('{{%matrixfieldpreview_previewrecord}}');
     }
 }

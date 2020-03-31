@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matrix Field Preview plugin for Craft CMS 3.x
  *
@@ -8,14 +9,13 @@
  * @copyright Copyright (c) 2020 Timmy O'Mahony 
  */
 
-namespace weareferal\matrixfieldpreview\assetbundles\indexcpsection;
+namespace weareferal\matrixfieldpreview\assets\PreviewImage;
 
-use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
 /**
- * IndexCPSectionAsset AssetBundle
+ * PreviewImageAsset AssetBundle
  *
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.
  *
@@ -32,7 +32,7 @@ use craft\web\assets\cp\CpAsset;
  * @package   MatrixFieldPreview
  * @since     1.0.0
  */
-class IndexCPSectionAsset extends AssetBundle
+class PreviewImageAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -43,7 +43,7 @@ class IndexCPSectionAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@weareferal/matrixfieldpreview/assetbundles/indexcpsection/dist";
+        $this->sourcePath = "@weareferal/matrixfieldpreview/assets/previewimage/dist";
 
         // define the dependencies
         $this->depends = [
@@ -53,11 +53,11 @@ class IndexCPSectionAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/Index.js',
+            'js/PreviewImage.js',
         ];
 
         $this->css = [
-            'css/Index.css',
+            'css/PreviewImage.css',
         ];
 
         parent::init();
