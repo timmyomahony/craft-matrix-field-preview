@@ -1,14 +1,5 @@
 <?php
 
-/**
- * Matrix Field Preview plugin for Craft CMS 3.x
- *
- * Gives you the ability to configure a preview for all your matrix field blocks, giving your clients a better publishing experience.
- *
- * @link      https://weareferal.com
- * @copyright Copyright (c) 2020 Timmy O'Mahony 
- */
-
 namespace weareferal\matrixfieldpreview\controllers;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
@@ -23,25 +14,11 @@ use craft\elements\Asset;
 
 use yii\web\NotFoundHttpException;
 
-/**
- * 
- * @author    Timmy O'Mahony 
- * @package   MatrixFieldPreview
- * @since     1.0.0
- */
 class PreviewImageController extends Controller
 {
 
-    /**
-     * @var    bool|array Allows anonymous access to this controller's actions.
-     *         The actions must be in 'kebab-case'
-     * @access protected
-     */
     protected $allowAnonymous = [];
 
-    /**
-     * 
-     */
     public function actionUploadPreviewImage()
     {
         $this->requireAcceptsJson();
@@ -55,10 +32,6 @@ class PreviewImageController extends Controller
         if (!$preview) {
             throw new NotFoundHttpException('Invalid preview ID: ' . $previewId);
         }
-
-        // if ($userId != Craft::$app->getUser()->getIdentity()->id) {
-        //     $this->requirePermission('editUsers');
-        // }
 
         if (($file = UploadedFile::getInstanceByName('previewImage')) === null) {
             return null;
