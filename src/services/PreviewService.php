@@ -39,6 +39,11 @@ use craft\errors\InvalidSubpathException;
  */
 class PreviewService extends Component
 {
+    public function getAll()
+    {
+        return PreviewRecord::find()->all();
+    }
+
     public function getByBlockTypeId($blockTypeId)
     {
         $record = PreviewRecord::findOne([

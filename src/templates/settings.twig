@@ -10,6 +10,7 @@
     {% set volumeList = volumeList|merge([{'value': volume.uid, 'label': volume.name}]) %}
 {% endfor %}
 
+
 {% macro assetLocationInput(volumeOptions, volumeUid, subpath) %}
     {% from "_includes/forms" import select, text %}
     <div class="flex">
@@ -27,7 +28,7 @@
                 class: 'ltr',
                 name: 'previewSubpath',
                 value: subpath,
-                placeholder: "path/to/subfolder"|t('app')
+                placeholder: "path/to/subfolder"|t('matrix-field-preview')
             }) }}
         </div>
     </div>
@@ -36,37 +37,64 @@
 {% from _self import assetLocationInput %}
 
 {% if volumeList %}
-    {{ forms.field({
-        first: true,
-        label: "Preview Image Location"|t('app'),
-        instructions: "Where do you want to store matrix field preview images?"|t('matrix-field-preview')
-    }, assetLocationInput(volumeList, settings.previewVolumeUid, settings.previewSubpath)) }}
+    {{ forms.field(
+        {
+            first: true,
+            label: "Preview Image Location"|t('matrix-field-preview'),
+            instructions: "Where do you want to store matrix field preview images?"|t('matrix-field-preview'),
+            warning: (not settings.previewVolumeUid) ? "Please save this volume location for your preview images before continuing" : null
+        },
+        assetLocationInput(volumeList, settings.previewVolumeUid, settings.previewSubpath)
+    ) }}
+
 {% else %}
     {{ forms.field({
         first: true,
-        label: "Preview Image Location"|t('app')
-    }, '<p class="error">' ~ "No volumes exist yet."|t('app') ~ '</p>') }}
+        label: "Preview Image Location"|t('matrix-field-preview'),
+    }, '<p class="error">' ~ "No volumes exist yet."|t('matrix-field-preview') ~ '</p>') }}
 {% endif %}
-<div class="field">
+<div class="field mfp-settings-table">
     <div class="heading">
         <label>{{ "Configure your matrix blocks"|t('matrix-field-preview') }}</label>
         <div class="instructions"><p>Click a matrix block below to configure its description and preview image</p></div>
     </div>
-    {% if blockTypes | length <= 0 %}
+    {% if rows | length <= 0 %}
         <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
     {% else %}
         <table id="fields" class="data fullwidth">
+            <thead>
+                <th scope="col">{{ "Name"|t('matrix-field-preview') }}</th>
+                <th scope="col">{{ "Handle"|t('matrix-field-preview') }}</th>
+                <th scope="col">{{ "Description"|t('matrix-field-preview') }}</th>
+                <th scope="col">{{ "Has Image"|t('matrix-field-preview') }}</th>
+            </thead>
             <tbody>
-                {% for blockType in blockTypes %}
-                    <tr data-id="{{ loop.index }}" data-name="{{ blockType.name }}">
+                {% for row in rows %}
+                    <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
                         <td scope="row" data-title="Name">
                             <a href="{{ actionUrl('matrix-field-preview/preview', {
-                                blockTypeId: blockType.id
-                            }) }}">{{ blockType.name }}</a>
+                                blockTypeId: row.blockType.id
+                            }) }}"><strong>{{ row.blockType.name }}</strong></a>
+                        </td>
+                        <td scope="row" data-title="Description">
+                            {{ row.blockType.handle }}
+                        </td>
+                        <td scope="row" data-title="Description">
+                            {% if row.preview and row.preview.description %}
+                                <img class="mfp-settings-table__icon" src="{{ assets.success }}">
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if row.preview and row.preview.previewImageId %}
+                                <img class="mfp-settings-table__icon" src="{{ assets.success }}">
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+    {% endif %}
+    {% if not settings.previewVolumeUid %}
+        <div class="mfp-settings-table__overlay">&nbsp;</div>
     {% endif %}
 </div>
