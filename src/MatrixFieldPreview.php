@@ -15,6 +15,7 @@ use weareferal\matrixfieldpreview\services\PreviewService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\previewfield\PreviewFieldAsset;
+use weareferal\matrixfieldpreview\assets\previewsettings\PreviewSettingsAsset;
 
 use Craft;
 use craft\base\Plugin;
@@ -95,9 +96,39 @@ class MatrixFieldPreview extends Plugin
 
     protected function settingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('matrix-field-preview/settings', [
+        $view = Craft::$app->getView();
+        $view->registerAssetBundle(PreviewSettingsAsset::class);
+
+        $assets = [
+            'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
+        ];
+
+        $blockTypes = Craft::$app->matrix->getAllBlockTypes();
+        $previewService = $this->previewService;
+
+        // Annotate the matrix block types with our previews
+        $previews = $previewService->getAll();
+        $previewsMap = [];
+        foreach ($previews as $preview) {
+            $previewsMap[$preview->blockType->handle] = $preview;
+        }
+
+        $rows = [];
+        foreach ($blockTypes as $blockType) {
+            $preview = null;
+            if (array_key_exists($blockType->handle, $previewsMap)) {
+                $preview = $previewsMap[$blockType->handle];
+            }
+            array_push($rows, [
+                'blockType' => $blockType,
+                'preview' => $preview
+            ]);
+        }
+
+        return $view->renderTemplate('matrix-field-preview/settings', [
             'settings' => $this->getSettings(),
-            'blockTypes' => Craft::$app->matrix->getAllBlockTypes()
+            'assets' => $assets,
+            'rows' => $rows
         ]);
     }
 }

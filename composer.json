@@ -32,7 +32,6 @@
         "name": "Matrix Field Preview",
         "handle": "matrix-field-preview",
         "hasCpSettings": true,
-        "hasCpSection": true,
         "changelogUrl": "https://raw.githubusercontent.com/weareferal/matrix-field-preview/master/CHANGELOG.md",
         "components": {
             "previewService": "weareferal\\matrixfieldpreview\\services\\PreviewService"
