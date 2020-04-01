@@ -19,6 +19,7 @@ use craft\web\UploadedFile;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
 use craft\helpers\FileHelper;
+use craft\elements\Asset;
 
 use yii\web\NotFoundHttpException;
 
@@ -95,6 +96,31 @@ class PreviewImageController extends Controller
         }
     }
 
+    public function actionDeletePreviewImage()
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+
+        $previewService = MatrixFieldPreview::getInstance()->previewService;
+        $previewId = Craft::$app->getRequest()->getRequiredBodyParam('previewId');
+        $preview = $previewService->getById((int) $previewId);
+
+        if (!$preview) {
+            throw new NotFoundHttpException('Invalid preview ID: ' . $previewId);
+        }
+
+        if ($preview->previewImageId) {
+            Craft::$app->getElements()->deleteElementById($preview->previewImageId, Asset::class);
+        }
+
+        $preview->previewImageId = null;
+        $preview->save();
+
+        return $this->asJson([
+            'html' => $this->_renderPreviewImageTemplate($preview),
+        ]);
+    }
+
     private function _renderPreviewImageTemplate($preview): string
     {
         $settings = MatrixFieldPreview::getInstance()->getSettings();
@@ -105,9 +131,5 @@ class PreviewImageController extends Controller
             'settings' => $settings,
             'preview' => $preview
         ], $templateMode);
-    }
-
-    public function actionDeletePreviewImage()
-    {
     }
 }

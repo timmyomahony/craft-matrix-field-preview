@@ -1,17 +1,17 @@
 {# This is a partial so that the JS can re-render this snippet after upload  #}
 {% set volumeUid = settings.previewVolumeUid %}
 {% if volumeUid %}
-    <div class="preview-image" data-preview="{{ preview.id }}">
-        <div id="current-preview-image">
+    <div class="mfp-preview-image" data-preview="{{ preview.id }}">
+        <div class="mfp-preview-image__thumb">
             <img src="{{ preview.getThumbUrl(250) }}" alt="">
         </div>
-        <div class="preview-image-controls">
+        <div class="mfp-preview-image__controls">
             <input type="file" name="preview-image" class="hidden" />
             {% if preview.previewImage %}
-                <div class="btn upload-preview-image">{{ "Change preview image"|t('matrix-field-preview') }}</div>
-                <div class="btn delete-preview-image">{{ "Delete preview image"|t('matrix-field-preview') }}</div>
+                <div class="btn mfp-preview-image__button--upload">{{ "Change preview image"|t('matrix-field-preview') }}</div>
+                <div class="btn mfp-preview-image__button--delete">{{ "Delete preview image"|t('matrix-field-preview') }}</div>
             {% else %}
-                <div class="btn upload-preview-image">{{ "Upload a preview image"|t('matrix-field-preview') }}</div>
+                <div class="btn mfp-preview-image__button--upload">{{ "Upload a preview image"|t('matrix-field-preview') }}</div>
             {% endif %}
         </div>
     </div>

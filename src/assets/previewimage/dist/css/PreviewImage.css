@@ -9,34 +9,34 @@
  * @package   MatrixFieldPreview
  * @since     1.0.0
  */
-div.preview-image {
+.mfp-preview-image {
 }
 
-div.preview-image #current-preview-image {
+.mfp-preview-image__thumb {
   position: relative;
   margin-top: 15px;
 }
 
-div.preview-image #current-preview-image:after {
+.mfp-preview-image__thumb:after {
 }
 
-div.preview-image #current-preview-image img {
+.mfp-preview-image__thumb img {
   max-width: 250px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 20, 0.1);
   display: block;
 }
 
-div.preview-image div.preview-image-controls {
+.mfp-preview-image .mfp-preview-image__controls {
   margin-top: 15px;
   position: relative;
 }
 
-div.preview-image div.preview-image-controls .btn {
+.mfp-preview-image .mfp-preview-image__controls .btn {
   margin-right: 5px;
 }
 
-div.preview-image-controls .progress-shade {
+.mfp-preview-image__controls .progress-shade {
   background: transparentize(rgba(255, 255, 255, 1), 0.2);
   width: 100%;
   height: 100%;
@@ -46,18 +46,6 @@ div.preview-image-controls .progress-shade {
   display: none;
 }
 
-div.preview-image-controls.uploading .progress-shade {
+.mfp-preview-image__controls.uploading .progress-shade {
   display: block;
-}
-
-div.preview-image div.preview-image-controls .upload-preview-image ul {
-  display: none;
-}
-
-div.preview-image div.preview-image-controls .QqUploader-uploader {
-  display: inline-block;
-}
-
-div.profile-image-modal {
-  width: 500px;
 }

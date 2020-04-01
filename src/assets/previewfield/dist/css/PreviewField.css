@@ -71,6 +71,7 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+  border: 1px solid #eee;
 }
 
 .mfp-modal__name {
