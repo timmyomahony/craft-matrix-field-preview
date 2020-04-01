@@ -72,7 +72,7 @@ class MatrixFieldPreview extends Plugin
             View::class,
             View::EVENT_AFTER_RENDER_TEMPLATE,
             function (TemplateEvent $event) {
-                $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/PreviewImage/dist/img/dummy-image.svg', true);
+                $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/dummy-image.svg', true);
                 $view = Craft::$app->getView();
                 $view->registerAssetBundle(PreviewFieldAsset::class);
                 $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field", "' . $defaultImage . '");');
