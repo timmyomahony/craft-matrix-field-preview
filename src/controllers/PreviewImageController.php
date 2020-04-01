@@ -63,34 +63,20 @@ class PreviewImageController extends Controller
             return null;
         }
 
-        if ($file->getHasError()) {
-            throw new UploadFailedException($file->error);
-        }
-
-        // Move to our own temp location
-        $fileLocation = Assets::tempFilePath($file->getExtension());
-        move_uploaded_file($file->tempName, $fileLocation);
-
-        $previewImageService->savePreviewImage($fileLocation, $preview, $file->name);
-
-        return $this->asJson([
-            'html' => $this->_renderPreviewImageTemplate($preview),
-        ]);
-
         try {
-            // if ($file->getHasError()) {
-            //     throw new UploadFailedException($file->error);
-            // }
+            if ($file->getHasError()) {
+                throw new UploadFailedException($file->error);
+            }
 
-            // // Move to our own temp location
-            // $fileLocation = Assets::tempFilePath($file->getExtension());
-            // move_uploaded_file($file->tempName, $fileLocation);
+            // Move to our own temp location
+            $fileLocation = Assets::tempFilePath($file->getExtension());
+            move_uploaded_file($file->tempName, $fileLocation);
 
-            // $previewImageService->savePreviewImage($fileLocation, $preview, $file->name);
+            $previewImageService->savePreviewImage($fileLocation, $preview, $file->name);
 
-            // return $this->asJson([
-            //     'html' => $this->_renderPreviewImageTemplate($preview),
-            // ]);    
+            return $this->asJson([
+                'html' => $this->_renderPreviewImageTemplate($preview),
+            ]);
         } catch (\Throwable $exception) {
             /** @noinspection UnSafeIsSetOverArrayInspection - FP */
             if (isset($fileLocation)) {

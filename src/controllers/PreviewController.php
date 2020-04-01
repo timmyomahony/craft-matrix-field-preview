@@ -80,6 +80,7 @@ class PreviewController extends Controller
             $preview = new PreviewRecord();
             $preview->blockType = $blockType;
             $preview->siteId = $siteId;
+            $preview->matrixFieldHandle = $blockType->field->handle;
             $preview->save();
         }
 
@@ -104,5 +105,42 @@ class PreviewController extends Controller
                 'settings' => $settings
             ]
         );
+    }
+
+    /**
+     * Get preview config 
+     * 
+     * Return a JSON configuration for the frontend to use
+     * 
+     * NOTE: there are two "handles" in play here: the matrix field handle
+     * as well as the block type handles
+     */
+    public function actionGetPreviews($handle)
+    {
+        $previewService = MatrixFieldPreview::getInstance()->previewService;
+
+        $results = [];
+        $previews = $previewService->getByHandle($handle);
+        foreach ($previews as $preview) {
+            $blockType = $preview->blockType;
+            $asset = Craft::$app->assets->getAssetById($preview->previewImageId);
+            $results[$blockType->handle] = [
+                'name' => $blockType->name,
+                'description' => $preview->description,
+                'image' => $asset ? $asset->getUrl([
+                    'width' => 800,
+                    'height' => 600,
+                    'mode' => 'fit',
+                    'position' => 'center-center'
+                ]) : "",
+                'thumb' => $asset ? $asset->getThumbUrl(300, 300) : "",
+            ];
+        }
+
+        return $this->asJson([
+            'success' => true,
+            'handle' => $handle,
+            'previews' => $results
+        ]);
     }
 }

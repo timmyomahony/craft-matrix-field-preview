@@ -82,11 +82,11 @@ class PreviewRecord extends ActiveRecord
      * has its own getThumbUrl. Why not just return an Element from the above
      * getPreviewImage so we could use that {{ preview.previewImage.getThumbUrl() }}
      */
-    public function getThumbUrl(int $size)
+    public function getThumbUrl(int $width, int $height = null)
     {
         if ($this->previewImage) {
             $element = Craft::$app->getElements()->getElementById($this->previewImage->id);
-            return Craft::$app->getAssets()->getThumbUrl($element, $size, null, false);
+            return Craft::$app->getAssets()->getThumbUrl($element, $width, $height, false);
         }
 
         return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/PreviewImage/dist/img/dummy-image.svg', true);

@@ -115,6 +115,7 @@ class Install extends Migration
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
                     // Custom columns in the table
+                    'matrixFieldHandle' => $this->string(1024)->notNull()->defaultValue(''),
                     'blockTypeId' => $this->integer()->notNull(),
                     'previewImageId' => $this->integer(),
                     'siteId' => $this->integer()->notNull(),

@@ -52,6 +52,19 @@ class PreviewService extends Component
         return $record;
     }
 
+    public function getByHandle($handle)
+    {
+        $records = PreviewRecord::find([
+            'matrixFieldHandle' => $handle
+        ])->all();
+
+        if (!$records) {
+            return null;
+        }
+
+        return $records;
+    }
+
     public function getById($id)
     {
         $record = PreviewRecord::findOne([

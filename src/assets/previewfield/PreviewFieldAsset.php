@@ -9,13 +9,14 @@
  * @copyright Copyright (c) 2020 Timmy O'Mahony 
  */
 
-namespace weareferal\matrixfieldpreview\assets\PreviewImage;
+namespace weareferal\matrixfieldpreview\assets\PreviewField;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\assets\matrix\MatrixAsset;
 
 /**
- * PreviewImageAsset AssetBundle
+ * PreviewFieldAsset AssetBundle
  *
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.
  *
@@ -32,7 +33,7 @@ use craft\web\assets\cp\CpAsset;
  * @package   MatrixFieldPreview
  * @since     1.0.0
  */
-class PreviewImageAsset extends AssetBundle
+class PreviewFieldAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -43,21 +44,21 @@ class PreviewImageAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@weareferal/matrixfieldpreview/assets/previewimage/dist";
+        $this->sourcePath = "@weareferal/matrixfieldpreview/assets/previewfield/dist";
 
         // define the dependencies
         $this->depends = [
-            CpAsset::class
+            MatrixAsset::class
         ];
 
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/PreviewImage.js',
+            'js/PreviewField.js',
         ];
 
         $this->css = [
-            'css/PreviewImage.css',
+            'css/PreviewField.css',
         ];
 
         parent::init();

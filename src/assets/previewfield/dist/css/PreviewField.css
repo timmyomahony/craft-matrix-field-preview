@@ -1,0 +1,89 @@
+/* Hide the default matrix fields */
+.matrix.matrix-field .btngroup,
+.matrix.matrix-field .menubtn:not(.matrix-field-preview-btn) {
+  display: none !important;
+}
+
+/* Block type preview in CP */
+.mfp-block-type-preview {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.mfp-block-type-preview__thumb {
+  width: 45px;
+  height: 45px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.mfp-block-type-preview__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 500px;
+  border-radius: 5px;
+  z-index: 5;
+}
+
+.mfp-block-type-preview__description {
+  margin: 0;
+  max-width: 450px;
+  line-height: 1.1;
+  color: #8f98a3;
+}
+
+/* Modal */
+.modal.mfp-modal {
+  width: 1000px;
+  max-width: 80%;
+  height: 70vh;
+}
+
+.modal.mfp-modal .body {
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 60px;
+}
+
+.mfp-modal__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+  padding-bottom: 60px;
+}
+
+.mfp-modal__item {
+  cursor: pointer;
+}
+
+.mfp-modal__image {
+  width: 100%;
+  height: 250px;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.mfp-modal__name {
+  margin: 15px 0 0 0;
+}
+
+.mfp-modal__description {
+  margin: 5px 0 0 0;
+}
+
+.modal.mfp-modal .footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
