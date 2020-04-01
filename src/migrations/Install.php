@@ -65,17 +65,6 @@ class Install extends Migration
 
     protected function createIndexes()
     {
-        // matrixfieldpreview_previewrecord table
-        $this->createIndex(
-            $this->db->getIndexName(
-                '{{%matrixfieldpreview_previewrecord}}',
-                'description',
-                true
-            ),
-            '{{%matrixfieldpreview_previewrecord}}',
-            'description',
-            true
-        );
         // Additional commands depending on the db driver
         switch ($this->driver) {
             case DbConfig::DRIVER_MYSQL:
