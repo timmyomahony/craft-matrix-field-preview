@@ -1,12 +1,14 @@
-# Matrix Field Preview plugin for Craft CMS 3.x
+# Matrix Field Preview
 
-Gives you the ability to configure a preview for all your matrix field blocks, giving your clients a better publishing experience.
+Configure a screenshot preview for all your matrix field blocks, giving your clients a better publishing experience.
 
-![Screenshot](resources/img/plugin-logo.png)
+<img src="src/icon.svg" width="125px">
+
+## Overview
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+This plugin requires Craft CMS 3.0.0 or later.
 
 ## Installation
 
@@ -22,22 +24,19 @@ To install the plugin, follow these instructions.
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Matrix Field Preview.
 
-## Matrix Field Preview Overview
+## Configuration
 
--Insert text here-
+## Usage
 
-## Configuring Matrix Field Preview
+## Features
 
--Insert text here-
+## Functionality
 
-## Using Matrix Field Preview
+## Troubleshooting
 
--Insert text here-
+## Support
 
-## Matrix Field Preview Roadmap
+<img src="resources/img/feral-logo.svg" width="250px">
 
-Some things to do, and ideas for potential features:
+Brought to you by [Feral](https://weareferal.com). Any problems email [timmy@weareferal.com](mailto:timmy@weareferal.com?subject=Craft Env Sync Question) or leave an issue on Github.
 
-* Release it
-
-Brought to you by [Timmy O'Mahony ](https://weareferal.com)
