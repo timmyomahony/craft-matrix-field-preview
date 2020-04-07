@@ -1,6 +1,6 @@
 /* Hide the default matrix fields */
-.matrix.matrix-field.preview-loaded .btngroup,
-.matrix.matrix-field.preview-loaded .menubtn:not(.matrix-field-preview-btn) {
+.matrix.matrix-field.preview-loaded .buttons .btngroup,
+.matrix.matrix-field.preview-loaded .buttons .menubtn {
   display: none !important;
 }
 

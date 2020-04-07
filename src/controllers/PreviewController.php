@@ -84,6 +84,7 @@ class PreviewController extends Controller
 
         $results = [];
         $previews = $previewService->getByHandle($handle);
+
         foreach ($previews as $preview) {
             $blockType = $preview->blockType;
             $result = [
