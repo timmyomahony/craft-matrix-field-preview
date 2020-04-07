@@ -61,7 +61,7 @@ class PreviewRecord extends ActiveRecord
     {
         if ($this->previewImage) {
             $element = Craft::$app->getElements()->getElementById($this->previewImage->id);
-            return Craft::$app->getAssets()->getThumbUrl($element, $width, $height, false);
+            return Craft::$app->getAssets()->getThumbUrl($element, $width, false);
         }
 
         return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/dummy-image.svg', true);

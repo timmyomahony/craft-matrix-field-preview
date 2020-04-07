@@ -11,7 +11,7 @@
 }
 
 .mfp-preview-image__thumb img {
-  max-width: 250px;
+  max-width: 400px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 20, 0.1);
   display: block;
