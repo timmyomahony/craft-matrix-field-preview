@@ -1,8 +1,8 @@
 # Matrix Field Preview
 
-Configure a screenshot preview for all your matrix field blocks, giving your clients a better publishing experience.
-
 <img src="src/icon.svg" width="125px">
+
+Configure a screenshot preview for all your matrix field blocks, giving your clients a better publishing experience.
 
 ## Overview
 

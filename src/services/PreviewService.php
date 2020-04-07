@@ -64,7 +64,7 @@ class PreviewService extends Component
         ])->all();
 
         if (!$records) {
-            return null;
+            return [];
         }
 
         return $records;
