@@ -147,7 +147,7 @@
             var preview = this.previews[blockType.handle];
             var $img = $("<div>", {
               class: "mfp-modal__image",
-            }).css("background-image", "url('" + preview["image"] + "')");
+            });
             var $name = $("<h2>", {
               class: "mfp-modal__name",
               text: preview["name"],
@@ -156,15 +156,17 @@
               class: "mfp-modal__description",
               text: preview["description"],
             });
+            $img.append($("<img>").attr("src", preview["image"]));
             $item.prepend($img, $name, $description);
           } else {
             var $img = $("<div>", {
               class: "mfp-modal__image mfp-modal__image--default",
-            }).css("background-image", "url(' " + this.defaultImageUrl + " ')");
+            });
             var $name = $("<h2>", {
               class: "mfp-modal__name",
               text: blockType.name,
             });
+            $img.append($("<img>").attr("src", this.defaultImageUrl));
             $item.prepend($img, $name, $description);
           }
 

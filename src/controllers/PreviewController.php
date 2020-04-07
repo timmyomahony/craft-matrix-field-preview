@@ -96,7 +96,6 @@ class PreviewController extends Controller
                 $asset = Craft::$app->assets->getAssetById($preview->previewImageId);
                 $result['image'] = $asset ? $asset->getUrl([
                     'width' => 800,
-                    'height' => 600,
                     'mode' => 'stretch',
                     'position' => 'center-center'
                 ]) : "";
