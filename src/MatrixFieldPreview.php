@@ -104,6 +104,10 @@ class MatrixFieldPreview extends Plugin
         ];
 
         $blockTypes = Craft::$app->matrix->getAllBlockTypes();
+        usort($blockTypes, function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
+
         $previewService = $this->previewService;
 
         // Annotate the matrix block types with our previews
