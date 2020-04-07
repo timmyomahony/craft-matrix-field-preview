@@ -72,7 +72,7 @@ class MatrixFieldPreview extends Plugin
             View::class,
             View::EVENT_AFTER_RENDER_TEMPLATE,
             function (TemplateEvent $event) {
-                $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/dummy-image.svg', true);
+                $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/no-dummy-image.svg', true);
                 $view = Craft::$app->getView();
                 $view->registerAssetBundle(PreviewFieldAsset::class);
                 $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field", "' . $defaultImage . '");');
@@ -104,6 +104,10 @@ class MatrixFieldPreview extends Plugin
         ];
 
         $blockTypes = Craft::$app->matrix->getAllBlockTypes();
+        usort($blockTypes, function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
+
         $previewService = $this->previewService;
 
         // Annotate the matrix block types with our previews

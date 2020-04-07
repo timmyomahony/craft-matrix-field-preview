@@ -1,6 +1,6 @@
 /* Hide the default matrix fields */
-.matrix.matrix-field .btngroup,
-.matrix.matrix-field .menubtn:not(.matrix-field-preview-btn) {
+.matrix.matrix-field.preview-loaded .btngroup,
+.matrix.matrix-field.preview-loaded .menubtn:not(.matrix-field-preview-btn) {
   display: none !important;
 }
 
@@ -12,33 +12,46 @@
 }
 
 .mfp-block-type-preview__thumb {
-  width: 45px;
-  height: 45px;
+  width: 60px;
+  height: 60px;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  border-radius: 50%;
+  border-radius: 5px;
   margin-right: 10px;
+  border: 1px solid rgba(96, 125, 159, 0.25);
+  box-shadow: 0 1px 2px -1px rgba(96, 125, 159, 0.25);
 }
 
 .mfp-block-type-preview__image {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -1px;
+  left: -1px;
   max-width: 500px;
   border-radius: 5px;
   z-index: 5;
+  border: 1px solid rgba(96, 125, 159, 0.25);
+  box-shadow: 0 1px 4px -1px rgba(96, 125, 159, 0.25);
+}
+
+.mfp-block-type-preview__text {
+  max-width: 450px;
+}
+
+.mfp-block-type-preview__name {
+  font-weight: bold;
+  margin: 0;
 }
 
 .mfp-block-type-preview__description {
   margin: 0;
-  max-width: 450px;
   line-height: 1.1;
   color: #8f98a3;
 }
 
 /* Modal */
 .modal.mfp-modal {
+  display: none;
   width: 1000px;
   max-width: 80%;
   height: 70vh;
@@ -56,7 +69,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 25px;
-  grid-row-gap: 25px;
+  grid-row-gap: 40px;
   padding-bottom: 60px;
 }
 
@@ -65,13 +78,24 @@
 }
 
 .mfp-modal__image {
+  box-sizing: border-box;
   width: 100%;
   height: 250px;
   border-radius: 5px;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  border: 1px solid #eee;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(96, 125, 159, 0.25);
+}
+
+.mfp-modal__image img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.mfp-modal__image--default img {
+  max-width: 100px;
 }
 
 .mfp-modal__name {

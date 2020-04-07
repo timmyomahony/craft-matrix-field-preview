@@ -86,18 +86,22 @@ class PreviewController extends Controller
         $previews = $previewService->getByHandle($handle);
         foreach ($previews as $preview) {
             $blockType = $preview->blockType;
-            $asset = Craft::$app->assets->getAssetById($preview->previewImageId);
-            $results[$blockType->handle] = [
+            $result = [
                 'name' => $blockType->name,
                 'description' => $preview->description,
-                'image' => $asset ? $asset->getUrl([
-                    'width' => 800,
-                    'height' => 600,
-                    'mode' => 'fit',
-                    'position' => 'center-center'
-                ]) : "",
-                'thumb' => $asset ? $asset->getThumbUrl(300, 300) : "",
+                'image' => null,
+                'thumb' => null
             ];
+            if ($preview->previewImageId) {
+                $asset = Craft::$app->assets->getAssetById($preview->previewImageId);
+                $result['image'] = $asset ? $asset->getUrl([
+                    'width' => 800,
+                    'mode' => 'stretch',
+                    'position' => 'center-center'
+                ]) : "";
+                $result['thumb'] = $asset ? $asset->getThumbUrl(300, 300) : "";
+            }
+            $results[$blockType->handle] = $result;
         }
 
         return $this->asJson([
