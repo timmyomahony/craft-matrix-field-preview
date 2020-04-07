@@ -222,7 +222,7 @@
 
     createModalButton: function ($matrixField) {
       var $button = $("<div>")
-        .addClass("btn add icon")
+        .addClass("btn dashed add icon")
         .text($matrixField.find(".menubtn").text());
       $matrixField.find(".buttons").append($button);
       return $button;
