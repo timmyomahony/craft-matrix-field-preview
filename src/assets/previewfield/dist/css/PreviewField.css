@@ -1,6 +1,6 @@
 /* Hide the default matrix fields */
-.matrix.matrix-field .btngroup,
-.matrix.matrix-field .menubtn:not(.matrix-field-preview-btn) {
+.matrix.matrix-field.preview-loaded .btngroup,
+.matrix.matrix-field.preview-loaded .menubtn:not(.matrix-field-preview-btn) {
   display: none !important;
 }
 
@@ -39,6 +39,7 @@
 
 /* Modal */
 .modal.mfp-modal {
+  display: none;
   width: 1000px;
   max-width: 80%;
   height: 70vh;
@@ -56,7 +57,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 25px;
-  grid-row-gap: 25px;
+  grid-row-gap: 40px;
   padding-bottom: 60px;
 }
 
@@ -70,8 +71,12 @@
   border-radius: 5px;
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: cover;
+  background-size: contain;
   border: 1px solid #eee;
+}
+
+.mfp-modal__image--default {
+  background-size: 100px auto;
 }
 
 .mfp-modal__name {
