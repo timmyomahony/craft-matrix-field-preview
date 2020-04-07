@@ -244,19 +244,22 @@
             class: "mfp-block-type-preview__image",
             src: preview["image"],
           }).hide();
+          var $name = $("<p>", {
+            class: "mfp-block-type-preview__name",
+            text: preview["name"],
+          });
           var $description = $("<p>", {
             class: "mfp-block-type-preview__description",
             text: preview["description"],
           });
+          var $text = $("<div>").append($name, $description);
           $thumb.on("mouseover", function () {
             $img.fadeIn("fast");
           });
           $img.on("mouseout", function () {
             $img.fadeOut("fast");
           });
-          $blockType
-            .find(".fields")
-            .prepend($div.append($thumb, $description, $img));
+          $blockType.find(".fields").prepend($div.append($thumb, $text, $img));
         } else {
           console.warn("Skipping block type preview for " + handle);
         }
