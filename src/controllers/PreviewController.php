@@ -93,7 +93,7 @@ class PreviewController extends Controller
                 'image' => $asset ? $asset->getUrl([
                     'width' => 800,
                     'height' => 600,
-                    'mode' => 'fit',
+                    'mode' => 'stretch',
                     'position' => 'center-center'
                 ]) : "",
                 'thumb' => $asset ? $asset->getThumbUrl(300, 300) : "",
