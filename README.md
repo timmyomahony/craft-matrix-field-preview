@@ -74,6 +74,14 @@ You will also get an inline preview for all existing blocks. This inline preview
 
 ![Usage step](resources/img/screenshot-7.png)
 
+## Caveats
+
+- Configuration of preview fields happens in a custom database table. When you go to migrate your site to staging or production your configuration will not be added be default. You will need to either perform a database dump/restore to ensure the configuration gets transferred, or use another tool to sync your database (like [`craft-remote-sync`](https://github.com/weareferal/craft-remote-sync) for example 😉)
+
+## Todo
+
+- Improve configuration approach when migrating (see above caveat and [Issue #18](https://github.com/weareferal/craft-matrix-field-preview/issues/18))
+
 ## Support
 
 <img src="resources/img/feral-logo.svg" width="250px">
