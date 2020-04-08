@@ -80,7 +80,7 @@ You will also get an inline preview for all existing blocks. This inline preview
 
 ## Todo
 
-- Improve configuration approach when migrating (see above caveat)
+- Improve configuration approach when migrating (see above caveat and [Issue #18](https://github.com/weareferal/craft-matrix-field-preview/issues/18))
 
 ## Support
 
