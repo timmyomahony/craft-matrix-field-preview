@@ -9,3 +9,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 
 - Initial release
+
+## 1.0.1 - 2020-05-23
+
+### Changed
+
+- Fixed issue with the JavaScript asset bundle running on non-cp requests
