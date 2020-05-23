@@ -19,8 +19,6 @@ use weareferal\matrixfieldpreview\assets\previewsettings\PreviewSettingsAsset;
 
 use Craft;
 use craft\base\Plugin;
-use craft\services\Plugins;
-use craft\events\PluginEvent;
 use craft\web\View;
 use craft\events\TemplateEvent;
 
@@ -61,21 +59,34 @@ class MatrixFieldPreview extends Plugin
             'previewImageService' => PreviewImageService::class
         ]);
 
-        // FIXME: there's a big problem with the JavaScript ordering. The
-        // default MatrixInput initialised its JavaScript from its Field's 
-        // getInputHtml() method. There doesn't seem to be any way to control
-        // or prioritise JavaScript initialisation. Furthermore there is no
-        // central even registry or element registry. Currently the only way
-        // to make sure we render AFTER the matrix input is to use the 
-        // EVENT_AFTER_RENDER_TEMPLATE event
+        // Inject custom matrix field input JavaScript
+        //
+        // @fixme find better way to insert JavaScript, taking into account its
+        // dependency on the MatrixInput's JavaScript
+        // 
+        // Craft does not support any way (that I am aware of) to 
+        //
+        // a) track the rendering/asset bundle insertion of a particular input
+        //    so that we could conditionally insert our JavaScript only when
+        //    a MatrixInput is rendered
+        // b) control the initialisation order of JavaScript so that we could
+        //    guarantee our JavaScript is only inserted/loaded *after* the
+        //    MatrixInput is rendered
+        //
+        // Therefore, the only way to do this is to use EVENT_AFTER_RENDER_TEMPLATE 
+        // event to insert and run our asset bundles after a control panel
+        // view has been rendered
         Event::on(
             View::class,
-            View::EVENT_AFTER_RENDER_TEMPLATE,
+            View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
             function (TemplateEvent $event) {
-                $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/no-dummy-image.svg', true);
-                $view = Craft::$app->getView();
-                $view->registerAssetBundle(PreviewFieldAsset::class);
-                $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field", "' . $defaultImage . '");');
+                if (Craft::$app->request->isCpRequest) {
+                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/no-dummy-image.svg', true);
+                    $view = Craft::$app->getView();
+                    $view->registerAssetBundle(PreviewFieldAsset::class);
+                    $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
+                    $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field");', View::POS_READY, 'matrix-field-preview');
+                }
             }
         );
 

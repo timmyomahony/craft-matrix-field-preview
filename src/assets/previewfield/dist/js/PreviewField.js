@@ -10,8 +10,8 @@
     // reinitialised (not readded, just re-inited). It must be something
     // to do with the MatrixInput.addBlock method from Craft's
     // matrix field JavaScript, but I don't know why it's happening
-    init: function (matrixFields, defaultImageUrl) {
-      this.defaultImageUrl = defaultImageUrl;
+    init: function (matrixFields) {
+      this.defaultImageUrl = matrixFieldPreviewDefaultImage; // via $view->registerJsVar
       this.$matrixFields = $(matrixFields);
       if (this.$matrixFields.length > 0) {
         this.$matrixFields.each(
