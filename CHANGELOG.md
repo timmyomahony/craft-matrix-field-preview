@@ -27,3 +27,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 
 - Debugging output for preview field
+
+## 1.0.4 - 2020-06-03
+
+### Changed
+
+- Fixed issue with "Position Fieldtype" plugin
