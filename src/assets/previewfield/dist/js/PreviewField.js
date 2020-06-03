@@ -160,7 +160,7 @@
      * custom button and overlay
      */
     createNavigation: function ($matrixField, matrixFieldHandle) {
-      var blockTypes = $matrixField.find(".btngroup .btn").map(
+      var blockTypes = $matrixField.find("> .buttons > .btngroup .btn").map(
         function (i, button) {
           var $button = $(button);
           return {
