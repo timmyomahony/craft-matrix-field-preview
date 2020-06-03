@@ -21,4 +21,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Fixed issues with default preview images
-  
+
+## 1.0.3 - 2020-06-03
+
+### Added
+
+- Debugging output for preview field
