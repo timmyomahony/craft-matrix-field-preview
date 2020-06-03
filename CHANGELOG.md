@@ -15,3 +15,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Fixed issue with the JavaScript asset bundle running on non-cp requests
+
+## 1.0.2 - 2020-06-03
+
+### Changed
+
+- Fixed issues with default preview images
+  
