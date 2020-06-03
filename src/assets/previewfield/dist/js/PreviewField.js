@@ -33,7 +33,7 @@
             var $matrixField = $(matrixField);
             var matrixFieldHandle = this.getMatrixFieldHandle($matrixField);
             if (!this.matrixFields.hasOwnProperty(matrixFieldHandle)) {
-              console.info(
+              console.debug(
                 "Initialising matrix-field-preview plugin on field '" +
                   matrixFieldHandle +
                   "'"
@@ -60,7 +60,7 @@
         dataType: "json",
         success: function (response) {
           if (response["success"]) {
-            console.info(
+            console.debug(
               "Received response from matrix field config endpoint: ",
               response
             );
@@ -76,9 +76,22 @@
                 var blockTypeHandle = $blockType.attr("data-type");
                 if (this.previews.hasOwnProperty(blockTypeHandle)) {
                   // Insert block type previews for all the static block types
+                  console.debug(
+                    "Creating preview thumbnail for existing block type " +
+                      blockTypeHandle +
+                      " in matrix field " +
+                      matrixFieldHandle
+                  );
                   this.createBlockTypePreview(
                     $blockType,
                     this.previews[blockTypeHandle]
+                  );
+                } else {
+                  console.debug(
+                    "No preview configuration for existing block type " +
+                      blockTypeHandle +
+                      " in matrix field " +
+                      matrixFieldHandle
                   );
                 }
               }.bind(this)
@@ -91,9 +104,22 @@
                 var $blockType = ev["$block"];
                 var blockTypeHandle = $blockType.attr("data-type");
                 if (this.previews.hasOwnProperty(blockTypeHandle)) {
+                  console.debug(
+                    "Inserting preview thumbnail for new block type " +
+                      blockTypeHandle +
+                      " in matrix field " +
+                      matrixFieldHandle
+                  );
                   this.createBlockTypePreview(
                     $blockType,
                     this.previews[blockTypeHandle]
+                  );
+                } else {
+                  console.debug(
+                    "No preview configuration for new block type " +
+                      blockTypeHandle +
+                      " in matrix field " +
+                      matrixFieldHandle
                   );
                 }
               }.bind(this)
@@ -144,6 +170,11 @@
         }.bind(this)
       );
 
+      console.debug(
+        "Blocktypes found in matrix field " + matrixFieldHandle + ":",
+        blockTypes
+      );
+
       var modal = this.createModal($matrixField, matrixFieldHandle);
       var $button = this.createModalButton($matrixField);
 
@@ -153,6 +184,13 @@
 
       blockTypes.each(
         function (i, blockType) {
+          console.debug(
+            "Creating modal preview for block type " +
+              blockType.handle +
+              " in matrix field " +
+              matrixFieldHandle
+          );
+
           var $item = $("<div>", {
             class: "mfp-modal__item",
           }).attr("data-block-type", blockType.handle);
