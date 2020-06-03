@@ -67,7 +67,9 @@
             this.previews = response["previews"];
 
             var matrixInput = $matrixField.data("matrix");
-            var $existingBlockTypes = $matrixField.find(".blocks .matrixblock");
+            var $existingBlockTypes = $matrixField.find(
+              " > .blocks > .matrixblock"
+            );
 
             // Insert thumbnail previews into _existing_ block types
             $existingBlockTypes.each(
