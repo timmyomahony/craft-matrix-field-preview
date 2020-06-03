@@ -151,7 +151,6 @@
         class: "mfp-modal__grid",
       });
 
-      //for (let [blockTypeHandle, preview] of Object.entries(this.previews)) {
       blockTypes.each(
         function (i, blockType) {
           var $item = $("<div>", {
@@ -254,28 +253,44 @@
           var $div = $("<div>", {
             class: "mfp-block-type-preview",
           });
+
           var $thumb = $("<div>", {
             class: "mfp-block-type-preview__thumb",
-          }).css("background-image", "url('" + preview["thumb"] + "')");
-          var $img = $("<img>", {
-            class: "mfp-block-type-preview__image",
-            src: preview["image"],
-          }).hide();
+          });
+
+          if (preview["image"]) {
+            $thumb.css("background-image", "url('" + preview["thumb"] + "')");
+
+            var $img = $("<img>", {
+              class: "mfp-block-type-preview__image",
+              src: preview["image"],
+            }).hide();
+
+            $thumb.on("mouseover", function () {
+              $img.fadeIn("fast");
+            });
+
+            $img.on("mouseout", function () {
+              $img.fadeOut("fast");
+            });
+          } else {
+            $thumb.css(
+              "background-image",
+              "url('" + this.defaultImageUrl + "')"
+            );
+          }
+
           var $name = $("<p>", {
             class: "mfp-block-type-preview__name",
             text: preview["name"],
           });
+
           var $description = $("<p>", {
             class: "mfp-block-type-preview__description",
             text: preview["description"],
           });
+
           var $text = $("<div>").append($name, $description);
-          $thumb.on("mouseover", function () {
-            $img.fadeIn("fast");
-          });
-          $img.on("mouseout", function () {
-            $img.fadeOut("fast");
-          });
           $blockType.find(".fields").prepend($div.append($thumb, $text, $img));
         } else {
           console.warn("Skipping block type preview for " + handle);
