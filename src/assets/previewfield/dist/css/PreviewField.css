@@ -14,6 +14,7 @@
 .mfp-block-type-preview__thumb {
   width: 60px;
   height: 60px;
+  background-color: white;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -24,10 +25,12 @@
 }
 
 .mfp-block-type-preview__image {
+  background-color: white;
   position: absolute;
   top: -1px;
   left: -1px;
-  max-width: 500px;
+  max-width: 300px;
+  max-height: 300px;
   border-radius: 5px;
   z-index: 5;
   border: 1px solid rgba(96, 125, 159, 0.25);
@@ -54,7 +57,7 @@
   display: none;
   width: 1000px;
   max-width: 80%;
-  height: 70vh;
+  height: 80vh;
 }
 
 .modal.mfp-modal .body {
@@ -69,7 +72,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 25px;
-  grid-row-gap: 40px;
+  grid-row-gap: 20px;
   padding-bottom: 60px;
 }
 

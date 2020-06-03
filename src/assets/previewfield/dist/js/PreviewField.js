@@ -1,4 +1,18 @@
 (function ($) {
+  /**
+   * Create Matrix Field Preview
+   *
+   * This JavaScript file will only run on Control Panel requests. At a high
+   * level it does the following:
+   *
+   * - Search for all matrix field inputs (via `.matrix-field`)
+   * - For each matrix field on the page:
+   *  - Fetch JSON configuration of preview fields from custom controller
+   *  - Find all existing block types on the page by using the existing
+   *    dropdown button used by default
+   *  - Insert previews into existing and new block types
+   *  - Create alternative modal selector with previews
+   */
   Craft.MatrixFieldPreview = Garnish.Base.extend({
     $matrixFields: null,
     matrixFields: {},
@@ -55,6 +69,7 @@
             var matrixInput = $matrixField.data("matrix");
             var $existingBlockTypes = $matrixField.find(".blocks .matrixblock");
 
+            // Insert thumbnail previews into _existing_ block types
             $existingBlockTypes.each(
               function (i, blockType) {
                 var $blockType = $(blockType);
@@ -69,7 +84,7 @@
               }.bind(this)
             );
 
-            // Insert block type previews when a new block is added
+            // Insert thumbnail previews into _new_ block types that are added
             matrixInput.on(
               "blockAdded",
               function (ev) {
@@ -136,39 +151,40 @@
         class: "mfp-modal__grid",
       });
 
-      //for (let [blockTypeHandle, preview] of Object.entries(this.previews)) {
       blockTypes.each(
         function (i, blockType) {
           var $item = $("<div>", {
             class: "mfp-modal__item",
           }).attr("data-block-type", blockType.handle);
 
+          var $img = $("<div>", {
+            class: "mfp-modal__image mfp-modal__image--default",
+          }).append($("<img>").attr("src", this.defaultImageUrl));
+
+          var $name = $("<h2>", {
+            class: "mfp-modal__name",
+            text: blockType.name,
+          });
+
+          var $description = $("<p>", {
+            class: "mfp-modal__description",
+          });
+
           if (this.previews.hasOwnProperty(blockType.handle)) {
             var preview = this.previews[blockType.handle];
-            var $img = $("<div>", {
-              class: "mfp-modal__image",
-            });
-            var $name = $("<h2>", {
-              class: "mfp-modal__name",
-              text: preview["name"],
-            });
-            var $description = $("<p>", {
-              class: "mfp-modal__description",
-              text: preview["description"],
-            });
-            $img.append($("<img>").attr("src", preview["image"]));
-            $item.prepend($img, $name, $description);
-          } else {
-            var $img = $("<div>", {
-              class: "mfp-modal__image mfp-modal__image--default",
-            });
-            var $name = $("<h2>", {
-              class: "mfp-modal__name",
-              text: blockType.name,
-            });
-            $img.append($("<img>").attr("src", this.defaultImageUrl));
-            $item.prepend($img, $name, $description);
+            if (preview["image"]) {
+              $img.removeClass("mfp-modal__image--default");
+              $img.children("img").attr("src", preview["image"]);
+            }
+            if (preview["name"]) {
+              $name.text(preview["name"]);
+            }
+            if (preview["description"]) {
+              $description.text(preview["description"]);
+            }
           }
+
+          $item.prepend($img, $name, $description);
 
           $grid.append($item);
 
@@ -237,28 +253,44 @@
           var $div = $("<div>", {
             class: "mfp-block-type-preview",
           });
+
           var $thumb = $("<div>", {
             class: "mfp-block-type-preview__thumb",
-          }).css("background-image", "url('" + preview["thumb"] + "')");
-          var $img = $("<img>", {
-            class: "mfp-block-type-preview__image",
-            src: preview["image"],
-          }).hide();
+          });
+
+          if (preview["image"]) {
+            $thumb.css("background-image", "url('" + preview["thumb"] + "')");
+
+            var $img = $("<img>", {
+              class: "mfp-block-type-preview__image",
+              src: preview["image"],
+            }).hide();
+
+            $thumb.on("mouseover", function () {
+              $img.fadeIn("fast");
+            });
+
+            $img.on("mouseout", function () {
+              $img.fadeOut("fast");
+            });
+          } else {
+            $thumb.css(
+              "background-image",
+              "url('" + this.defaultImageUrl + "')"
+            );
+          }
+
           var $name = $("<p>", {
             class: "mfp-block-type-preview__name",
             text: preview["name"],
           });
+
           var $description = $("<p>", {
             class: "mfp-block-type-preview__description",
             text: preview["description"],
           });
+
           var $text = $("<div>").append($name, $description);
-          $thumb.on("mouseover", function () {
-            $img.fadeIn("fast");
-          });
-          $img.on("mouseout", function () {
-            $img.fadeOut("fast");
-          });
           $blockType.find(".fields").prepend($div.append($thumb, $text, $img));
         } else {
           console.warn("Skipping block type preview for " + handle);
