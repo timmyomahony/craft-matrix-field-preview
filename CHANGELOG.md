@@ -33,3 +33,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Fixed issue with "Position Fieldtype" plugin
+
+## 1.0.5 - 2020-07-02
+
+### Changed
+
+- Fixed issue with a stray console log
