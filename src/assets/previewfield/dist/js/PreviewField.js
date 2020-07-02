@@ -332,8 +332,6 @@
 
           var $text = $("<div>").append($name, $description);
           $blockType.find(".fields").prepend($div.append($thumb, $text, $img));
-        } else {
-          console.warn("Skipping block type preview for " + handle);
         }
       }
     },
