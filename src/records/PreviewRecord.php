@@ -61,7 +61,11 @@ class PreviewRecord extends ActiveRecord
     {
         if ($this->previewImage) {
             $element = Craft::$app->getElements()->getElementById($this->previewImage->id);
-            return Craft::$app->getAssets()->getThumbUrl($element, $width, false);
+            // Make sure the asset hasn't been soft deleted
+            // https://github.com/weareferal/craft-matrix-field-preview/issues/36
+            if ($element && !$element->trashed) {
+                return Craft::$app->getAssets()->getThumbUrl($element, $width, false);
+            }
         }
 
         return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/dummy-image.svg', true);
