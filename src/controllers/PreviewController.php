@@ -40,7 +40,7 @@ class PreviewController extends Controller
         $preview = $previewService->getByBlockTypeId($blockTypeId);
         if (!$preview) {
             $preview = new PreviewRecord();
-            $preview->blockType = $blockType;
+            $preview->blockType = $blockType->id ?? null;
             $preview->siteId = $siteId;
             $preview->description = "";
             $preview->matrixFieldHandle = $blockType->field->handle;

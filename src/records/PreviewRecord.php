@@ -2,9 +2,12 @@
 
 namespace weareferal\matrixfieldpreview\records;
 
+use yii\db\ActiveQueryInterface;
+
 use Craft;
 use craft\db\ActiveRecord;
 use craft\records\MatrixBlockType;
+use craft\records\Matrix;
 use craft\records\Asset;
 use craft\services\Elements;
 
@@ -20,14 +23,19 @@ class PreviewRecord extends ActiveRecord
      * 
      * An active record foreign key accessor
      */
-    public function getBlockType()
+    public function getBlockType(): ActiveQueryInterface
     {
         return $this->hasOne(MatrixBlockType::className(), ['id' => 'blockTypeId']);
     }
 
-    public function setBlockType($blockType)
+    /**
+     * Get block type
+     * 
+     * An active record foreign key accessor
+     */
+    public function getField(): ActiveQueryInterface
     {
-        $this->blockTypeId = $blockType->id ?? null;
+        return $this->hasOne(Field::class, ['id' => 'fieldId']);
     }
 
     /**
@@ -40,14 +48,6 @@ class PreviewRecord extends ActiveRecord
     public function getPreviewImage()
     {
         return $this->hasOne(Asset::className(), ['id' => 'previewImageId']);
-    }
-
-    /**
-     * Set the preview image (asset)
-     */
-    public function setPreviewImage($previewImage)
-    {
-        $this->previewImageId = $previewImage->id ?? null;
     }
 
     /**

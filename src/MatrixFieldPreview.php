@@ -19,6 +19,7 @@ use weareferal\matrixfieldpreview\assets\previewsettings\PreviewSettingsAsset;
 
 use Craft;
 use craft\base\Plugin;
+use craft\db\Query;
 use craft\web\View;
 use craft\events\TemplateEvent;
 
@@ -125,6 +126,16 @@ class MatrixFieldPreview extends Plugin
         });
 
         $previewService = $this->previewService;
+
+        // $rows = (new Query())
+        //     ->select(['mfp.id', 'mbt.fieldId'])
+        //     ->from('{{%matrixfieldpreview_previewrecord}} mfp')
+        //     ->innerJoin('{{%matrixblocktypes}} mbt', '[[mbt.id]] = [[mfp.blockTypeId]]')
+        //     ->all();
+        // Craft::info($rows, 'boom');
+        
+    
+        
 
         // Annotate the matrix block types with our previews
         $previews = $previewService->getAll();
