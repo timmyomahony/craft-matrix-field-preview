@@ -1,0 +1,31 @@
+{% macro configWarning(setting, handle) -%}
+    {%- set configArray = craft.app.config.getConfigFromFile(handle) -%}
+    {%- if configArray[setting] is defined -%}
+        {{- "This is being overridden by the `#{setting}` setting in the `config/matrix-field-preview.php` file." |raw }}
+    {%- else -%}
+        {{ false }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro assetLocationInput(volumeOptions, volumeUid, subpath) %}
+    {% from "_includes/forms" import select, text %}
+    <div class="flex">
+        <div>
+            {{ select({
+                id: 'previewVolumeUid',
+                name: 'previewVolumeUid',
+                options: volumeOptions,
+                value: volumeUid,
+            }) }}
+        </div>
+        <div class="flex-grow">
+            {{ text({
+                id: 'previewSubpath',
+                class: 'ltr',
+                name: 'previewSubpath',
+                value: subpath,
+                placeholder: "path/to/subfolder"|t('matrix-field-preview')
+            }) }}
+        </div>
+    </div>
+{% endmacro %}

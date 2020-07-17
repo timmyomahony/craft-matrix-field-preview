@@ -1,7 +1,5 @@
-/* Hide the default matrix fields */
-.matrix.matrix-field.preview-loaded .buttons .btngroup,
-.matrix.matrix-field.preview-loaded .buttons .menubtn {
-  display: none !important;
+.mfp-matrix-field {
+
 }
 
 /* Block type preview in CP */
@@ -50,6 +48,11 @@
   margin: 0;
   line-height: 1.1;
   color: #8f98a3;
+}
+
+/* Modal trigger button */
+.mfp-modal-trigger {
+  margin-left: 10px;
 }
 
 /* Modal */
@@ -114,4 +117,14 @@
   bottom: 0;
   left: 0;
   width: 100%;
+}
+
+/* Takeover */
+.mfp-matrix-field.mfp-take-over .buttons .btngroup,
+.mfp-matrix-field.mfp-take-over .buttons .menubtn {
+  display: none !important;
+}
+
+.mfp-matrix-field.mfp-take-over .mfp-modal-trigger {
+  margin-left: 0;
 }
