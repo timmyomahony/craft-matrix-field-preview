@@ -55,30 +55,32 @@ class PreviewImageService extends Component
 
         $assetsService = Craft::$app->getAssets();
 
+        // If we have an existing preview saved, replace it
         if ($preview->previewImageId && $preview->getPreviewImage() !== null) {
-            $assetsService->replaceAssetFile($assetsService->getAssetById($preview->previewImageId), $fileLocation, $filenameToUse);
-        } else {
-            Craft::info('Test123', 'matrix-field-preview-log');
-            Craft::info($subpath, 'matrix-field-preview-log');
-            Craft::info($volume, 'matrix-field-preview-log');
-            $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
-            $filenameToUse = $assetsService->getNameReplacementInFolder($filenameToUse, $folderId);
-
-            // Create new element
-            $previewImage = new Asset();
-            $previewImage->setScenario(Asset::SCENARIO_CREATE);
-            $previewImage->tempFilePath = $fileLocation;
-            $previewImage->filename = $filenameToUse;
-            $previewImage->newFolderId = $folderId;
-            $previewImage->volumeId = $volume->id;
-
-            // Save photo.
-            $elementsService = Craft::$app->getElements();
-            $elementsService->saveElement($previewImage);
-
-            // Save preview image to our Record's FK
-            $preview->setPreviewImage($previewImage);
-            $preview->save();
+            $asset = $assetsService->getAssetById($preview->previewImageId);
+            if ($asset && !$asset->trashed) {
+                $assetsService->replaceAssetFile($asset, $fileLocation, $filenameToUse);
+                return;
+            }
         }
+
+        // Create a new asset
+        $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+        $filenameToUse = $assetsService->getNameReplacementInFolder($filenameToUse, $folderId);
+
+        $previewImage = new Asset();
+        $previewImage->setScenario(Asset::SCENARIO_CREATE);
+        $previewImage->tempFilePath = $fileLocation;
+        $previewImage->filename = $filenameToUse;
+        $previewImage->newFolderId = $folderId;
+        $previewImage->volumeId = $volume->id;
+
+        // Save photo.
+        $elementsService = Craft::$app->getElements();
+        $elementsService->saveElement($previewImage);
+
+        // Save preview image to our Record's FK
+        $preview->setPreviewImage($previewImage);
+        $preview->save();
     }
 }
