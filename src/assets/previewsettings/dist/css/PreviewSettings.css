@@ -3,6 +3,14 @@
   position: relative;
 }
 
+.mfp-settings-table table {
+  margin-bottom: 25px;
+}
+
+.mfp-settings-table tbody tr td {
+  width: 25%;
+}
+
 .mfp-settings-table__overlay {
   position: absolute;
   height: 100%;

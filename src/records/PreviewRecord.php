@@ -22,6 +22,8 @@ class PreviewRecord extends ActiveRecord
      * Get block type
      * 
      * An active record foreign key accessor
+     * 
+     * @fixme: why does Craft not use setters in any of its Records?
      */
     public function getBlockType(): ActiveQueryInterface
     {
@@ -32,6 +34,8 @@ class PreviewRecord extends ActiveRecord
      * Get block type
      * 
      * An active record foreign key accessor
+     * 
+     * @fixme: why does Craft not use setters in any of its Records?
      */
     public function getField(): ActiveQueryInterface
     {

@@ -121,45 +121,50 @@ class MatrixFieldPreview extends Plugin
         ];
 
         $blockTypes = Craft::$app->matrix->getAllBlockTypes();
-        usort($blockTypes, function ($a, $b) {
-            return strcmp($a->name, $b->name);
-        });
+        $previews = $this->previewService->getAll();
+        // usort($blockTypes, function ($a, $b) {
+        //     return strcmp($a->name, $b->name);
+        // });
 
-        $previewService = $this->previewService;
 
-        // $rows = (new Query())
-        //     ->select(['mfp.id', 'mbt.fieldId'])
-        //     ->from('{{%matrixfieldpreview_previewrecord}} mfp')
-        //     ->innerJoin('{{%matrixblocktypes}} mbt', '[[mbt.id]] = [[mfp.blockTypeId]]')
-        //     ->all();
-        // Craft::info($rows, 'boom');
-        
-    
-        
-
-        // Annotate the matrix block types with our previews
-        $previews = $previewService->getAll();
         $previewsMap = [];
         foreach ($previews as $preview) {
-            $previewsMap[$preview->blockType->handle] = $preview;
+            $previewsMap[$preview->blockType->id] = $preview;
         }
 
-        $rows = [];
+        $matrixFieldsMap = [];
         foreach ($blockTypes as $blockType) {
-            $preview = null;
-            if (array_key_exists($blockType->handle, $previewsMap)) {
-                $preview = $previewsMap[$blockType->handle];
+            $matrixField = $blockType->field;
+
+            // Initialise an array for each matrix field
+            if (! array_key_exists($matrixField->id, $matrixFieldsMap)) {
+                $matrixFieldsMap[$matrixField->id] = [
+                    'matrixField' => $matrixField,
+                    'rows' => []
+                ];
             }
-            array_push($rows, [
+
+            // Get the preview for this block type if it exists
+            $preview = null;
+            if (array_key_exists($blockType->id, $previewsMap)) {
+                $preview = $previewsMap[$blockType->id];
+            }
+        
+            array_push($matrixFieldsMap[$matrixField->id]['rows'], [
                 'blockType' => $blockType,
                 'preview' => $preview
             ]);
         }
 
+        $matrixFields = [];
+        foreach($matrixFieldsMap as $key => $value) {
+            array_push($matrixFields, $value);
+        }
+
         return $view->renderTemplate('matrix-field-preview/settings', [
             'settings' => $this->getSettings(),
             'assets' => $assets,
-            'rows' => $rows
+            'matrixFields' => $matrixFields
         ]);
     }
 }
