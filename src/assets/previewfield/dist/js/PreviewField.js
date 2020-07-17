@@ -88,6 +88,7 @@
             );
             this.previews = response["previews"];
 
+            var matrixInput = $matrixField.data("matrix");
             var $existingBlockTypes = $matrixField.find(
               " > .blocks > .matrixblock"
             );
@@ -126,6 +127,7 @@
               function (ev) {
                 var $blockType = ev["$block"];
                 var blockTypeHandle = $blockType.attr("data-type");
+
                 if (this.previews.hasOwnProperty(blockTypeHandle)) {
                   console.debug(
                     "Inserting preview thumbnail for new block type " +
@@ -145,6 +147,12 @@
                       matrixFieldHandle
                   );
                 }
+
+                if (matrixInput.canAddMoreBlocks()) {
+                  this.enableModalButton($matrixField);
+                } else {
+                  this.disableModalButton($matrixField);
+                }
               }.bind(this)
             );
 
@@ -154,8 +162,15 @@
               function (ev) {
                 var $blockType = ev["$block"];
                 var blockTypeHandle = $blockType.attr("data-type");
+                
                 if (this.previews.hasOwnProperty(blockTypeHandle)) {
                   delete this.previews[blockTypeHandle];
+                }
+
+                if (matrixInput.canAddMoreBlocks()) {
+                  this.enableModalButton($matrixField);
+                } else {
+                  this.disableModalButton($matrixField);
                 }
               }.bind(this)
             );
@@ -199,7 +214,8 @@
       );
 
       var modal = this.createModal($matrixField, matrixFieldHandle);
-      var $button = this.createModalButton($matrixField);
+      var matrixInput = $matrixField.data("matrix");
+      var $modalButton = this.createModalButton($matrixField);
 
       var $grid = $("<div>", {
         class: "mfp-modal__grid",
@@ -254,8 +270,6 @@
             var targetBlockTypeHandle = $(ev.currentTarget).attr(
               "data-block-type"
             );
-
-            var matrixInput = $matrixField.data("matrix");
             matrixInput.addBlock(targetBlockTypeHandle);
             modal.hide();
           });
@@ -264,8 +278,12 @@
 
       modal.$container.find(".body").append($grid);
 
-      this.addListener($button, "click", function () {
-        modal.show();
+      this.addListener($modalButton, "click", function () {
+        if (matrixInput.canAddMoreBlocks()) {
+          modal.show();
+        } else {
+          console.debug('Maximum number of blocks reached');
+        }
       });
     },
 
@@ -309,6 +327,14 @@
         .text(buttonText);
       $matrixField.find(".buttons").append($button);
       return $button;
+    },
+
+    disableModalButton: function($matrixField) {
+      $matrixField.find('.mfp-modal-trigger').addClass('disabled');
+    },
+
+    enableModalButton: function($matrixField) {
+      $matrixField.find('.mfp-modal-trigger').removeClass('disabled');
     },
 
     /**
