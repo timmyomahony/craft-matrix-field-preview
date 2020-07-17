@@ -39,3 +39,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Fixed issue with a stray console log
+
+## 1.0.6 - 2020-07-17
+
+### Changed
+
+- Quick-fix for soft-deleted assets issue
