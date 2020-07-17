@@ -45,3 +45,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Quick-fix for soft-deleted assets issue
+
+## 1.0.7 - 2020-07-17
+
+### Changed
+
+- Fixed with matrix fields and max-blocks. Now the max-block setting will be respected
+- Added a "take-over" option which can be disabled so that the preview field augments the matrix field as opposed to taking it over. This allows use alongside Spoon for example
