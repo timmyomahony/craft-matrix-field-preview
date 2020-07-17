@@ -78,15 +78,16 @@ class PreviewController extends Controller
      * NOTE: there are two "handles" in play here: the matrix field handle
      * as well as the block type handles
      */
-    public function actionGetPreviews($handle)
+    public function actionGetPreviews($matrixFieldHandle)
     {
         $previewService = MatrixFieldPreview::getInstance()->previewService;
 
         $results = [];
-        $previews = $previewService->getByHandle($handle);
+        $previews = $previewService->getByHandle($matrixFieldHandle);
 
         foreach ($previews as $preview) {
             $blockType = $preview->blockType;
+            $blockTypeHandle = $blockType->handle;
             $result = [
                 'name' => $blockType->name,
                 'description' => $preview->description,
@@ -102,12 +103,12 @@ class PreviewController extends Controller
                 ]) : "";
                 $result['thumb'] = $asset ? $asset->getThumbUrl(300, 300) : "";
             }
-            $results[$blockType->handle] = $result;
+            $results[$blockTypeHandle] = $result;
         }
 
         return $this->asJson([
             'success' => true,
-            'handle' => $handle,
+            'handle' => $matrixFieldHandle,
             'previews' => $results
         ]);
     }

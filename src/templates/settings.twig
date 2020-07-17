@@ -10,31 +10,7 @@
     {% set volumeList = volumeList|merge([{'value': volume.uid, 'label': volume.name}]) %}
 {% endfor %}
 
-
-{% macro assetLocationInput(volumeOptions, volumeUid, subpath) %}
-    {% from "_includes/forms" import select, text %}
-    <div class="flex">
-        <div>
-            {{ select({
-                id: 'previewVolumeUid',
-                name: 'previewVolumeUid',
-                options: volumeOptions,
-                value: volumeUid,
-            }) }}
-        </div>
-        <div class="flex-grow">
-            {{ text({
-                id: 'previewSubpath',
-                class: 'ltr',
-                name: 'previewSubpath',
-                value: subpath,
-                placeholder: "path/to/subfolder"|t('matrix-field-preview')
-            }) }}
-        </div>
-    </div>
-{% endmacro %}
-
-{% from _self import assetLocationInput %}
+{% from "matrix-field-preview/macros" import assetLocationInput,configWarning  %}
 
 {% if volumeList %}
     {{ forms.field(
@@ -46,13 +22,13 @@
         },
         assetLocationInput(volumeList, settings.previewVolumeUid, settings.previewSubpath)
     ) }}
-
 {% else %}
     {{ forms.field({
         first: true,
         label: "Preview Image Location"|t('matrix-field-preview'),
     }, '<p class="error">' ~ "No volumes exist yet."|t('matrix-field-preview') ~ '</p>') }}
 {% endif %}
+<hr>
 <div class="field mfp-settings-table">
     <div class="heading">
         <label>{{ "Configure your matrix blocks"|t('matrix-field-preview') }}</label>
@@ -98,3 +74,13 @@
         <div class="mfp-settings-table__overlay">&nbsp;</div>
     {% endif %}
 </div>
+<hr>
+{{ forms.lightswitchField({
+    label: "Take-over Fields"|t('matrix-field-preview'),
+    instructions: "Whether to 'take-over' the existing matrix field functionality or just work alongside the default functionality."|t('matrix-field-preview'),
+    name: 'takeoverFields',
+    id: 'takeoverFields',
+    on: settings.takeoverFields,
+    errors: settings.getErrors('takeoverFields'),
+    warning: configWarning('takeoverFields', 'matrix-field-preview')
+}) }}

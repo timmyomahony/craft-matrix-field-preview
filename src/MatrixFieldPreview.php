@@ -76,15 +76,20 @@ class MatrixFieldPreview extends Plugin
         // Therefore, the only way to do this is to use EVENT_AFTER_RENDER_TEMPLATE 
         // event to insert and run our asset bundles after a control panel
         // view has been rendered
+        //
+        // More info here: https://github.com/craftcms/cms/issues/5867, and 
+        // in particular this https://github.com/craftcms/cms/issues/5867#issuecomment-639912817
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
             function (TemplateEvent $event) {
                 if (Craft::$app->request->isCpRequest) {
                     $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/no-dummy-image.svg', true);
+                    $settings = $this->getSettings();
                     $view = Craft::$app->getView();
                     $view->registerAssetBundle(PreviewFieldAsset::class);
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
+                    $view->registerJsVar('matrixFieldPreviewTakeoverFields', $settings->takeoverFields);
                     $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field");', View::POS_READY, 'matrix-field-preview');
                 }
             }

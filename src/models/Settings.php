@@ -9,6 +9,7 @@ class Settings extends Model
 {
     public $previewVolumeUid = null;
     public $previewSubpath = null;
+    public $takeoverFields = true;
 
     public function rules()
     {
