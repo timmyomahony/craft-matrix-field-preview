@@ -55,7 +55,7 @@
                         <td scope="row" data-title="Description">
                             {{ row.blockType.handle }}
                         </td>
-                        <td scope="row" data-title="Description">
+                        <td scope="row" data-title="Description" {% if row.preview and row.preview.description %}title="{{ row.preview.description }}"{% endif %}>
                             {% if row.preview and row.preview.description %}
                                 <img class="mfp-settings-table__icon" src="{{ assets.success }}">
                             {% endif %}
