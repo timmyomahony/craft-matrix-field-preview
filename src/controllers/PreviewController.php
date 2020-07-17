@@ -112,4 +112,11 @@ class PreviewController extends Controller
             'previews' => $results
         ]);
     }
+
+    public function actionGetSettings() {
+        $settings = MatrixFieldPreview::getInstance()->getSettings();
+        return $this->asJson([
+            'takeoverFields' => $settings->takeoverFields
+        ]);
+    }
 }
