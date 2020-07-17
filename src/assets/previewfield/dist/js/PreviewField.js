@@ -12,6 +12,20 @@
    *    dropdown button used by default
    *  - Insert previews into existing and new block types
    *  - Create alternative modal selector with previews
+   *
+   * Access to existing MatrixInput:
+   *
+   * The Craft control panel has its own JavaScript object that is stored
+   * on the matrix field HTML DOM element:
+   *
+   * > $('.matrix-field').data("matrix")
+   *
+   * But the BIG caveat is that you have to wait for the element to finish 
+   * executing and setting up. There's no way to wait or know when the
+   * matrix field has been initialised.
+   *
+   * See the existing comments in the MatrixFieldPreview.php file that loads
+   * this asset bundle for more details
    */
   Craft.MatrixFieldPreview = Garnish.Base.extend({
     $matrixFields: null,
@@ -74,7 +88,6 @@
             );
             this.previews = response["previews"];
 
-            var matrixInput = $matrixField.data("matrix");
             var $existingBlockTypes = $matrixField.find(
               " > .blocks > .matrixblock"
             );

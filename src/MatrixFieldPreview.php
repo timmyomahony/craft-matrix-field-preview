@@ -76,6 +76,9 @@ class MatrixFieldPreview extends Plugin
         // Therefore, the only way to do this is to use EVENT_AFTER_RENDER_TEMPLATE 
         // event to insert and run our asset bundles after a control panel
         // view has been rendered
+        //
+        // More info here: https://github.com/craftcms/cms/issues/5867, and 
+        // in particular this https://github.com/craftcms/cms/issues/5867#issuecomment-639912817
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
