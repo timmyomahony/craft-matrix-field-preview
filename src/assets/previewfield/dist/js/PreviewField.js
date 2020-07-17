@@ -16,6 +16,7 @@
   Craft.MatrixFieldPreview = Garnish.Base.extend({
     $matrixFields: null,
     matrixFields: {},
+    settingsUrl: "matrix-field-preview/preview/get-settings",
     previewsUrl: "matrix-field-preview/preview/get-previews",
     previews: {},
     // FIXME: I'm not sure why, but every time you insert a block
@@ -26,11 +27,18 @@
     // matrix field JavaScript, but I don't know why it's happening
     init: function (matrixFields) {
       this.defaultImageUrl = matrixFieldPreviewDefaultImage; // via $view->registerJsVar
+      this.takeoverFields = matrixFieldPreviewTakeoverFields; // via $view->registerJsVar
       this.$matrixFields = $(matrixFields);
       if (this.$matrixFields.length > 0) {
         this.$matrixFields.each(
           function (i, matrixField) {
             var $matrixField = $(matrixField);
+  
+            $matrixField.addClass("mfp-matrix-field");
+            if (this.takeoverFields) {
+              $matrixField.addClass("mfp-take-over");
+            }
+
             var matrixFieldHandle = this.getMatrixFieldHandle($matrixField);
             if (!this.matrixFields.hasOwnProperty(matrixFieldHandle)) {
               console.debug(
@@ -55,7 +63,7 @@
       $.get({
         url: Craft.getActionUrl(this.previewsUrl),
         data: {
-          handle: matrixFieldHandle,
+          matrixFieldHandle: matrixFieldHandle,
         },
         dataType: "json",
         success: function (response) {
@@ -144,7 +152,7 @@
 
             this.matrixFields[matrixFieldHandle] = $matrixField;
 
-            $matrixField.addClass("preview-loaded");
+            $matrixField.addClass("mfp-loaded");
           } else {
             console.error(error);
             Craft.cp.displayError("Error rendering matrix field preview");
@@ -277,9 +285,15 @@
     },
 
     createModalButton: function ($matrixField) {
+      var buttonText = $matrixField.find(".menubtn").text();
+      var buttonIcon = "add";
+      if (! this.takeoverFields) {
+        buttonText = "Preview Blocks";
+        buttonIcon = "search";
+      }
       var $button = $("<div>")
-        .addClass("btn dashed add icon")
-        .text($matrixField.find(".menubtn").text());
+        .addClass("mfp-modal-trigger btn icon dashed " + buttonIcon)
+        .text(buttonText);
       $matrixField.find(".buttons").append($button);
       return $button;
     },
