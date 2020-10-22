@@ -8,6 +8,7 @@
 
 {% set title = "Previews Configuration" | t("matrix-field-preview") %}
 
+{% block submitButton %}{% endblock %}
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
     {{ actionInput('matrix-field-preview/settings/previews') }}
