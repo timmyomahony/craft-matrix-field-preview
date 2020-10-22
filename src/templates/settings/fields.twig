@@ -1,0 +1,16 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% import '_includes/forms' as forms %}
+
+{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
+
+{% set fullPageForm = true %}
+
+{% block content %}
+    <input type="hidden" name="action" value="plugins/save-plugin-settings">
+    <input type="hidden" name="pluginHandle" value="matrix-field-plugin">
+
+    {% namespace 'settings' %}
+    Fields
+    {% endnamespace %}
+{% endblock %}

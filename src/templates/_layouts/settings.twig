@@ -1,0 +1,33 @@
+{% extends "_layouts/cp" %}
+
+{% if title is not defined %}
+    {% set title = plugin.name %}
+{% endif %}
+
+{% set navItems = {
+    heading: {
+        heading: "Settings" | t('matrix-field-preview')
+    },
+    fields: {
+        title: "Fields"|t('matrix-field-preview')
+    },
+    previews: {
+        title: "Previews"|t('matrix-field-preview')
+    },
+} %}
+
+{% set selectedItem = craft.app.request.getSegment(3)|default("fields") %}
+
+{% block sidebar %}
+    <nav>
+        <ul>
+            {% for id, item in navItems %}
+                {% if item.heading is defined %}
+                    <li class="heading"><span>{{ item.heading }}</span></li>
+                {% else %}
+                    <li><a href="{{ url('matrix-field-preview/settings/' ~ id) }}"{% if id == selectedItem %} class="sel"{% endif %}>{{ item.title }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
