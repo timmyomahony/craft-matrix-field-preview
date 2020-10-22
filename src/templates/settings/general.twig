@@ -1,0 +1,51 @@
+{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
+
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% import '_includes/forms' as forms %}
+
+{% set fullPageForm = true %}
+
+{% block content %}
+    <input type="hidden" name="action" value="plugins/save-plugin-settings">
+    <input type="hidden" name="pluginHandle" value="matrix-field-plugin">
+
+    {% namespace 'settings' %}
+        {# 
+            Adapted from:
+            https://github.com/craftcms/cms/blob/develop/src/templates/settings/users/settings.html
+        #}
+        {% set allVolumes = craft.app.volumes.getAllVolumes() %}
+        {% set volumeList = [] %}
+        {% for volume in allVolumes %}
+            {% set volumeList = volumeList|merge([{'value': volume.uid, 'label': volume.name}]) %}
+        {% endfor %}
+
+        {% if volumeList %}
+            {{ forms.field(
+                {
+                    first: true,
+                    label: "Preview Image Location"|t('matrix-field-preview'),
+                    instructions: "Where do you want to store matrix field preview images?"|t('matrix-field-preview'),
+                    warning: (not settings.previewVolumeUid) ? "Please save this volume location for your preview images before continuing" : null
+                },
+                assetLocationInput(volumeList, settings.previewVolumeUid, settings.previewSubpath)
+            ) }}
+        {% else %}
+            {{ forms.field({
+                first: true,
+                label: "Preview Image Location"|t('matrix-field-preview'),
+            }, '<p class="error">' ~ "No volumes exist yet."|t('matrix-field-preview') ~ '</p>') }}
+        {% endif %}
+        <hr>
+        {{ forms.lightswitchField({
+            label: "Take-over Fields"|t('matrix-field-preview'),
+            instructions: "Whether to 'take-over' the existing matrix field functionality or just work alongside the default functionality."|t('matrix-field-preview'),
+            name: 'takeoverFields',
+            id: 'takeoverFields',
+            on: settings.takeoverFields,
+            errors: settings.getErrors('takeoverFields'),
+            warning: configWarning('takeoverFields', 'matrix-field-preview')
+        }) }}
+    {% endnamespace %}
+{% endblock %}

@@ -18,6 +18,8 @@ class PreviewController extends Controller
     protected $allowAnonymous = [];
 
     /**
+     * TODO: Move this
+     * 
      * Get preview config 
      * 
      * Return a JSON configuration for the frontend to use

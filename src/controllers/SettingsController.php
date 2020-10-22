@@ -17,7 +17,21 @@ class SettingsController extends Controller
     protected $allowAnonymous = [];
 
     /**
-     * Configure fields to use previews on
+     * General plugin settings
+     */
+    public function actionGeneral()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        $settings = $plugin->getSettings();
+
+        return $this->renderTemplate('matrix-field-preview/settings/general', [
+            'settings' => $settings,
+            'plugin' => $plugin
+        ]);
+    }
+
+    /**
+     * Enable/disable previews on matrix fields
      */
     public function actionFields()
     {
@@ -31,7 +45,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Configure previews and list all matrix field block types
+     * Add images and descriptions to individual matrix field block types
      */
     public function actionPreviews()
     {
