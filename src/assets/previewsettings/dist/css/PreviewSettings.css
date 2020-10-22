@@ -1,6 +1,7 @@
 /* The block type table in settings */
 .mfp-settings-table {
   position: relative;
+  margin-top: 0;
 }
 
 .mfp-settings-table table {
