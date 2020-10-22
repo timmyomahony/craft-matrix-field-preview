@@ -59,7 +59,7 @@
                             {% for row in group.rows %}
                                 <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
                                     <td scope="row" data-title="Name">
-                                        <a href="{{ actionUrl('matrix-field-preview/preview', {
+                                        <a href="{{ actionUrl('matrix-field-preview/settings/preview', {
                                             blockTypeId: row.blockType.id
                                         }) }}"><strong>{{ row.blockType.name }}</strong></a>
                                     </td>

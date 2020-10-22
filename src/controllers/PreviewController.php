@@ -17,59 +17,6 @@ class PreviewController extends Controller
 
     protected $allowAnonymous = [];
 
-    public $defaultAction = 'preview';
-
-    /**
-     * Render a particular matrix block type with a form
-     */
-    public function actionPreview($blockTypeId)
-    {
-        $this->view->registerAssetBundle(PreviewImageAsset::class);
-
-        $siteId = Craft::$app->getSites()->currentSite->id;
-        $previewService = MatrixFieldPreview::getInstance()->previewService;
-        $request = Craft::$app->request;
-        $plugin = MatrixFieldPreview::getInstance();
-        $settings = $plugin->getSettings();
-
-        $blockType = Craft::$app->matrix->getBlockTypeById($blockTypeId);
-        if (!$blockType) {
-            throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
-        }
-
-        $preview = $previewService->getByBlockTypeId($blockTypeId);
-        if (!$preview) {
-            $preview = new PreviewRecord();
-            $preview->blockTypeId = $blockType->id ?? null;
-            $preview->siteId = $siteId;
-            $preview->description = "";
-            $preview->matrixFieldHandle = $blockType->field->handle;
-            $preview->save();
-        }
-
-        if ($request->isPost) {
-            $post = $request->post();
-            $preview->description = $post['description'];
-            if ($preview->validate()) {
-                $preview->save();
-                Craft::$app->getSession()->setNotice(Craft::t('app', 'Plugin settings saved.'));
-                return $this->redirect('/admin/settings/plugins/' . $plugin->id);
-            } else {
-                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save plugin settings.'));
-            }
-        }
-
-        return $this->renderTemplate(
-            'matrix-field-preview/preview',
-            [
-                'preview' => $preview,
-                'plugin' => $plugin,
-                'fullPageForm' => true,
-                'settings' => $settings
-            ]
-        );
-    }
-
     /**
      * Get preview config 
      * 

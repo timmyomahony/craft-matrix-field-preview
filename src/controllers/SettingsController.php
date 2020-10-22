@@ -5,6 +5,7 @@ namespace weareferal\matrixfieldpreview\controllers;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\assets\previewsettings\PreviewSettingsAsset;
+use weareferal\matrixfieldpreview\assets\previewimage\PreviewImageAsset;
 
 use Craft;
 use craft\web\Controller;
@@ -15,6 +16,9 @@ class SettingsController extends Controller
 
     protected $allowAnonymous = [];
 
+    /**
+     * Configure fields to use previews on
+     */
     public function actionFields()
     {
         $plugin = MatrixFieldPreview::getInstance();
@@ -26,13 +30,15 @@ class SettingsController extends Controller
         ]);
     }
 
+    /**
+     * Configure previews and list all matrix field block types
+     */
     public function actionPreviews()
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
-        $view = Craft::$app->getView();
-        $view->registerAssetBundle(PreviewSettingsAsset::class);
+        $this->view->registerAssetBundle(PreviewSettingsAsset::class);
 
         $assets = [
             'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
@@ -81,5 +87,57 @@ class SettingsController extends Controller
             'assets' => $assets,
             'matrixFields' => $matrixFields
         ]);
+    }
+
+    /**
+     * Configure an individual matrix field block type preview. Upload an
+     * image and a custom description
+     */
+    public function actionPreview($blockTypeId)
+    {
+        $this->view->registerAssetBundle(PreviewImageAsset::class);
+
+        $siteId = Craft::$app->getSites()->currentSite->id;
+        $previewService = MatrixFieldPreview::getInstance()->previewService;
+        $request = Craft::$app->request;
+        $plugin = MatrixFieldPreview::getInstance();
+        $settings = $plugin->getSettings();
+
+        $blockType = Craft::$app->matrix->getBlockTypeById($blockTypeId);
+        if (!$blockType) {
+            throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
+        }
+
+        $preview = $previewService->getByBlockTypeId($blockTypeId);
+        if (!$preview) {
+            $preview = new PreviewRecord();
+            $preview->blockTypeId = $blockType->id ?? null;
+            $preview->siteId = $siteId;
+            $preview->description = "";
+            $preview->matrixFieldHandle = $blockType->field->handle;
+            $preview->save();
+        }
+
+        if ($request->isPost) {
+            $post = $request->post();
+            $preview->description = $post['description'];
+            if ($preview->validate()) {
+                $preview->save();
+                Craft::$app->getSession()->setNotice(Craft::t('app', 'Plugin settings saved.'));
+                return $this->redirect('/admin/settings/plugins/' . $plugin->id);
+            } else {
+                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save plugin settings.'));
+            }
+        }
+
+        return $this->renderTemplate(
+            'matrix-field-preview/settings/preview',
+            [
+                'preview' => $preview,
+                'plugin' => $plugin,
+                'fullPageForm' => true,
+                'settings' => $settings
+            ]
+        );
     }
 }
