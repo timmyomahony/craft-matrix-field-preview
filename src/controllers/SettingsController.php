@@ -134,13 +134,13 @@ class SettingsController extends Controller
 
         if ($request->isPost) {
             $post = $request->post();
-            $preview->description = $post['description'];
+            $preview->description = $post['settings']['description'];
             if ($preview->validate()) {
                 $preview->save();
-                Craft::$app->getSession()->setNotice(Craft::t('app', 'Plugin settings saved.'));
-                return $this->redirect('/admin/settings/plugins/' . $plugin->id);
+                Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
+                return $this->redirect('matrix-field-preview/settings/previews');
             } else {
-                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save plugin settings.'));
+                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
             }
         }
 
