@@ -1,5 +1,9 @@
 {% extends "_layouts/cp" %}
 
+{% if plugin is not defined %}
+    {% set plugin = craft.app.getPlugins().getPlugin('matrix-field-preview') %}
+{% endif %}
+
 {% if title is not defined %}
     {% set title = plugin.name %}
 {% endif %}

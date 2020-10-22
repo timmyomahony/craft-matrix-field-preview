@@ -6,8 +6,10 @@
 
 {% set fullPageForm = true %}
 
+{% set title = "Fields Configuration" | t("matrix-field-preview") %}
+
 {% block content %}
-    <input type="hidden" name="pluginHandle" value="matrix-field-plugin">
+    <input type="hidden" name="pluginHandle" value="matrix-field-preview">
     {{ actionInput('matrix-field-preview/settings/fields') }}
 
     {% namespace 'settings' %}
