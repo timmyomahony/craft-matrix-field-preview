@@ -7,8 +7,8 @@
 {% set fullPageForm = true %}
 
 {% block content %}
-    <input type="hidden" name="action" value="plugins/save-plugin-settings">
     <input type="hidden" name="pluginHandle" value="matrix-field-plugin">
+    {{ actionInput('matrix-field-preview/settings/previews') }}
 
     {% namespace 'settings' %}
         {# 

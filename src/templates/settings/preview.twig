@@ -16,8 +16,8 @@
 ] %}
 
 {% block content %}
-    <input type="hidden" name="action" value="plugins/save-plugin-settings">
     <input type="hidden" name="pluginHandle" value="matrix-field-plugin">
+    {{ actionInput('matrix-field-preview/settings/preview', {blockTypeId: preview.blockType.id}) }}
 
     {% namespace 'settings' %}
         {{ forms.textareaField({
