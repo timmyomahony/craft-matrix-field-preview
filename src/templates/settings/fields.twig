@@ -11,8 +11,51 @@
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
     {{ actionInput('matrix-field-preview/settings/fields') }}
-
     {% namespace 'settings' %}
-    Fields
+        <div class="field mfp-settings-table">
+            <div class="heading">
+                <label>{{ "Configure your matrix fields"|t('matrix-field-preview') }}</label>
+                <div class="instructions"><p>Enable/disable the matrix fields you want previews to appear on</p></div>
+            </div>
+            {% if matrixFields | length <= 0 %}
+                <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
+            {% else %}
+                <table id="fields" class="data fullwidth">
+                    <thead>
+                        <th scope="col">{{ "Matrix Field"|t('matrix-field-preview') }}</th>
+                        <th scope="col">{{ "Handle"|t('matrix-field-preview') }}</th>
+                        <th scope="col">{{ "Enabled"|t('matrix-field-preview') }} <span class="info"><p>Whether or not to show previews for this matrix field.</p></span></th>
+                        <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>Whether to completely take-over the matrix field with custom previews,<br>or just show previews alongside the existing Craft matrix field interface.</p></span></th>
+                    </thead>
+                    <tbody>
+                        {% for matrixField in matrixFields %}
+                            <tr data-id="{{ loop.index }}" data-name="{{ matrixField.handle }}">
+                                <td scope="row" data-title="Handle">
+                                    <strong>{{ matrixField.name }}</strong>
+                                </td>
+                                <td scope="row" data-title="Enable/Disable">
+                                    {{ matrixField.handle }}
+                                </td>
+                                <td scope="row" data-title="Enable/Disable">
+                                    {{ forms.lightswitchField({
+                                        name: 'takeoverFields',
+                                        id: 'takeoverFields'
+                                    }) }}
+                                </td>
+                                <td scope="row" data-title="Takeover">
+                                    {{ forms.lightswitchField({
+                                        name: 'takeoverFields',
+                                        id: 'takeoverFields'
+                                    }) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if not settings.previewVolumeUid %}
+                <div class="mfp-settings-table__overlay">&nbsp;</div>
+            {% endif %}
+        </div>
     {% endnamespace %}
 {% endblock %}

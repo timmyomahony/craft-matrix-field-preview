@@ -4,6 +4,10 @@
   margin-top: 0;
 }
 
+.mfp-settings-table .heading {
+  margin-bottom: 25px;
+}
+
 .mfp-settings-table table {
   margin-bottom: 25px;
 }

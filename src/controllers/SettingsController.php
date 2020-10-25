@@ -24,6 +24,8 @@ class SettingsController extends Controller
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
+        $this->view->registerAssetBundle(PreviewSettingsAsset::class);
+
         return $this->renderTemplate('matrix-field-preview/settings/general', [
             'settings' => $settings,
             'plugin' => $plugin
@@ -38,9 +40,19 @@ class SettingsController extends Controller
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
+        $this->view->registerAssetBundle(PreviewSettingsAsset::class);
+
+        // Get all sections and matrix fields
+        $sections = Craft::$app->sections->getAllSections();
+
+        $matrixFields = $plugin->previewService->getAllMatrixFields();
+
+        Craft::info($sections, "matrix-field-previews");
+
         return $this->renderTemplate('matrix-field-preview/settings/fields', [
             'settings' => $settings,
-            'plugin' => $plugin
+            'plugin' => $plugin,
+            'matrixFields' => $matrixFields
         ]);
     }
 

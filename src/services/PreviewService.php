@@ -98,14 +98,15 @@ class PreviewService extends Component
      * 
      * So instead, we have our own function here
      */
-    public function getAllMatrixFields() {
+    public function getAllMatrixFields()
+    {
         $results = [];
-        foreach(Craft::$app->getFields()->getAllFields() as $field) {
+        foreach (Craft::$app->getFields()->getAllFields() as $field) {
             // @fixme: is this really the best way to get matrix fields?
             if (get_class($field) == 'craft\fields\Matrix') {
                 array_push($results, $field);
             }
         }
         return $results;
-    }   
+    }
 }
