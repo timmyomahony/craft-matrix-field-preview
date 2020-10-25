@@ -12,6 +12,7 @@
 namespace weareferal\matrixfieldpreview;
 
 use weareferal\matrixfieldpreview\services\PreviewService;
+use weareferal\matrixfieldpreview\services\FieldConfigService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\previewfield\PreviewFieldAsset;
@@ -80,7 +81,8 @@ class MatrixFieldPreview extends Plugin
     {
         $this->setComponents([
             'previewService' => PreviewService::class,
-            'previewImageService' => PreviewImageService::class
+            'previewImageService' => PreviewImageService::class,
+            'fieldConfigService' => FieldConfigService::class,
         ]);
     }
 

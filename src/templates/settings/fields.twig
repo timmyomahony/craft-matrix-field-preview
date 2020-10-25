@@ -23,38 +23,34 @@
                 <table id="fields" class="data fullwidth">
                     <thead>
                         <th scope="col">{{ "Matrix Field"|t('matrix-field-preview') }}</th>
-                        <th scope="col">{{ "Handle"|t('matrix-field-preview') }}</th>
                         <th scope="col">{{ "Enabled"|t('matrix-field-preview') }} <span class="info"><p>Whether or not to show previews for this matrix field.</p></span></th>
                         <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>Whether to completely take-over the matrix field with custom previews,<br>or just show previews alongside the existing Craft matrix field interface.</p></span></th>
                     </thead>
                     <tbody>
-                        {% for matrixField in matrixFields %}
+                        {% for fieldConfig in fieldConfigs %}
+                            {% set matrixField = fieldConfig.field %}
                             <tr data-id="{{ loop.index }}" data-name="{{ matrixField.handle }}">
-                                <td scope="row" data-title="Handle">
+                                <td scope="row" data-title="Matrix Field">
                                     <strong>{{ matrixField.name }}</strong>
                                 </td>
                                 <td scope="row" data-title="Enable/Disable">
-                                    {{ matrixField.handle }}
-                                </td>
-                                <td scope="row" data-title="Enable/Disable">
                                     {{ forms.lightswitchField({
-                                        name: 'takeoverFields',
-                                        id: 'takeoverFields'
+                                        name: matrixField.handle ~ '_enablePreviews',
+                                        id: matrixField.handle ~ '_enablePreviews',
+                                        on: fieldConfig.enablePreviews
                                     }) }}
                                 </td>
                                 <td scope="row" data-title="Takeover">
                                     {{ forms.lightswitchField({
-                                        name: 'takeoverFields',
-                                        id: 'takeoverFields'
+                                        name: matrixField.handle ~ '_enableTakeover',
+                                        id: matrixField.handle ~ '_enableTakeover',
+                                        on: fieldConfig.enableTakeover
                                     }) }}
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-            {% endif %}
-            {% if not settings.previewVolumeUid %}
-                <div class="mfp-settings-table__overlay">&nbsp;</div>
             {% endif %}
         </div>
     {% endnamespace %}

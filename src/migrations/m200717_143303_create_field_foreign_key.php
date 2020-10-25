@@ -30,9 +30,9 @@ class m200717_143303_create_field_foreign_key extends Migration
             'CASCADE',
             'CASCADE'
         );
-        
+
         // Now do a data migration to save the new fieldId FK
-        foreach(MatrixFieldPreview::getInstance()->previewService->getAll() as $preview) {
+        foreach (MatrixFieldPreview::getInstance()->previewService->getAll() as $preview) {
             $preview->fieldId = $preview->blockType->fieldId;
             $preview->save();
         }
@@ -45,7 +45,8 @@ class m200717_143303_create_field_foreign_key extends Migration
     {
         $this->dropForeignKey(
             $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'fieldId'),
-            '{{%matrixfieldpreview_previewrecord}}');
+            '{{%matrixfieldpreview_previewrecord}}'
+        );
         $this->dropColumn('{{%matrixfieldpreview_previewrecord}}', 'fieldId');
         return true;
     }

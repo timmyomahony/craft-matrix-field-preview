@@ -46,13 +46,15 @@ class SettingsController extends Controller
         $sections = Craft::$app->sections->getAllSections();
 
         $matrixFields = $plugin->previewService->getAllMatrixFields();
+        $fieldConfigs = $plugin->fieldConfigService->getAll();
 
         Craft::info($sections, "matrix-field-previews");
 
         return $this->renderTemplate('matrix-field-preview/settings/fields', [
             'settings' => $settings,
             'plugin' => $plugin,
-            'matrixFields' => $matrixFields
+            'matrixFields' => $matrixFields,
+            'fieldConfigs' => $fieldConfigs
         ]);
     }
 
