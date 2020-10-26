@@ -23,7 +23,7 @@
                     <thead>
                         <th scope="col">{{ "Matrix Field"|t('matrix-field-preview') }}</th>
                         <th scope="col">{{ "Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this matrix field." | t('matrix-field-preview') }}</p></span></th>
-                        <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether to completely take-over the matrix field with custom previews,<br>or just show previews alongside the existing Craft matrix field interface." | t('matrix-field-preview') }}</p></span></th>
+                        <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default Craft matrix field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
                     </thead>
                     <tbody>
                         {% for fieldConfig in fieldConfigs %}
