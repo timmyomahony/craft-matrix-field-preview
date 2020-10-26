@@ -6,41 +6,38 @@
 
 {% set fullPageForm = true %}
 
-{% set title = "Previews Configuration" | t("matrix-field-preview") %}
+{% set title = "Block Types Configuration" | t("matrix-field-preview") %}
 
 {% block submitButton %}{% endblock %}
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
-    {{ actionInput('matrix-field-preview/settings/previews') }}
+    {{ actionInput('matrix-field-preview/settings/block-types') }}
 
     {% namespace 'settings' %}
         <div class="field mfp-settings-table">
             <div class="heading">
-                <label>{{ "Configure your previews"|t('matrix-field-preview') }}</label>
-                <div class="instructions"><p>Click a matrix block type below to configure its description and preview image</p></div>
+                <label>{{ "Configure Matrix Block Types"|t('matrix-field-preview') }}</label>
+                <div class="instructions"><p>{{ "Use this page to configure the images and descriptions that appear for your matrix field block types." | t('matrix-field-preview') }}</p></div>
             </div>
             {% if matrixFields | length <= 0 %}
                 <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
             {% else %}
                 {% for group in matrixFields %}
-                    <h4>"{{ group.matrixField.name }}" Matrix Field</h4>
+                    <h4><em>{{ group.matrixField.name }}</em> Matrix Field</h4>
                     <table id="fields" class="data fullwidth">
                         <thead>
-                            <th scope="col">{{ "Name"|t('matrix-field-preview') }}</th>
-                            <th scope="col">{{ "Handle"|t('matrix-field-preview') }}</th>
-                            <th scope="col">{{ "Has Description"|t('matrix-field-preview') }}</th>
-                            <th scope="col">{{ "Has Image"|t('matrix-field-preview') }}</th>
+                            <th scope="col">{{ "Block Type"|t('matrix-field-preview') }}</th>
+                            <th scope="col">{{ "Description"|t('matrix-field-preview') }}</th>
+                            <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
                         </thead>
                         <tbody>
                             {% for row in group.rows %}
                                 <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
                                     <td scope="row" data-title="Name">
-                                        <a href="{{ actionUrl('matrix-field-preview/settings/preview', {
+                                        <a href="{{ url('matrix-field-preview/settings/block-type', {
                                             blockTypeId: row.blockType.id
-                                        }) }}"><strong>{{ row.blockType.name }}</strong></a>
-                                    </td>
-                                    <td scope="row" data-title="Description">
-                                        {{ row.blockType.handle }}
+                                        }) }}">
+                                        <strong>{{ row.blockType.name }}</strong></a>
                                     </td>
                                     <td scope="row" data-title="Description" {% if row.preview and row.preview.description %}title="{{ row.preview.description }}"{% endif %}>
                                         {% if row.preview and row.preview.description %}

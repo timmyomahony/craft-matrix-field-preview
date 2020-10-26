@@ -12,12 +12,12 @@
 
 {% set crumbs = [
     { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
-    { label: "Previews" | t('feed-me'), url: url('matrix-field-preview/settings/previews') }
+    { label: "Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/block-types') }
 ] %}
 
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
-    {{ actionInput('matrix-field-preview/settings/preview', {blockTypeId: preview.blockType.id}) }}
+    {{ actionInput('matrix-field-preview/settings/block-type', {blockTypeId: preview.blockType.id}) }}
 
     {% namespace 'settings' %}
         {{ forms.textareaField({
@@ -31,13 +31,12 @@
         }) }}
 
         {{ forms.field(
-                {
-                    instructions: "Upload a screenshot of your matrix field block here. This will be visible when publishing content via the matrix field",
-                    label: "Preview Image"|t('matrix-field-preview'),
-                    id: 'preview'
-                },
-                include('matrix-field-preview/_includes/preview-image', with_context = true)
-            )
-        }}
+            {
+                instructions: "Upload a screenshot of your matrix field block here. This will be visible when publishing content via the matrix field",
+                label: "Preview Image"|t('matrix-field-preview'),
+                id: 'preview'
+            },
+            include('matrix-field-preview/_includes/preview-image', with_context = true)
+        )}}
     {% endnamespace %}
 {% endblock %}

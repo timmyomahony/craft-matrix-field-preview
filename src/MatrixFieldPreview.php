@@ -134,7 +134,8 @@ class MatrixFieldPreview extends Plugin
                     'matrix-field-preview/settings' => 'matrix-field-preview/settings/general',
                     'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
                     'matrix-field-preview/settings/fields' => 'matrix-field-preview/settings/fields',
-                    'matrix-field-preview/settings/previews' => 'matrix-field-preview/settings/previews'
+                    'matrix-field-preview/settings/block-types' => 'matrix-field-preview/settings/block-types',
+                    'matrix-field-preview/settings/block-type' => 'matrix-field-preview/settings/block-type'
                 ]);
             }
         );

@@ -80,7 +80,7 @@ class SettingsController extends Controller
     /**
      * Add images and descriptions to individual matrix field block types
      */
-    public function actionPreviews()
+    public function actionBlockTypes()
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
@@ -128,7 +128,7 @@ class SettingsController extends Controller
             array_push($matrixFields, $value);
         }
 
-        return $this->renderTemplate('matrix-field-preview/settings/previews', [
+        return $this->renderTemplate('matrix-field-preview/settings/block-types', [
             'settings' => $settings,
             'plugin' => $plugin,
             'assets' => $assets,
@@ -140,7 +140,7 @@ class SettingsController extends Controller
      * Configure an individual matrix field block type preview. Upload an
      * image and a custom description
      */
-    public function actionPreview($blockTypeId)
+    public function actionBlockType($blockTypeId)
     {
         $this->view->registerAssetBundle(PreviewImageAsset::class);
 
@@ -171,14 +171,14 @@ class SettingsController extends Controller
             if ($preview->validate()) {
                 $preview->save();
                 Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
-                return $this->redirect('matrix-field-preview/settings/previews');
+                return $this->redirect('matrix-field-preview/settings/block-types');
             } else {
                 Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
             }
         }
 
         return $this->renderTemplate(
-            'matrix-field-preview/settings/preview',
+            'matrix-field-preview/settings/block-type',
             [
                 'preview' => $preview,
                 'plugin' => $plugin,

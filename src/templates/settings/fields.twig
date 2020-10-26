@@ -13,8 +13,8 @@
     {{ actionInput('matrix-field-preview/settings/fields') }}
         <div class="field mfp-settings-table">
             <div class="heading">
-                <label>{{ "Configure your matrix fields"|t('matrix-field-preview') }}</label>
-                <div class="instructions"><p>Enable/disable the matrix fields you want previews to appear on</p></div>
+                <label>{{ "Configure Matrix Fields"|t('matrix-field-preview') }}</label>
+                <div class="instructions"><p>{{ "Use this page to select the matrix fields you want preview images and descriptions to appear on." | t('matrix-field-preview') }}</p></div>
             </div>
             {% if matrixFields | length <= 0 %}
                 <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
@@ -22,8 +22,8 @@
                 <table id="fields" class="data fullwidth">
                     <thead>
                         <th scope="col">{{ "Matrix Field"|t('matrix-field-preview') }}</th>
-                        <th scope="col">{{ "Enabled"|t('matrix-field-preview') }} <span class="info"><p>Whether or not to show previews for this matrix field.</p></span></th>
-                        <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>Whether to completely take-over the matrix field with custom previews,<br>or just show previews alongside the existing Craft matrix field interface.</p></span></th>
+                        <th scope="col">{{ "Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this matrix field." | t('matrix-field-preview') }}</p></span></th>
+                        <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether to completely take-over the matrix field with custom previews,<br>or just show previews alongside the existing Craft matrix field interface." | t('matrix-field-preview') }}</p></span></th>
                     </thead>
                     <tbody>
                         {% for fieldConfig in fieldConfigs %}
