@@ -25,10 +25,10 @@ class PreviewImageController extends Controller
         $this->requireLogin();
 
         $previewImageService = MatrixFieldPreview::getInstance()->previewImageService;
-        $previewService = MatrixFieldPreview::getInstance()->previewService;
+        $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
 
         $previewId = Craft::$app->getRequest()->getRequiredBodyParam('previewId');
-        $preview = $previewService->getById((int) $previewId);
+        $preview = $blockTypeConfigService->getById((int) $previewId);
         if (!$preview) {
             throw new NotFoundHttpException('Invalid preview ID: ' . $previewId);
         }
@@ -74,9 +74,9 @@ class PreviewImageController extends Controller
         $this->requireAcceptsJson();
         $this->requireLogin();
 
-        $previewService = MatrixFieldPreview::getInstance()->previewService;
+        $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
         $previewId = Craft::$app->getRequest()->getRequiredBodyParam('previewId');
-        $preview = $previewService->getById((int) $previewId);
+        $preview = $blockTypeConfigService->getById((int) $previewId);
 
         if (!$preview) {
             throw new NotFoundHttpException('Invalid preview ID: ' . $previewId);

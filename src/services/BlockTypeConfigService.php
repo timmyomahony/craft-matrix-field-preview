@@ -26,7 +26,7 @@ use craft\errors\ImageException;
 use craft\errors\InvalidSubpathException;
 
 /**
- * PreviewService Service
+ * BlockTypeConfigService Service
  *
  * All of your plugin’s business logic should go in services, including saving data,
  * retrieving data, etc. They provide APIs that your controllers, template variables,
@@ -38,7 +38,7 @@ use craft\errors\InvalidSubpathException;
  * @package   MatrixFieldPreview
  * @since     1.0.0
  */
-class PreviewService extends Component
+class BlockTypeConfigService extends Component
 {
     public function getAll()
     {

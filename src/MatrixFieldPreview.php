@@ -11,7 +11,7 @@
 
 namespace weareferal\matrixfieldpreview;
 
-use weareferal\matrixfieldpreview\services\PreviewService;
+use weareferal\matrixfieldpreview\services\BlockTypeConfigService;
 use weareferal\matrixfieldpreview\services\FieldConfigService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
@@ -42,7 +42,7 @@ use yii\base\Event;
  * @package   MatrixFieldPreview
  * @since     1.0.0
  *
- * @property  PreviewService $previewService
+ * @property  BlockTypeConfigService $blockTypeConfigService
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -80,9 +80,9 @@ class MatrixFieldPreview extends Plugin
     private function _setPluginComponents()
     {
         $this->setComponents([
-            'previewService' => PreviewService::class,
             'previewImageService' => PreviewImageService::class,
             'fieldConfigService' => FieldConfigService::class,
+            'blockTypeConfigService' => BlockTypeConfigService::class
         ]);
     }
 

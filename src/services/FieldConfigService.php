@@ -33,7 +33,7 @@ class FieldConfigService extends Component
     public function getAll()
     {
         $plugin = MatrixFieldPreview::getInstance();
-        $matrixFields = $plugin->previewService->getAllMatrixFields();
+        $matrixFields = $plugin->blockTypeConfigService->getAllMatrixFields();
 
         // TODO: performance can be improved here
         foreach ($matrixFields as $matrixField) {

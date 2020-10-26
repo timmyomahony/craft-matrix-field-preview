@@ -52,7 +52,7 @@ class PreviewController extends Controller
             "enableTakeover" => $fieldConfig->enableTakeover,
         ];
 
-        $blockTypeConfigs = $plugin->previewService->getByHandle($matrixFieldHandle);
+        $blockTypeConfigs = $plugin->blockTypeConfigService->getByHandle($matrixFieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
             $result = [

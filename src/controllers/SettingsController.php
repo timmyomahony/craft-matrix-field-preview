@@ -60,7 +60,7 @@ class SettingsController extends Controller
             }
         }
 
-        $matrixFields = $plugin->previewService->getAllMatrixFields();
+        $matrixFields = $plugin->blockTypeConfigService->getAllMatrixFields();
         $fieldConfigs = $plugin->fieldConfigService->getAll();
 
         usort($fieldConfigs, function ($a, $b) {
@@ -92,7 +92,7 @@ class SettingsController extends Controller
         ];
 
         $blockTypes = Craft::$app->matrix->getAllBlockTypes();
-        $blockTypeConfigs = $plugin->previewService->getAll();
+        $blockTypeConfigs = $plugin->blockTypeConfigService->getAll();
 
         $blockTypeConfigMap = [];
         foreach ($blockTypeConfigs as $blockTypeConfig) {
@@ -148,7 +148,6 @@ class SettingsController extends Controller
         $this->view->registerAssetBundle(PreviewImageAsset::class);
 
         $siteId = Craft::$app->getSites()->currentSite->id;
-        $previewService = MatrixFieldPreview::getInstance()->previewService;
         $request = Craft::$app->request;
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
@@ -158,7 +157,7 @@ class SettingsController extends Controller
             throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
         }
 
-        $preview = $previewService->getByBlockTypeId($blockTypeId);
+        $preview = $plugin->blockTypeConfigService->getByBlockTypeId($blockTypeId);
         if (!$preview) {
             $preview = new PreviewRecord();
             $preview->blockTypeId = $blockType->id ?? null;
