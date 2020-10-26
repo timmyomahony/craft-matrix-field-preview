@@ -15,7 +15,7 @@ class BlockTypeConfigRecord extends ActiveRecord
 {
     public static function tableName()
     {
-        return '{{%matrixfieldpreview_previewrecord}}';
+        return '{{%matrixfieldpreview_blocktypes_config}}';
     }
 
     /**
