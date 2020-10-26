@@ -235,7 +235,10 @@
 
       var modal = this.createModal($matrixField, matrixFieldHandle);
       var matrixInput = $matrixField.data("matrix");
-      var $modalButton = this.createModalButton($matrixField);
+      var $modalButton = this.createModalButton(
+        $matrixField,
+        matrixFieldHandle
+      );
 
       var $grid = $("<div>", {
         class: "mfp-modal__grid",
@@ -337,10 +340,11 @@
       return modal;
     },
 
-    createModalButton: function ($matrixField) {
+    createModalButton: function ($matrixField, matrixFieldHandle) {
       var buttonText = $matrixField.find(".menubtn").text();
       var buttonIcon = "add";
-      if (!this.takeoverFields) {
+      var config = this.configs[matrixFieldHandle];
+      if (!config["fieldConfig"]["enableTakeover"]) {
         buttonText = "Preview Blocks";
         buttonIcon = "search";
       }
