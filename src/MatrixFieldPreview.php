@@ -118,7 +118,6 @@ class MatrixFieldPreview extends Plugin
                     $view = Craft::$app->getView();
                     $view->registerAssetBundle(PreviewFieldAsset::class);
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
-                    $view->registerJsVar('matrixFieldPreviewTakeoverFields', $settings->takeoverFields);
                     $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field");', View::POS_READY, 'matrix-field-preview');
                 }
             }

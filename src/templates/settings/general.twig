@@ -39,15 +39,5 @@
                 label: "Preview Image Location"|t('matrix-field-preview'),
             }, '<p class="error">' ~ "No volumes exist yet."|t('matrix-field-preview') ~ '</p>') }}
         {% endif %}
-        {# <hr>
-        {{ forms.lightswitchField({
-            label: "Take-over Fields"|t('matrix-field-preview'),
-            instructions: "Whether to 'take-over' the existing matrix field functionality or just work alongside the default functionality."|t('matrix-field-preview'),
-            name: 'takeoverFields',
-            id: 'takeoverFields',
-            on: settings.takeoverFields,
-            errors: settings.getErrors('takeoverFields'),
-            warning: configWarning('takeoverFields', 'matrix-field-preview')
-        }) }} #}
     {% endnamespace %}
 {% endblock %}

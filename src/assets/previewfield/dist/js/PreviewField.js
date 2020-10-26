@@ -41,7 +41,6 @@
     // matrix field JavaScript, but I don't know why it's happening
     init: function (matrixFields) {
       this.defaultImageUrl = matrixFieldPreviewDefaultImage; // via $view->registerJsVar
-      this.takeoverFields = matrixFieldPreviewTakeoverFields; // via $view->registerJsVar
       this.$matrixFields = $(matrixFields);
       if (this.$matrixFields.length > 0) {
         this.$matrixFields.each(
