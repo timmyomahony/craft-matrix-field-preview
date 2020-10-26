@@ -23,40 +23,61 @@
                 <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
             {% else %}
                 {% for group in matrixFields %}
-                    <h4><em>{{ group.matrixField.name }}</em> Matrix Field</h4>
-                    <table id="fields" class="data fullwidth">
-                        <thead>
-                            <th scope="col">{{ "Block Type"|t('matrix-field-preview') }}</th>
-                            <th scope="col">{{ "Description"|t('matrix-field-preview') }}</th>
-                            <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
-                        </thead>
-                        <tbody>
-                            {% for row in group.rows %}
-                                <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
-                                    <td scope="row" data-title="Name">
-                                        <a href="{{ url('matrix-field-preview/settings/block-type', {
-                                            blockTypeId: row.blockType.id
-                                        }) }}">
-                                        <strong>{{ row.blockType.name }}</strong></a>
-                                    </td>
-                                    <td scope="row" data-title="Description" {% if row.preview and row.preview.description %}title="{{ row.preview.description }}"{% endif %}>
-                                        {% if row.preview and row.preview.description %}
-                                            <img class="mfp-settings-table__icon" src="{{ assets.success }}">
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if row.preview and row.preview.previewImageId %}
-                                            <img class="mfp-settings-table__icon" src="{{ assets.success }}">
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <h4><em>{{ group.matrixField.name }}</em> {{ "Matrix Field" | t("matrix-field-preview") }}</h4>
+                    <div class="mfp-settings-table__table">
+                        {% if group.fieldConfig.enablePreviews %}
+                            <table id="fields" class="data fullwidth">
+                                <thead>
+                                    <th scope="col">{{ "Block Type"|t('matrix-field-preview') }}</th>
+                                    <th scope="col">{{ "Description"|t('matrix-field-preview') }}</th>
+                                    <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
+                                </thead>
+                                <tbody>
+                                    {% for row in group.rows %}
+                                        <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
+                                            <td scope="row" data-title="Name">
+                                                <a href="{{ url('matrix-field-preview/settings/block-type', {
+                                                    blockTypeId: row.blockType.id
+                                                }) }}">
+                                                <strong>{{ row.blockType.name }}</strong></a>
+                                            </td>
+                                            <td scope="row" data-title="Description" {% if row.blockTypeConfig and row.blockTypeConfig.description %}title="{{ row.blockTypeConfig.description }}"{% endif %}>
+                                                {% if row.blockTypeConfig and row.blockTypeConfig.description %}
+                                                    <img class="mfp-settings-table__icon" src="{{ assets.success }}">
+                                                {% endif %}
+                                            </td>
+                                            <td scope="row" data-title="Preview Image">
+                                                {% if row.blockTypeConfig and row.blockTypeConfig.previewImageId %}
+                                                    <img class="mfp-settings-table__icon" src="{{ assets.success }}">
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <table id="fields" class="data fullwidth">
+                                <thead>
+                                    <th scope="col">{{ "Block Type"|t('matrix-field-preview') }}</th>
+                                    <th scope="col">{{ "Description"|t('matrix-field-preview') }}</th>
+                                    <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
+                                </thead>
+                                <tbody>
+                                    {% for row in group.rows %}
+                                        <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
+                                            <td scope="row" data-title="Name">
+                                                <strong>{{ row.blockType.name }}</strong>
+                                            </td>
+                                            <td scope="row" data-title="Description"></td>
+                                            <td scope="row" data-title="Preview Image"></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="mfp-settings-table__overlay" title="{{ 'This matrix field is not configured for preview descriptions and images.' | t('matrix-field-preview') }}"></div>
+                        {% endif %}
+                    </div>
                 {% endfor %}
-            {% endif %}
-            {% if not settings.previewVolumeUid %}
-                <div class="mfp-settings-table__overlay">&nbsp;</div>
             {% endif %}
         </div>
     {% endnamespace %}

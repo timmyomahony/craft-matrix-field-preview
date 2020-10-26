@@ -92,34 +92,37 @@ class SettingsController extends Controller
         ];
 
         $blockTypes = Craft::$app->matrix->getAllBlockTypes();
-        $previews = $plugin->previewService->getAll();
+        $blockTypeConfigs = $plugin->previewService->getAll();
 
-        $previewsMap = [];
-        foreach ($previews as $preview) {
-            $previewsMap[$preview->blockType->id] = $preview;
+        $blockTypeConfigMap = [];
+        foreach ($blockTypeConfigs as $blockTypeConfig) {
+            $blockTypeConfigMap[$blockTypeConfig->blockType->id] = $blockTypeConfig;
         }
 
         $matrixFieldsMap = [];
         foreach ($blockTypes as $blockType) {
             $matrixField = $blockType->field;
 
+            $fieldConfig = $plugin->fieldConfigService->getByHandle($matrixField->handle);
+
             // Initialise an array for each matrix field
             if (!array_key_exists($matrixField->id, $matrixFieldsMap)) {
                 $matrixFieldsMap[$matrixField->id] = [
                     'matrixField' => $matrixField,
+                    'fieldConfig' => $fieldConfig,
                     'rows' => []
                 ];
             }
 
-            // Get the preview for this block type if it exists
-            $preview = null;
-            if (array_key_exists($blockType->id, $previewsMap)) {
-                $preview = $previewsMap[$blockType->id];
+            // Get the block type config for this block type if it exists
+            $blockTypeConfig = null;
+            if (array_key_exists($blockType->id, $blockTypeConfigMap)) {
+                $blockTypeConfig = $blockTypeConfigMap[$blockType->id];
             }
 
             array_push($matrixFieldsMap[$matrixField->id]['rows'], [
                 'blockType' => $blockType,
-                'preview' => $preview
+                'blockTypeConfig' => $blockTypeConfig
             ]);
         }
 

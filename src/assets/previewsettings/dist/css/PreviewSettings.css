@@ -8,6 +8,10 @@
   margin-bottom: 25px;
 }
 
+.mfp-settings-table__table {
+  position: relative;
+}
+
 .mfp-settings-table table {
   margin-bottom: 25px;
 }
