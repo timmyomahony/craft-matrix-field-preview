@@ -11,7 +11,7 @@ use craft\records\Matrix;
 use craft\records\Asset;
 use craft\services\Elements;
 
-class PreviewRecord extends ActiveRecord
+class BlockTypeConfigRecord extends ActiveRecord
 {
     public static function tableName()
     {

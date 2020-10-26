@@ -159,7 +159,7 @@ class SettingsController extends Controller
 
         $preview = $plugin->blockTypeConfigService->getByBlockTypeId($blockTypeId);
         if (!$preview) {
-            $preview = new PreviewRecord();
+            $preview = new BlockTypeConfigRecord();
             $preview->blockTypeId = $blockType->id ?? null;
             $preview->siteId = $siteId;
             $preview->description = "";

@@ -12,7 +12,7 @@
 namespace weareferal\matrixfieldpreview\services;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\records\PreviewRecord;
+use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
 // use weareferal\matrixfieldpreview\models\MatrixFieldPreviewModel;
 
 use Craft;
@@ -42,12 +42,12 @@ class BlockTypeConfigService extends Component
 {
     public function getAll()
     {
-        return PreviewRecord::find()->all();
+        return BlockTypeConfigRecord::find()->all();
     }
 
     public function getByBlockTypeId($blockTypeId)
     {
-        $record = PreviewRecord::findOne([
+        $record = BlockTypeConfigRecord::findOne([
             'blockTypeId' => $blockTypeId
         ]);
 
@@ -60,7 +60,7 @@ class BlockTypeConfigService extends Component
 
     public function getByHandle($handle)
     {
-        $records = PreviewRecord::find([
+        $records = BlockTypeConfigRecord::find([
             'matrixFieldHandle' => $handle
         ])->all();
 
@@ -73,7 +73,7 @@ class BlockTypeConfigService extends Component
 
     public function getById($id)
     {
-        $record = PreviewRecord::findOne([
+        $record = BlockTypeConfigRecord::findOne([
             'id' => $id
         ]);
 
