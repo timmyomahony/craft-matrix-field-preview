@@ -53,4 +53,28 @@ class FieldConfigService extends Component
 
         return FieldConfigRecord::find()->all();
     }
+
+    /**
+     * Get By Handle
+     * 
+     * Get a field config row based on it's associated matrix field handle
+     */
+    public function getByHandle($handle)
+    {
+        $matrixField = Craft::$app->getFields()->getFieldByHandle($handle);
+
+        if ($matrixField) {
+            $record = FieldConfigRecord::findOne([
+                'fieldId' => $matrixField->id
+            ]);
+
+            if (!$record) {
+                return null;
+            } else {
+                return $record;
+            }
+        }
+
+        return null;
+    }
 }

@@ -39,16 +39,35 @@ class SettingsController extends Controller
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
+        $request = Craft::$app->request;
 
         $this->view->registerAssetBundle(PreviewSettingsAsset::class);
 
         // Get all sections and matrix fields
         $sections = Craft::$app->sections->getAllSections();
 
+        if ($request->isPost) {
+            $post = $request->post();
+            foreach ($post['settings'] as $handle => $values) {
+                $fieldConfig = $plugin->fieldConfigService->getByHandle($handle);
+                if ($fieldConfig) {
+                    $fieldConfig->enablePreviews = $values['enablePreviews'];
+                    $fieldConfig->enableTakeover = $values['enableTakeover'];
+                    if ($fieldConfig->validate()) {
+                        $fieldConfig->save();
+                    }
+                }
+            }
+        }
+
         $matrixFields = $plugin->previewService->getAllMatrixFields();
         $fieldConfigs = $plugin->fieldConfigService->getAll();
 
-        Craft::info($sections, "matrix-field-previews");
+        usort($fieldConfigs, function ($a, $b) {
+            return strcmp($a->field->name, $b->field->name);
+        });
+
+        // Craft::info($sections, "matrix-field-previews");
 
         return $this->renderTemplate('matrix-field-preview/settings/fields', [
             'settings' => $settings,

@@ -11,7 +11,6 @@
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
     {{ actionInput('matrix-field-preview/settings/fields') }}
-    {% namespace 'settings' %}
         <div class="field mfp-settings-table">
             <div class="heading">
                 <label>{{ "Configure your matrix fields"|t('matrix-field-preview') }}</label>
@@ -35,15 +34,15 @@
                                 </td>
                                 <td scope="row" data-title="Enable/Disable">
                                     {{ forms.lightswitchField({
-                                        name: matrixField.handle ~ '_enablePreviews',
-                                        id: matrixField.handle ~ '_enablePreviews',
+                                        name: 'settings[' ~ matrixField.handle ~ '][enablePreviews]',
+                                        id: matrixField.handle ~ '-enablePreviews',
                                         on: fieldConfig.enablePreviews
                                     }) }}
                                 </td>
                                 <td scope="row" data-title="Takeover">
                                     {{ forms.lightswitchField({
-                                        name: matrixField.handle ~ '_enableTakeover',
-                                        id: matrixField.handle ~ '_enableTakeover',
+                                        name: 'settings[' ~ matrixField.handle ~ '][enableTakeover]',
+                                        id:  matrixField.handle ~ '-enableTakeover',
                                         on: fieldConfig.enableTakeover
                                     }) }}
                                 </td>
@@ -53,5 +52,4 @@
                 </table>
             {% endif %}
         </div>
-    {% endnamespace %}
 {% endblock %}
