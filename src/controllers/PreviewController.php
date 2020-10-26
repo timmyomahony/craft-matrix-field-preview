@@ -12,14 +12,17 @@ use craft\web\Controller;
 
 use yii\web\NotFoundHttpException;
 
+/**
+ * Preview controller
+ * 
+ * Controller to handle Ajax requests for configuration from the cp
+ */
 class PreviewController extends Controller
 {
 
     protected $allowAnonymous = [];
 
     /**
-     * TODO: Move this
-     * 
      * Get preview config 
      * 
      * Return a JSON configuration for the frontend to use
@@ -29,36 +32,50 @@ class PreviewController extends Controller
      */
     public function actionGetPreviews($matrixFieldHandle)
     {
-        $previewService = MatrixFieldPreview::getInstance()->previewService;
+        $plugin = MatrixFieldPreview::getInstance();
+        $fieldConfig = $plugin->fieldConfigService->getByHandle($matrixFieldHandle);
 
-        $results = [];
-        $previews = $previewService->getByHandle($matrixFieldHandle);
+        $response = [
+            "success" => false,
+            "fieldConfig" => null,
+            "blockTypeConfigs" => []
+        ];
 
-        foreach ($previews as $preview) {
-            $blockType = $preview->blockType;
-            $blockTypeHandle = $blockType->handle;
-            $result = [
-                'name' => $blockType->name,
-                'description' => $preview->description,
-                'image' => null,
-                'thumb' => null
-            ];
-            if ($preview->previewImageId) {
-                $asset = Craft::$app->assets->getAssetById($preview->previewImageId);
-                $result['image'] = $asset ? $asset->getUrl([
-                    'width' => 800,
-                    'mode' => 'stretch',
-                    'position' => 'center-center'
-                ]) : "";
-                $result['thumb'] = $asset ? $asset->getThumbUrl(300, 300) : "";
-            }
-            $results[$blockTypeHandle] = $result;
+        if (!$fieldConfig) {
+            return $this->asJson($response);
         }
 
-        return $this->asJson([
-            'success' => true,
-            'handle' => $matrixFieldHandle,
-            'previews' => $results
-        ]);
+        $response['fieldConfig'] = [
+            "name" => $fieldConfig->field->name,
+            "handle" => $fieldConfig->field->handle,
+            "enablePreviews" => $fieldConfig->enablePreviews,
+            "enableTakeover" => $fieldConfig->enableTakeover,
+        ];
+
+        $blockTypeConfigs = $plugin->previewService->getByHandle($matrixFieldHandle);
+        foreach ($blockTypeConfigs as $blockTypeConfig) {
+            $blockType = $blockTypeConfig->blockType;
+            $result = [
+                "name" => $blockType->name,
+                "handle" => $blockType->handle,
+                "description" => $blockTypeConfig->description,
+                "image" => null,
+                "thumb" => null
+            ];
+            if ($blockTypeConfig->previewImageId) {
+                $asset = Craft::$app->assets->getAssetById($blockTypeConfig->previewImageId);
+                $result["image"] = $asset ? $asset->getUrl([
+                    "width" => 800,
+                    "mode" => "stretch",
+                    "position" => "center-center"
+                ]) : "";
+                $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";
+            }
+            $response["blockTypeConfigs"][$blockType->handle] = $result;
+        }
+
+        $response["success"] = true;
+
+        return $this->asJson($response);
     }
 }

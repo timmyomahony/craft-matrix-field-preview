@@ -69,10 +69,15 @@ class FieldConfigService extends Component
             ]);
 
             if (!$record) {
-                return null;
-            } else {
-                return $record;
+                $record = new FieldConfigRecord();
+                $record->fieldId = $matrixField->id ?? null;
+                $record->siteId = Craft::$app->getSites()->currentSite->id;
+                $record->enablePreviews = true;
+                $record->enableTakeover = true;
+                $record->save();
             }
+
+            return $record;
         }
 
         return null;

@@ -20,7 +20,7 @@
    *
    * > $('.matrix-field').data("matrix")
    *
-   * But the BIG caveat is that you have to wait for the element to finish 
+   * But the BIG caveat is that you have to wait for the element to finish
    * executing and setting up. There's no way to wait or know when the
    * matrix field has been initialised.
    *
@@ -32,7 +32,7 @@
     matrixFields: {},
     settingsUrl: "matrix-field-preview/preview/get-settings",
     previewsUrl: "matrix-field-preview/preview/get-previews",
-    previews: {},
+    configs: {},
     // FIXME: I'm not sure why, but every time you insert a block
     // into the matrix field, either by the original buttons or by
     // our own modal overlay, our JavaScript code is being
@@ -47,11 +47,8 @@
         this.$matrixFields.each(
           function (i, matrixField) {
             var $matrixField = $(matrixField);
-  
+
             $matrixField.addClass("mfp-matrix-field");
-            if (this.takeoverFields) {
-              $matrixField.addClass("mfp-take-over");
-            }
 
             var matrixFieldHandle = this.getMatrixFieldHandle($matrixField);
             if (!this.matrixFields.hasOwnProperty(matrixFieldHandle)) {
@@ -86,7 +83,21 @@
               "Received response from matrix field config endpoint: ",
               response
             );
-            this.previews = response["previews"];
+            this.configs[matrixFieldHandle] = response;
+
+            // Skip if previews are not enabled for this matrix field
+            if (!response["fieldConfig"]["enablePreviews"]) {
+              console.debug(
+                "Previews are not enabled for this matrix field " +
+                  matrixFieldHandle
+              );
+              return;
+            }
+
+            // Take over the existing matrix field dropdown
+            if (response["fieldConfig"]["enableTakeover"]) {
+              $matrixField.addClass("mfp-take-over");
+            }
 
             var matrixInput = $matrixField.data("matrix");
             var $existingBlockTypes = $matrixField.find(
@@ -98,7 +109,10 @@
               function (i, blockType) {
                 var $blockType = $(blockType);
                 var blockTypeHandle = $blockType.attr("data-type");
-                if (this.previews.hasOwnProperty(blockTypeHandle)) {
+                var config = this.configs[matrixFieldHandle];
+                if (
+                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
+                ) {
                   // Insert block type previews for all the static block types
                   console.debug(
                     "Creating preview thumbnail for existing block type " +
@@ -108,7 +122,7 @@
                   );
                   this.createBlockTypePreview(
                     $blockType,
-                    this.previews[blockTypeHandle]
+                    config["blockTypeConfigs"][blockTypeHandle]
                   );
                 } else {
                   console.debug(
@@ -127,8 +141,11 @@
               function (ev) {
                 var $blockType = ev["$block"];
                 var blockTypeHandle = $blockType.attr("data-type");
+                var config = this.configs[matrixFieldHandle];
 
-                if (this.previews.hasOwnProperty(blockTypeHandle)) {
+                if (
+                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
+                ) {
                   console.debug(
                     "Inserting preview thumbnail for new block type " +
                       blockTypeHandle +
@@ -137,7 +154,7 @@
                   );
                   this.createBlockTypePreview(
                     $blockType,
-                    this.previews[blockTypeHandle]
+                    config["blockTypeConfigs"][blockTypeHandle]
                   );
                 } else {
                   console.debug(
@@ -162,9 +179,12 @@
               function (ev) {
                 var $blockType = ev["$block"];
                 var blockTypeHandle = $blockType.attr("data-type");
-                
-                if (this.previews.hasOwnProperty(blockTypeHandle)) {
-                  delete this.previews[blockTypeHandle];
+                var config = this.configs[matrixFieldHandle];
+
+                if (
+                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
+                ) {
+                  delete config["blockTypeConfigs"][blockTypeHandle];
                 }
 
                 if (matrixInput.canAddMoreBlocks()) {
@@ -230,6 +250,8 @@
               matrixFieldHandle
           );
 
+          var config = this.configs[matrixFieldHandle];
+
           var $item = $("<div>", {
             class: "mfp-modal__item",
           }).attr("data-block-type", blockType.handle);
@@ -247,17 +269,17 @@
             class: "mfp-modal__description",
           });
 
-          if (this.previews.hasOwnProperty(blockType.handle)) {
-            var preview = this.previews[blockType.handle];
-            if (preview["image"]) {
+          if (config["blockTypeConfigs"].hasOwnProperty(blockType.handle)) {
+            var blockTypeConfig = config["blockTypeConfigs"][blockType.handle];
+            if (blockTypeConfig["image"]) {
               $img.removeClass("mfp-modal__image--default");
-              $img.children("img").attr("src", preview["image"]);
+              $img.children("img").attr("src", blockTypeConfig["image"]);
             }
-            if (preview["name"]) {
-              $name.text(preview["name"]);
+            if (blockTypeConfig["name"]) {
+              $name.text(blockTypeConfig["name"]);
             }
-            if (preview["description"]) {
-              $description.text(preview["description"]);
+            if (blockTypeConfig["description"]) {
+              $description.text(blockTypeConfig["description"]);
             }
           }
 
@@ -282,7 +304,7 @@
         if (matrixInput.canAddMoreBlocks()) {
           modal.show();
         } else {
-          console.debug('Maximum number of blocks reached');
+          console.debug("Maximum number of blocks reached");
         }
       });
     },
@@ -318,7 +340,7 @@
     createModalButton: function ($matrixField) {
       var buttonText = $matrixField.find(".menubtn").text();
       var buttonIcon = "add";
-      if (! this.takeoverFields) {
+      if (!this.takeoverFields) {
         buttonText = "Preview Blocks";
         buttonIcon = "search";
       }
@@ -329,12 +351,12 @@
       return $button;
     },
 
-    disableModalButton: function($matrixField) {
-      $matrixField.find('.mfp-modal-trigger').addClass('disabled');
+    disableModalButton: function ($matrixField) {
+      $matrixField.find(".mfp-modal-trigger").addClass("disabled");
     },
 
-    enableModalButton: function($matrixField) {
-      $matrixField.find('.mfp-modal-trigger').removeClass('disabled');
+    enableModalButton: function ($matrixField) {
+      $matrixField.find(".mfp-modal-trigger").removeClass("disabled");
     },
 
     /**
