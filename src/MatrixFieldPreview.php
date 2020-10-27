@@ -72,7 +72,7 @@ class MatrixFieldPreview extends Plugin
     public function getSettingsResponse()
     {
         Craft::$app->controller->redirect(
-            UrlHelper::cpUrl('matrix-field-preview/settings')
+            UrlHelper::cpUrl('matrix-field-preview/settings/general')
         );
     }
 
@@ -129,7 +129,6 @@ class MatrixFieldPreview extends Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $event->rules = array_merge($event->rules, [
-                    'matrix-field-preview/settings' => 'matrix-field-preview/settings/general',
                     'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
                     'matrix-field-preview/settings/fields' => 'matrix-field-preview/settings/fields',
                     'matrix-field-preview/settings/block-types' => 'matrix-field-preview/settings/block-types',
