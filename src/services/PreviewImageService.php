@@ -24,7 +24,7 @@ class PreviewImageService extends Component
      * 
      * https://github.com/craftcms/cms/blob/develop/src/services/Users.php#L408
      */
-    public function savePreviewImage(string $fileLocation, $preview, string $filename = '')
+    public function savePreviewImage(string $fileLocation, $blockTypeConfig, string $filename = '')
     {
         $settings = MatrixFieldPreview::getInstance()->getSettings();
 
@@ -47,7 +47,7 @@ class PreviewImageService extends Component
 
         if ($subpath) {
             try {
-                $subpath = Craft::$app->getView()->renderObjectTemplate($subpath, $preview);
+                $subpath = Craft::$app->getView()->renderObjectTemplate($subpath, $blockTypeConfig);
             } catch (\Throwable $e) {
                 throw new InvalidSubpathException($subpath);
             }
@@ -56,8 +56,8 @@ class PreviewImageService extends Component
         $assetsService = Craft::$app->getAssets();
 
         // If we have an existing preview saved, replace it
-        if ($preview->previewImageId && $preview->getPreviewImage() !== null) {
-            $asset = $assetsService->getAssetById($preview->previewImageId);
+        if ($blockTypeConfig->previewImageId && $blockTypeConfig->getPreviewImage() !== null) {
+            $asset = $assetsService->getAssetById($blockTypeConfig->previewImageId);
             if ($asset && !$asset->trashed) {
                 $assetsService->replaceAssetFile($asset, $fileLocation, $filenameToUse);
                 return;
@@ -80,7 +80,7 @@ class PreviewImageService extends Component
         $elementsService->saveElement($previewImage);
 
         // Save preview image to our Record's FK
-        $preview->setPreviewImage($previewImage);
-        $preview->save();
+        $blockTypeConfig->setPreviewImage($previewImage);
+        $blockTypeConfig->save();
     }
 }

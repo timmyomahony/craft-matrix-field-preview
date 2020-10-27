@@ -27,10 +27,10 @@ class PreviewImageController extends Controller
         $previewImageService = MatrixFieldPreview::getInstance()->previewImageService;
         $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
 
-        $previewId = Craft::$app->getRequest()->getRequiredBodyParam('previewId');
-        $preview = $blockTypeConfigService->getById((int) $previewId);
-        if (!$preview) {
-            throw new NotFoundHttpException('Invalid preview ID: ' . $previewId);
+        $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
+        $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
+        if (!$blockTypeConfig) {
+            throw new NotFoundHttpException('Invalid preview ID: ' . $blockTypeId);
         }
 
         if (($file = UploadedFile::getInstanceByName('previewImage')) === null) {
@@ -46,10 +46,10 @@ class PreviewImageController extends Controller
             $fileLocation = Assets::tempFilePath($file->getExtension());
             move_uploaded_file($file->tempName, $fileLocation);
 
-            $previewImageService->savePreviewImage($fileLocation, $preview, $file->name);
+            $previewImageService->savePreviewImage($fileLocation, $blockTypeConfig, $file->name);
 
             return $this->asJson([
-                'html' => $this->_renderPreviewImageTemplate($preview),
+                'html' => $this->_renderPreviewImageTemplate($blockTypeConfig),
             ]);
         } catch (\Throwable $exception) {
             /** @noinspection UnSafeIsSetOverArrayInspection - FP */
@@ -75,34 +75,33 @@ class PreviewImageController extends Controller
         $this->requireLogin();
 
         $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
-        $previewId = Craft::$app->getRequest()->getRequiredBodyParam('previewId');
-        $preview = $blockTypeConfigService->getById((int) $previewId);
+        $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
+        $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
 
-        if (!$preview) {
-            throw new NotFoundHttpException('Invalid preview ID: ' . $previewId);
+        if (!$blockTypeConfig) {
+            throw new NotFoundHttpException('Invalid preview ID: ' . $blockTypeId);
         }
 
-        if ($preview->previewImageId) {
-            Craft::$app->getElements()->deleteElementById($preview->previewImageId, Asset::class);
+        if ($blockTypeConfig->previewImageId) {
+            Craft::$app->getElements()->deleteElementById($blockTypeConfig->previewImageId, Asset::class);
         }
 
-        $preview->previewImageId = null;
-        $preview->save();
+        $blockTypeConfig->previewImageId = null;
+        $blockTypeConfig->save();
 
         return $this->asJson([
-            'html' => $this->_renderPreviewImageTemplate($preview),
+            'html' => $this->_renderPreviewImageTemplate($blockTypeConfig),
         ]);
     }
 
-    private function _renderPreviewImageTemplate($preview): string
+    private function _renderPreviewImageTemplate($blockTypeConfig): string
     {
         $settings = MatrixFieldPreview::getInstance()->getSettings();
-
         $view = $this->getView();
         $templateMode = $view->getTemplateMode();
-        return $view->renderTemplate('matrix-field-preview/_includes/preview-image', [
+        return $view->renderTemplate('matrix-field-preview/_includes/preview-image-field', [
             'settings' => $settings,
-            'preview' => $preview
+            'blockTypeConfig' => $blockTypeConfig
         ], $templateMode);
     }
 }

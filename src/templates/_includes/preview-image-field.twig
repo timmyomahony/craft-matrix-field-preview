@@ -1,17 +1,24 @@
-{# This is a partial so that the JS can re-render this snippet after upload  #}
+{#
+    Based on the Craft user portrait:
+
+    https://github.com/craftcms/cms/blob/master/src/templates/users/_photo.html
+    https://github.com/craftcms/cms/blob/master/src/web/assets/edituser/src/profile.js
+
+    Note: This is a partial so that the JS can re-render this snippet after upload 
+#}
 {% set volumeUid = settings.previewVolumeUid %}
 {% if volumeUid %}
-    <div class="mfp-settings-preview-image" data-preview="{{ blockTypeConfig.id }}">
+    <div class="mfp-settings-preview-image" data-blocktype="{{ blockTypeConfig.id }}">
         <div class="mfp-settings-preview-image__thumb">
             <img src="{{ blockTypeConfig.getThumbUrl(800) }}" alt="">
         </div>
         <div class="mfp-settings-preview-image__controls">
-            <input type="file" name="preview-image" class="hidden" />
+            <input type="file" name="preview-image" class="hidden">
             {% if blockTypeConfig.previewImage %}
-                <div class="btn mfp-settings-preview-image__button--upload">{{ "Change preview image"|t('matrix-field-preview') }}</div>
-                <div class="btn mfp-settings-preview-image__button--delete">{{ "Delete preview image"|t('matrix-field-preview') }}</div>
+                <button type="button" class="btn mfp-settings-preview-image__upload">{{ "Change preview image"|t('matrix-field-preview') }}</button>
+                <button type="button" class="btn mfp-settings-preview-image__delete">{{ "Delete preview image"|t('matrix-field-preview') }}</button>
             {% else %}
-                <div class="btn mfp-settings-preview-image__button--upload">{{ "Upload a preview image"|t('matrix-field-preview') }}</div>
+                <button type="button" class="btn mfp-settings-preview-image__upload">{{ "Upload a preview image"|t('matrix-field-preview') }}</button>
             {% endif %}
         </div>
     </div>

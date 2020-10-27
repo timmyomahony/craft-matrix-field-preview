@@ -1,24 +1,19 @@
 (function ($) {
-  var settings = {
+  /**
+   * Based on user image uploading:
+   *
+   * https://github.com/craftcms/cms/blob/master/src/web/assets/edituser/src/profile.js
+   */
+  new Craft.ImageUpload({
     postParameters: {
-      previewId: $(".mfp-settings-preview-image").attr("data-preview"),
+      blockTypeId: $(".mfp-settings-preview-image").attr("data-blocktype"),
     },
     containerSelector: ".mfp-settings-preview-image",
     uploadAction: "matrix-field-preview/preview-image/upload-preview-image",
     deleteAction: "matrix-field-preview/preview-image/delete-preview-image",
-    uploadButtonSelector: ".mfp-settings-preview-image__button--upload",
-    deleteButtonSelector: ".mfp-settings-preview-image__button--delete",
-    fileInputSelector: "input[name=preview-image]",
+    uploadButtonSelector: ".btn.mfp-settings-preview-image__upload",
+    deleteButtonSelector: ".btn.mfp-settings-preview-image__delete",
+    fileInputSelector: "input[name='preview-image']",
     uploadParamName: "previewImage",
-  };
-
-  new Craft.ImageUpload(settings);
-
-  var settings = {
-    allowSavingAsNew: false,
-    onSave: function () {
-      location.reload();
-    },
-    allowDegreeFractions: Craft.isImagick,
-  };
+  });
 })(jQuery);

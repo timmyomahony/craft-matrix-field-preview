@@ -30,16 +30,19 @@ class BlockTypeConfigRecord extends ActiveRecord
         return $this->hasOne(MatrixBlockType::className(), ['id' => 'blockTypeId']);
     }
 
-    /**
-     * Get block type
-     * 
-     * An active record foreign key accessor
-     * 
-     * @fixme: why does Craft not use setters in any of its Records?
-     */
+    public function setBlockType($blockType)
+    {
+        $this->blockTypeId = $blockType->id ?? null;
+    }
+
     public function getField(): ActiveQueryInterface
     {
         return $this->hasOne(Field::class, ['id' => 'fieldId']);
+    }
+
+    public function setField($field)
+    {
+        $this->fieldId = $field->id ?? null;
     }
 
     /**
@@ -52,6 +55,14 @@ class BlockTypeConfigRecord extends ActiveRecord
     public function getPreviewImage()
     {
         return $this->hasOne(Asset::className(), ['id' => 'previewImageId']);
+    }
+
+    /**
+     * Set the preview image (asset)
+     */
+    public function setPreviewImage($previewImage)
+    {
+        $this->previewImageId = $previewImage->id ?? null;
     }
 
     /**

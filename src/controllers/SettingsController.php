@@ -169,7 +169,7 @@ class SettingsController extends Controller
 
         if ($request->isPost) {
             $post = $request->post();
-            $blockTypeConfig->description = $post['settings']['description'];
+            $blockTypeConfig->description = $post['description'];
             if ($blockTypeConfig->validate()) {
                 $blockTypeConfig->save();
                 Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));

@@ -18,25 +18,22 @@
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
     {{ actionInput('matrix-field-preview/settings/block-type', {blockTypeId: blockTypeConfig.blockType.id}) }}
+    {{ forms.textareaField({
+        first: true,
+        label: "Description"|t('matrix-field-preview'),
+        instructions: "A short description of this matrix block"|t('matrix-field-preview'),
+        id: "description",
+        name: "description",
+        value: blockTypeConfig.description,
+        errors: blockTypeConfig.getErrors("description")
+    }) }}
 
-    {% namespace 'settings' %}
-        {{ forms.textareaField({
-            first: true,
-            label: "Description"|t('matrix-field-preview'),
-            instructions: "A short description of this matrix block"|t('matrix-field-preview'),
-            id: "description",
-            name: "description",
-            value: blockTypeConfig.description,
-            errors: blockTypeConfig.getErrors("description")
-        }) }}
-
-        {{ forms.field(
-            {
-                instructions: "Upload a screenshot of your matrix field block here. This will be visible when publishing content via the matrix field",
-                label: "Preview Image"|t('matrix-field-preview'),
-                id: 'preview'
-            },
-            include('matrix-field-preview/_includes/preview-image-field', with_context = true)
-        )}}
-    {% endnamespace %}
+    {{ forms.field(
+        {
+            instructions: "Upload a screenshot of your matrix field block here. This will be visible when publishing content via the matrix field",
+            label: "Preview Image"|t('matrix-field-preview'),
+            id: 'preview'
+        },
+        include('matrix-field-preview/_includes/preview-image-field', with_context = true)
+    )}}
 {% endblock %}
