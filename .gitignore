@@ -6,6 +6,7 @@ craft-matrix-field-preview.code-workspace
 .env
 
 # COMPOSER
+composer.lock
 /vendor
 
 # BUILD FILES

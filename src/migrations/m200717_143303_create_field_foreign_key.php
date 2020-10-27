@@ -32,9 +32,9 @@ class m200717_143303_create_field_foreign_key extends Migration
         );
 
         // Now do a data migration to save the new fieldId FK
-        foreach (MatrixFieldPreview::getInstance()->previewService->getAll() as $preview) {
-            $preview->fieldId = $preview->blockType->fieldId;
-            $preview->save();
+        foreach (MatrixFieldPreview::getInstance()->blockTypeConfigService->getAll() as $blockTypeConfig) {
+            $blockTypeConfig->fieldId = $blockTypeConfig->blockType->fieldId;
+            $blockTypeConfig->save();
         }
     }
 
