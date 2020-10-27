@@ -1,13 +1,13 @@
 {# This is a partial so that the JS can re-render this snippet after upload  #}
 {% set volumeUid = settings.previewVolumeUid %}
 {% if volumeUid %}
-    <div class="mfp-preview-image" data-preview="{{ preview.id }}">
+    <div class="mfp-preview-image" data-preview="{{ blockTypeConfig.id }}">
         <div class="mfp-preview-image__thumb">
-            <img src="{{ preview.getThumbUrl(800) }}" alt="">
+            <img src="{{ blockTypeConfig.getThumbUrl(800) }}" alt="">
         </div>
         <div class="mfp-preview-image__controls">
             <input type="file" name="preview-image" class="hidden" />
-            {% if preview.previewImage %}
+            {% if blockTypeConfig.previewImage %}
                 <div class="btn mfp-preview-image__button--upload">{{ "Change preview image"|t('matrix-field-preview') }}</div>
                 <div class="btn mfp-preview-image__button--delete">{{ "Delete preview image"|t('matrix-field-preview') }}</div>
             {% else %}

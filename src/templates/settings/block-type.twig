@@ -8,7 +8,7 @@
 
 {% do view.registerAssetBundle("craft\\web\\assets\\fileupload\\FileUploadAsset") %}
 
-{% set title = "'" ~ preview.blockType.name ~ "' Preview" %}
+{% set title = "'" ~ blockTypeConfig.blockType.name ~ "' Preview" %}
 
 {% set crumbs = [
     { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
@@ -17,7 +17,7 @@
 
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
-    {{ actionInput('matrix-field-preview/settings/block-type', {blockTypeId: preview.blockType.id}) }}
+    {{ actionInput('matrix-field-preview/settings/block-type', {blockTypeId: blockTypeConfig.blockType.id}) }}
 
     {% namespace 'settings' %}
         {{ forms.textareaField({
@@ -26,8 +26,8 @@
             instructions: "A short description of this matrix block"|t('matrix-field-preview'),
             id: "description",
             name: "description",
-            value: preview.description,
-            errors: preview.getErrors("description")
+            value: blockTypeConfig.description,
+            errors: blockTypeConfig.getErrors("description")
         }) }}
 
         {{ forms.field(

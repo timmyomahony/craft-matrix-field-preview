@@ -6,6 +6,7 @@ namespace weareferal\matrixfieldpreview\controllers;
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\assets\previewsettings\PreviewSettingsAsset;
 use weareferal\matrixfieldpreview\assets\previewimage\PreviewImageAsset;
+use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
 
 use Craft;
 use craft\web\Controller;
@@ -157,21 +158,21 @@ class SettingsController extends Controller
             throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
         }
 
-        $preview = $plugin->blockTypeConfigService->getByBlockTypeId($blockTypeId);
-        if (!$preview) {
-            $preview = new BlockTypeConfigRecord();
-            $preview->blockTypeId = $blockType->id ?? null;
-            $preview->siteId = $siteId;
-            $preview->description = "";
-            $preview->matrixFieldHandle = $blockType->field->handle;
-            $preview->save();
+        $blockTypeConfig = $plugin->blockTypeConfigService->getByBlockTypeId($blockTypeId);
+        if (!$blockTypeConfig) {
+            $blockTypeConfig = new BlockTypeConfigRecord();
+            $blockTypeConfig->siteId = $siteId;
+            $blockTypeConfig->description = "";
+            $blockTypeConfig->fieldId = $blockType->field->id;
+            $blockTypeConfig->blockTypeId = $blockType->id;
+            $blockTypeConfig->save();
         }
 
         if ($request->isPost) {
             $post = $request->post();
-            $preview->description = $post['settings']['description'];
-            if ($preview->validate()) {
-                $preview->save();
+            $blockTypeConfig->description = $post['settings']['description'];
+            if ($blockTypeConfig->validate()) {
+                $blockTypeConfig->save();
                 Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
                 return $this->redirect('matrix-field-preview/settings/block-types');
             } else {
@@ -182,7 +183,7 @@ class SettingsController extends Controller
         return $this->renderTemplate(
             'matrix-field-preview/settings/block-type',
             [
-                'preview' => $preview,
+                'blockTypeConfig' => $blockTypeConfig,
                 'plugin' => $plugin,
                 'fullPageForm' => true,
                 'settings' => $settings
