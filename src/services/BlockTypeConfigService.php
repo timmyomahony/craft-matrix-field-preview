@@ -63,7 +63,7 @@ class BlockTypeConfigService extends Component
         $matrixField = Craft::$app->getFields()->getFieldByHandle($handle);
 
         if ($matrixField) {
-            $records = BlockTypeConfigRecord::find([
+            $records = BlockTypeConfigRecord::find()->where([
                 'fieldId' => $matrixField->id
             ])->all();
 
