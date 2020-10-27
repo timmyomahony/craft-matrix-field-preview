@@ -164,11 +164,7 @@
                   );
                 }
 
-                if (matrixInput.canAddMoreBlocks()) {
-                  this.enableModalButton($matrixField);
-                } else {
-                  this.disableModalButton($matrixField);
-                }
+                this.updateModalButton($matrixField);
               }.bind(this)
             );
 
@@ -186,11 +182,7 @@
                   delete config["blockTypeConfigs"][blockTypeHandle];
                 }
 
-                if (matrixInput.canAddMoreBlocks()) {
-                  this.enableModalButton($matrixField);
-                } else {
-                  this.disableModalButton($matrixField);
-                }
+                this.updateModalButton($matrixField);
               }.bind(this)
             );
 
@@ -198,6 +190,8 @@
             this.createNavigation($matrixField, matrixFieldHandle);
 
             this.matrixFields[matrixFieldHandle] = $matrixField;
+
+            this.updateModalButton($matrixField);
 
             $matrixField.addClass("mfp-loaded");
           } else {
@@ -354,11 +348,32 @@
       return $button;
     },
 
+    updateModalButton: function ($matrixField) {
+      // FIXME: There is a bug in Craft. When we remove a block Craft fires
+      // the event before the actual element has been removed from the DOM:
+      //
+      // https://github.com/craftcms/cms/blob/master/src/web/assets/matrix/src/MatrixInput.js#L763
+      //
+      // So we have to use this timeout hack as a fix
+      setTimeout(
+        function () {
+          if ($matrixField.data("matrix").canAddMoreBlocks()) {
+            this.enableModalButton($matrixField);
+          } else {
+            this.disableModalButton($matrixField);
+          }
+        }.bind(this),
+        600
+      );
+    },
+
     disableModalButton: function ($matrixField) {
+      console.log("Adding disabled", $matrixField.find(".mfp-modal-trigger"));
       $matrixField.find(".mfp-modal-trigger").addClass("disabled");
     },
 
     enableModalButton: function ($matrixField) {
+      console.log("Removing disabled");
       $matrixField.find(".mfp-modal-trigger").removeClass("disabled");
     },
 
