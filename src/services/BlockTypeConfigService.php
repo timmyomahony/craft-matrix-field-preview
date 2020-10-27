@@ -60,15 +60,21 @@ class BlockTypeConfigService extends Component
 
     public function getByHandle($handle)
     {
-        $records = BlockTypeConfigRecord::find([
-            'matrixFieldHandle' => $handle
-        ])->all();
+        $matrixField = Craft::$app->getFields()->getFieldByHandle($handle);
 
-        if (!$records) {
-            return [];
+        if ($matrixField) {
+            $records = BlockTypeConfigRecord::find([
+                'fieldId' => $matrixField->id
+            ])->all();
+
+            if (!$records) {
+                return [];
+            }
+
+            return $records;
         }
 
-        return $records;
+        return [];
     }
 
     public function getById($id)
