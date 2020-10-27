@@ -4,8 +4,7 @@
 namespace weareferal\matrixfieldpreview\controllers;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\assets\previewsettings\PreviewSettingsAsset;
-use weareferal\matrixfieldpreview\assets\previewimage\PreviewImageAsset;
+use weareferal\matrixfieldpreview\assets\matrixfieldpreviewsettings\MatrixFieldPreviewSettingsAsset;
 use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
 
 use Craft;
@@ -25,7 +24,7 @@ class SettingsController extends Controller
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
-        $this->view->registerAssetBundle(PreviewSettingsAsset::class);
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         return $this->renderTemplate('matrix-field-preview/settings/general', [
             'settings' => $settings,
@@ -42,7 +41,7 @@ class SettingsController extends Controller
         $settings = $plugin->getSettings();
         $request = Craft::$app->request;
 
-        $this->view->registerAssetBundle(PreviewSettingsAsset::class);
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         // Get all sections and matrix fields
         $sections = Craft::$app->sections->getAllSections();
@@ -86,7 +85,7 @@ class SettingsController extends Controller
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
-        $this->view->registerAssetBundle(PreviewSettingsAsset::class);
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $assets = [
             'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
@@ -146,7 +145,7 @@ class SettingsController extends Controller
      */
     public function actionBlockType($blockTypeId)
     {
-        $this->view->registerAssetBundle(PreviewImageAsset::class);
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $siteId = Craft::$app->getSites()->currentSite->id;
         $request = Craft::$app->request;

@@ -4,8 +4,6 @@
 namespace weareferal\matrixfieldpreview\controllers;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
-use weareferal\matrixfieldpreview\assets\previewimage\PreviewImageAsset;
 
 use Craft;
 use craft\web\Controller;
