@@ -1,5 +1,4 @@
 .mfp-matrix-field {
-
 }
 
 /* Block type preview in CP */
@@ -7,6 +6,7 @@
   display: flex;
   align-items: center;
   position: relative;
+  margin-bottom: 24px;
 }
 
 .mfp-block-type-preview__thumb {

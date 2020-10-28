@@ -11,16 +11,19 @@
 
 namespace weareferal\matrixfieldpreview;
 
-use weareferal\matrixfieldpreview\services\PreviewService;
+use weareferal\matrixfieldpreview\services\BlockTypeConfigService;
+use weareferal\matrixfieldpreview\services\FieldConfigService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\previewfield\PreviewFieldAsset;
-use weareferal\matrixfieldpreview\assets\previewsettings\PreviewSettingsAsset;
 
 use Craft;
 use craft\base\Plugin;
 use craft\web\View;
+use craft\helpers\UrlHelper;
 use craft\events\TemplateEvent;
+use craft\events\RegisterUrlRulesEvent;
+use craft\web\UrlManager;
 
 use yii\base\Event;
 
@@ -38,7 +41,7 @@ use yii\base\Event;
  * @package   MatrixFieldPreview
  * @since     1.0.0
  *
- * @property  PreviewService $previewService
+ * @property  BlockTypeConfigService $blockTypeConfigService
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -46,19 +49,44 @@ class MatrixFieldPreview extends Plugin
 {
     public static $plugin;
 
-    public $schemaVersion = '1.0.0';
+    public $schemaVersion = '1.1.0';
+    public $hasCpSettings = true;
+    public $hasCpSection = false;
 
     public function init()
     {
         parent::init();
+
         self::$plugin = $this;
 
-        // Register our services
-        $this->setComponents([
-            'previewService' => PreviewService::class,
-            'previewImageService' => PreviewImageService::class
-        ]);
+        $this->_setPluginComponents();
+        $this->_registerCpRoutes();
+        $this->_registerMatrixFieldPreviews();
+    }
 
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
+
+    public function getSettingsResponse()
+    {
+        Craft::$app->controller->redirect(
+            UrlHelper::cpUrl('matrix-field-preview/settings/general')
+        );
+    }
+
+    private function _setPluginComponents()
+    {
+        $this->setComponents([
+            'previewImageService' => PreviewImageService::class,
+            'fieldConfigService' => FieldConfigService::class,
+            'blockTypeConfigService' => BlockTypeConfigService::class
+        ]);
+    }
+
+    private function _registerMatrixFieldPreviews()
+    {
         // Inject custom matrix field input JavaScript
         //
         // @fixme find better way to insert JavaScript, taking into account its
@@ -84,71 +112,29 @@ class MatrixFieldPreview extends Plugin
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
             function (TemplateEvent $event) {
                 if (Craft::$app->request->isCpRequest) {
-                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/no-dummy-image.svg', true);
-                    $settings = $this->getSettings();
+                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/matrixfieldpreviewsettings/dist/img/no-dummy-image.svg', true);
                     $view = Craft::$app->getView();
                     $view->registerAssetBundle(PreviewFieldAsset::class);
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
-                    $view->registerJsVar('matrixFieldPreviewTakeoverFields', $settings->takeoverFields);
                     $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field");', View::POS_READY, 'matrix-field-preview');
                 }
             }
         );
-
-        Craft::info(
-            Craft::t(
-                'matrix-field-preview',
-                '{name} plugin loaded',
-                ['name' => $this->name]
-            ),
-            __METHOD__
-        );
     }
 
-    protected function createSettingsModel()
+    private function _registerCpRoutes()
     {
-        return new Settings();
-    }
-
-    protected function settingsHtml()
-    {
-        $view = Craft::$app->getView();
-        $view->registerAssetBundle(PreviewSettingsAsset::class);
-
-        $assets = [
-            'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
-        ];
-
-        $blockTypes = Craft::$app->matrix->getAllBlockTypes();
-        usort($blockTypes, function ($a, $b) {
-            return strcmp($a->name, $b->name);
-        });
-
-        $previewService = $this->previewService;
-
-        // Annotate the matrix block types with our previews
-        $previews = $previewService->getAll();
-        $previewsMap = [];
-        foreach ($previews as $preview) {
-            $previewsMap[$preview->blockType->handle] = $preview;
-        }
-
-        $rows = [];
-        foreach ($blockTypes as $blockType) {
-            $preview = null;
-            if (array_key_exists($blockType->handle, $previewsMap)) {
-                $preview = $previewsMap[$blockType->handle];
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_CP_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules = array_merge($event->rules, [
+                    'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
+                    'matrix-field-preview/settings/fields' => 'matrix-field-preview/settings/fields',
+                    'matrix-field-preview/settings/block-types' => 'matrix-field-preview/settings/block-types',
+                    'matrix-field-preview/settings/block-type' => 'matrix-field-preview/settings/block-type'
+                ]);
             }
-            array_push($rows, [
-                'blockType' => $blockType,
-                'preview' => $preview
-            ]);
-        }
-
-        return $view->renderTemplate('matrix-field-preview/settings', [
-            'settings' => $this->getSettings(),
-            'assets' => $assets,
-            'rows' => $rows
-        ]);
+        );
     }
 }
