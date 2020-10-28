@@ -68,3 +68,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Fixed deprecation for Composer 2.0 (Issue #43)
 - Fixed bug with block type names (Issue #32)
 - Refactored code base for easier maintenance
+
+## 1.1.1 - 2020-10-28
+
+### Changed
+
+- Release fixes. Paths were incorrect after making changes for composer 2
