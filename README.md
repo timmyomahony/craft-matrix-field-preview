@@ -62,14 +62,6 @@ Once saved, next configure which of your matrix fields you want to enable previe
 
 ![Matrix field configuration](resources/img/screenshot-4.png)
 
-You can also choose to optionally "takeover" the default matrix field experience. This means only the new preview overlay modal can be used to select matrix fields block.
-
-![Takeover example](resources/img/screenshot-9.png)
-
-Alternatively, if you choose not to "takeover", the existing matrix field block button will continue to be displayed, while a "preview" button will be included alongside, giving users the best of both worlds.
-
-![Takeover counter example](resources/img/screenshot-10.png)
-
 Finally, configure the actual previews and descriptions for your matrix block types. 
 
 ![Matrix blocks configuration](resources/img/screenshot-5.png)
@@ -88,13 +80,17 @@ You will also get an inline preview for all existing blocks. This inline preview
 
 ![Usage step](resources/img/screenshot-7.png)
 
-## Caveats
+### Takeover
 
-- Configuration of preview fields happens in a custom database table. When you go to migrate your site to staging or production your configuration will not be added be default. You will need to either perform a database dump/restore to ensure the configuration gets transferred, or use another tool to sync your database (like [`craft-remote-sync`](https://github.com/weareferal/craft-remote-sync) for example 😉)
+You can also choose to optionally "takeover" the default matrix field experience. This means only the new preview overlay modal can be used to select matrix fields blocks:
 
-## Todo
+![Takeover example](resources/img/screenshot-9.png)
 
-- Improve configuration approach when migrating (see above caveat and [Issue #18](https://github.com/weareferal/craft-matrix-field-preview/issues/18))
+Alternatively, if you choose not to "takeover", the existing matrix field block button will continue to be displayed, while a "preview" button will be included alongside, giving users the best of both worlds.
+
+![Takeover counter example](resources/img/screenshot-10.png)
+
+This can be configured in the "Matrix Fields" panel in the settings.
 
 ## Support
 
