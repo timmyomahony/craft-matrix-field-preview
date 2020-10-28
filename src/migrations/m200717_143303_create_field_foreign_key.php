@@ -30,12 +30,6 @@ class m200717_143303_create_field_foreign_key extends Migration
             'CASCADE',
             'CASCADE'
         );
-
-        // Now do a data migration to save the new fieldId FK
-        foreach (MatrixFieldPreview::getInstance()->blockTypeConfigService->getAll() as $blockTypeConfig) {
-            $blockTypeConfig->fieldId = $blockTypeConfig->blockType->fieldId;
-            $blockTypeConfig->save();
-        }
     }
 
     /**
