@@ -2,30 +2,25 @@
 
 namespace weareferal\matrixfieldpreview\records;
 
-use yii\db\ActiveQueryInterface;
-
 use Craft;
 use craft\db\ActiveRecord;
 use craft\records\MatrixBlockType;
-use craft\records\Matrix;
 use craft\records\Asset;
 use craft\services\Elements;
 
-class BlockTypeConfigRecord extends ActiveRecord
+class PreviewRecord extends ActiveRecord
 {
     public static function tableName()
     {
-        return '{{%matrixfieldpreview_blocktypes_config}}';
+        return '{{%matrixfieldpreview_previewrecord}}';
     }
 
     /**
      * Get block type
      * 
      * An active record foreign key accessor
-     * 
-     * @fixme: why does Craft not use setters in any of its Records?
      */
-    public function getBlockType(): ActiveQueryInterface
+    public function getBlockType()
     {
         return $this->hasOne(MatrixBlockType::className(), ['id' => 'blockTypeId']);
     }
@@ -33,16 +28,6 @@ class BlockTypeConfigRecord extends ActiveRecord
     public function setBlockType($blockType)
     {
         $this->blockTypeId = $blockType->id ?? null;
-    }
-
-    public function getField(): ActiveQueryInterface
-    {
-        return $this->hasOne(Field::class, ['id' => 'fieldId']);
-    }
-
-    public function setField($field)
-    {
-        $this->fieldId = $field->id ?? null;
     }
 
     /**
@@ -83,6 +68,6 @@ class BlockTypeConfigRecord extends ActiveRecord
             }
         }
 
-        return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/matrixfieldpreviewsettings/dist/img/dummy-image.svg', true);
+        return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/previewimage/dist/img/dummy-image.svg', true);
     }
 }

@@ -34,7 +34,7 @@
         "hasCpSettings": true,
         "changelogUrl": "https://raw.githubusercontent.com/weareferal/matrix-field-preview/master/CHANGELOG.md",
         "components": {
-            "blockTypeConfigService": "weareferal\\matrixfieldpreview\\services\\BlockTypeConfigService"
+            "previewService": "weareferal\\matrixfieldpreview\\services\\PreviewService"
         },
         "class": "weareferal\\matrixfieldpreview\\MatrixFieldPreview"
     }

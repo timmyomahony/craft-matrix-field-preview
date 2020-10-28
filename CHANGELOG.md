@@ -52,19 +52,3 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Fixed with matrix fields and max-blocks. Now the max-block setting will be respected
 - Added a "take-over" option which can be disabled so that the preview field augments the matrix field as opposed to taking it over. This allows use alongside Spoon for example
-
-## 1.1.0 - 2020-10-28
-
-### Added
-
-- Ability to enable/disable previews for particular matrix fields (Issue #31)
-- Ability to control "takeover" of default Craft UI experience for particular matrix fields
-- Block types are now grouped by their matrix field (Issue #30)
-  
-### Changed
-
-- Improved settings page. Setting should now be available without needing to enable the settings (Issue #18)
-- Fixed bug with enabling/disabling "add block" button when max block types reached
-- Fixed deprecation for Composer 2.0 (Issue #43)
-- Fixed bug with block type names (Issue #32)
-- Refactored code base for easier maintenance
