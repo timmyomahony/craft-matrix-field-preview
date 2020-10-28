@@ -4,7 +4,7 @@
 namespace weareferal\matrixfieldpreview\controllers;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\assets\matrixfieldpreviewsettings\MatrixFieldPreviewSettingsAsset;
+use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
 use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
 
 use Craft;
