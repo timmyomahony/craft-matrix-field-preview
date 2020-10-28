@@ -10,7 +10,7 @@ class MatrixFieldPreviewSettingsAsset extends AssetBundle
 {
     public function init()
     {
-        $this->sourcePath = "@weareferal/matrixfieldpreview/assets/matrixfieldpreviewsettings/dist";
+        $this->sourcePath = "@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist";
 
         $this->depends = [
             CpAsset::class
