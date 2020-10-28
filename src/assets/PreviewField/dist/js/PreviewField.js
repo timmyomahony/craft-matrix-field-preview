@@ -20,7 +20,7 @@
    *
    * > $('.matrix-field').data("matrix")
    *
-   * But the BIG caveat is that you have to wait for the element to finish 
+   * But the BIG caveat is that you have to wait for the element to finish
    * executing and setting up. There's no way to wait or know when the
    * matrix field has been initialised.
    *
@@ -32,7 +32,7 @@
     matrixFields: {},
     settingsUrl: "matrix-field-preview/preview/get-settings",
     previewsUrl: "matrix-field-preview/preview/get-previews",
-    previews: {},
+    configs: {},
     // FIXME: I'm not sure why, but every time you insert a block
     // into the matrix field, either by the original buttons or by
     // our own modal overlay, our JavaScript code is being
@@ -41,17 +41,13 @@
     // matrix field JavaScript, but I don't know why it's happening
     init: function (matrixFields) {
       this.defaultImageUrl = matrixFieldPreviewDefaultImage; // via $view->registerJsVar
-      this.takeoverFields = matrixFieldPreviewTakeoverFields; // via $view->registerJsVar
       this.$matrixFields = $(matrixFields);
       if (this.$matrixFields.length > 0) {
         this.$matrixFields.each(
           function (i, matrixField) {
             var $matrixField = $(matrixField);
-  
+
             $matrixField.addClass("mfp-matrix-field");
-            if (this.takeoverFields) {
-              $matrixField.addClass("mfp-take-over");
-            }
 
             var matrixFieldHandle = this.getMatrixFieldHandle($matrixField);
             if (!this.matrixFields.hasOwnProperty(matrixFieldHandle)) {
@@ -86,7 +82,21 @@
               "Received response from matrix field config endpoint: ",
               response
             );
-            this.previews = response["previews"];
+            this.configs[matrixFieldHandle] = response;
+
+            // Skip if previews are not enabled for this matrix field
+            if (!response["fieldConfig"]["enablePreviews"]) {
+              console.debug(
+                "Previews are not enabled for this matrix field " +
+                  matrixFieldHandle
+              );
+              return;
+            }
+
+            // Take over the existing matrix field dropdown
+            if (response["fieldConfig"]["enableTakeover"]) {
+              $matrixField.addClass("mfp-take-over");
+            }
 
             var matrixInput = $matrixField.data("matrix");
             var $existingBlockTypes = $matrixField.find(
@@ -98,7 +108,10 @@
               function (i, blockType) {
                 var $blockType = $(blockType);
                 var blockTypeHandle = $blockType.attr("data-type");
-                if (this.previews.hasOwnProperty(blockTypeHandle)) {
+                var config = this.configs[matrixFieldHandle];
+                if (
+                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
+                ) {
                   // Insert block type previews for all the static block types
                   console.debug(
                     "Creating preview thumbnail for existing block type " +
@@ -108,7 +121,7 @@
                   );
                   this.createBlockTypePreview(
                     $blockType,
-                    this.previews[blockTypeHandle]
+                    config["blockTypeConfigs"][blockTypeHandle]
                   );
                 } else {
                   console.debug(
@@ -127,8 +140,16 @@
               function (ev) {
                 var $blockType = ev["$block"];
                 var blockTypeHandle = $blockType.attr("data-type");
-
-                if (this.previews.hasOwnProperty(blockTypeHandle)) {
+                var config = this.configs[matrixFieldHandle];
+                console.log(
+                  matrixFieldHandle,
+                  blockTypeHandle,
+                  config,
+                  config["blockTypeConfigs"]
+                );
+                if (
+                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
+                ) {
                   console.debug(
                     "Inserting preview thumbnail for new block type " +
                       blockTypeHandle +
@@ -137,7 +158,7 @@
                   );
                   this.createBlockTypePreview(
                     $blockType,
-                    this.previews[blockTypeHandle]
+                    config["blockTypeConfigs"][blockTypeHandle]
                   );
                 } else {
                   console.debug(
@@ -148,11 +169,7 @@
                   );
                 }
 
-                if (matrixInput.canAddMoreBlocks()) {
-                  this.enableModalButton($matrixField);
-                } else {
-                  this.disableModalButton($matrixField);
-                }
+                this.updateModalButton($matrixField);
               }.bind(this)
             );
 
@@ -160,18 +177,7 @@
             matrixInput.on(
               "blockDeleted",
               function (ev) {
-                var $blockType = ev["$block"];
-                var blockTypeHandle = $blockType.attr("data-type");
-                
-                if (this.previews.hasOwnProperty(blockTypeHandle)) {
-                  delete this.previews[blockTypeHandle];
-                }
-
-                if (matrixInput.canAddMoreBlocks()) {
-                  this.enableModalButton($matrixField);
-                } else {
-                  this.disableModalButton($matrixField);
-                }
+                this.updateModalButton($matrixField);
               }.bind(this)
             );
 
@@ -179,6 +185,8 @@
             this.createNavigation($matrixField, matrixFieldHandle);
 
             this.matrixFields[matrixFieldHandle] = $matrixField;
+
+            this.updateModalButton($matrixField);
 
             $matrixField.addClass("mfp-loaded");
           } else {
@@ -215,7 +223,10 @@
 
       var modal = this.createModal($matrixField, matrixFieldHandle);
       var matrixInput = $matrixField.data("matrix");
-      var $modalButton = this.createModalButton($matrixField);
+      var $modalButton = this.createModalButton(
+        $matrixField,
+        matrixFieldHandle
+      );
 
       var $grid = $("<div>", {
         class: "mfp-modal__grid",
@@ -229,6 +240,8 @@
               " in matrix field " +
               matrixFieldHandle
           );
+
+          var config = this.configs[matrixFieldHandle];
 
           var $item = $("<div>", {
             class: "mfp-modal__item",
@@ -247,17 +260,17 @@
             class: "mfp-modal__description",
           });
 
-          if (this.previews.hasOwnProperty(blockType.handle)) {
-            var preview = this.previews[blockType.handle];
-            if (preview["image"]) {
+          if (config["blockTypeConfigs"].hasOwnProperty(blockType.handle)) {
+            var blockTypeConfig = config["blockTypeConfigs"][blockType.handle];
+            if (blockTypeConfig["image"]) {
               $img.removeClass("mfp-modal__image--default");
-              $img.children("img").attr("src", preview["image"]);
+              $img.children("img").attr("src", blockTypeConfig["image"]);
             }
-            if (preview["name"]) {
-              $name.text(preview["name"]);
+            if (blockTypeConfig["name"]) {
+              $name.text(blockTypeConfig["name"]);
             }
-            if (preview["description"]) {
-              $description.text(preview["description"]);
+            if (blockTypeConfig["description"]) {
+              $description.text(blockTypeConfig["description"]);
             }
           }
 
@@ -282,7 +295,7 @@
         if (matrixInput.canAddMoreBlocks()) {
           modal.show();
         } else {
-          console.debug('Maximum number of blocks reached');
+          console.debug("Maximum number of blocks reached");
         }
       });
     },
@@ -315,10 +328,11 @@
       return modal;
     },
 
-    createModalButton: function ($matrixField) {
+    createModalButton: function ($matrixField, matrixFieldHandle) {
       var buttonText = $matrixField.find(".menubtn").text();
       var buttonIcon = "add";
-      if (! this.takeoverFields) {
+      var config = this.configs[matrixFieldHandle];
+      if (!config["fieldConfig"]["enableTakeover"]) {
         buttonText = "Preview Blocks";
         buttonIcon = "search";
       }
@@ -329,12 +343,33 @@
       return $button;
     },
 
-    disableModalButton: function($matrixField) {
-      $matrixField.find('.mfp-modal-trigger').addClass('disabled');
+    updateModalButton: function ($matrixField) {
+      // FIXME: There is a bug in Craft. When we remove a block Craft fires
+      // the event before the actual element has been removed from the DOM:
+      //
+      // https://github.com/craftcms/cms/blob/master/src/web/assets/matrix/src/MatrixInput.js#L763
+      //
+      // So we have to use this timeout hack as a fix
+      setTimeout(
+        function () {
+          if ($matrixField.data("matrix").canAddMoreBlocks()) {
+            this.enableModalButton($matrixField);
+          } else {
+            this.disableModalButton($matrixField);
+          }
+        }.bind(this),
+        600
+      );
     },
 
-    enableModalButton: function($matrixField) {
-      $matrixField.find('.mfp-modal-trigger').removeClass('disabled');
+    disableModalButton: function ($matrixField) {
+      console.log("Adding disabled", $matrixField.find(".mfp-modal-trigger"));
+      $matrixField.find(".mfp-modal-trigger").addClass("disabled");
+    },
+
+    enableModalButton: function ($matrixField) {
+      console.log("Removing disabled");
+      $matrixField.find(".mfp-modal-trigger").removeClass("disabled");
     },
 
     /**

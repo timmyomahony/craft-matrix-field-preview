@@ -1,0 +1,55 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% import '_includes/forms' as forms %}
+
+{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
+
+{% set fullPageForm = true %}
+
+{% set title = "Fields Configuration" | t("matrix-field-preview") %}
+
+{% block content %}
+    <input type="hidden" name="pluginHandle" value="matrix-field-preview">
+    {{ actionInput('matrix-field-preview/settings/fields') }}
+        <div class="field mfp-settings-table">
+            <div class="heading">
+                <label>{{ "Configure Matrix Fields"|t('matrix-field-preview') }}</label>
+                <div class="instructions"><p>{{ "Use this page to select the matrix fields you want preview images and descriptions to appear on." | t('matrix-field-preview') }}</p></div>
+            </div>
+            {% if matrixFields | length <= 0 %}
+                <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
+            {% else %}
+                <table id="fields" class="data fullwidth">
+                    <thead>
+                        <th scope="col">{{ "Matrix Field"|t('matrix-field-preview') }}</th>
+                        <th scope="col">{{ "Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this matrix field." | t('matrix-field-preview') }}</p></span></th>
+                        <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default Craft matrix field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
+                    </thead>
+                    <tbody>
+                        {% for fieldConfig in fieldConfigs %}
+                            {% set matrixField = fieldConfig.field %}
+                            <tr data-id="{{ loop.index }}" data-name="{{ matrixField.handle }}">
+                                <td scope="row" data-title="Matrix Field">
+                                    <strong>{{ matrixField.name }}</strong>
+                                </td>
+                                <td scope="row" data-title="Enable/Disable">
+                                    {{ forms.lightswitchField({
+                                        name: 'settings[' ~ matrixField.handle ~ '][enablePreviews]',
+                                        id: matrixField.handle ~ '-enablePreviews',
+                                        on: fieldConfig.enablePreviews
+                                    }) }}
+                                </td>
+                                <td scope="row" data-title="Takeover">
+                                    {{ forms.lightswitchField({
+                                        name: 'settings[' ~ matrixField.handle ~ '][enableTakeover]',
+                                        id:  matrixField.handle ~ '-enableTakeover',
+                                        on: fieldConfig.enableTakeover
+                                    }) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+{% endblock %}
