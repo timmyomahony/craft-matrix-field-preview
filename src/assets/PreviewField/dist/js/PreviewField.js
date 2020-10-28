@@ -141,7 +141,12 @@
                 var $blockType = ev["$block"];
                 var blockTypeHandle = $blockType.attr("data-type");
                 var config = this.configs[matrixFieldHandle];
-
+                console.log(
+                  matrixFieldHandle,
+                  blockTypeHandle,
+                  config,
+                  config["blockTypeConfigs"]
+                );
                 if (
                   config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
                 ) {
@@ -172,16 +177,6 @@
             matrixInput.on(
               "blockDeleted",
               function (ev) {
-                var $blockType = ev["$block"];
-                var blockTypeHandle = $blockType.attr("data-type");
-                var config = this.configs[matrixFieldHandle];
-
-                if (
-                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
-                ) {
-                  delete config["blockTypeConfigs"][blockTypeHandle];
-                }
-
                 this.updateModalButton($matrixField);
               }.bind(this)
             );
