@@ -18,7 +18,7 @@ When your client goes to publish they'll see a huge dropdown:
 
 There are a number of existing plugins like [Spoon](https://plugins.craftcms.com/spoon) and [Matrix Mate](https://plugins.craftcms.com/matrixmate) that help deal with this but as the number of matrix field blocks grows, even with descriptive block titles it can be tricky to figure out what a block will look like. 
 
-Craft Matrix Field Preview solves this by allowing you to upload screenshots of the rendered blocks so that you client can see at-a-glance what the content they are about to publish will look like. 
+Craft Matrix Field Preview solves this by allowing you to upload screenshots of the rendered blocks so that your client can see at-a-glance what the content they are about to publish will look like. 
 
 When they publish new content, instead of using the native dropdown shown above, they'll get an overlay modal with examples:
 
@@ -48,19 +48,33 @@ To install the plugin, follow these instructions.
 
 ## Configuration
 
-Configuration is handled in the plugin settings page.
+Configuration is handled in the plugin settings page. There are three tabs:
 
-The first step is to select a volume to hold screenshots assets. 
+- General settings
+- Matrix field settings
+- Matrix block type settings
 
-![Configuration step](resources/img/screenshot-9.png)
+The first step is to select a volume to hold your preview screenshots (you must already have a volume configured). 
 
-Once saved, you will see a list of all of your matrix blocks from your currently configured fields: ![Configuration step](resources/img/screenshot-4.png)
+![Matrix preview volume step](resources/img/screenshot-3.png)
 
-If you click into any of these, you will be able to add a description of the block as well as upload a screenshot. 
+Once saved, next configure which of your matrix fields you want to enable previews for:
 
-![Configuration step](resources/img/screenshot-5.png)
+![Matrix field configuration](resources/img/screenshot-4.png)
 
-Once you have added all your descriptions and screenshots, you're ready to go.
+You can also choose to optionally "takeover" the default matrix field experience. This means only the new preview overlay modal can be used to select matrix fields block.
+
+![Takeover example](resources/img/screenshot-9.png)
+
+Alternatively, if you choose not to "takeover", the existing matrix field block button will continue to be displayed, while a "preview" button will be included alongside, giving users the best of both worlds.
+
+![Takeover counter example](resources/img/screenshot-10.png)
+
+Finally, configure the actual previews and descriptions for your matrix block types. 
+
+![Matrix blocks configuration](resources/img/screenshot-5.png)
+
+Click into each block type to configure them individually (the more the merrier).
 
 ## Usage
 
