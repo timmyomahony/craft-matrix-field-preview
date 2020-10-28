@@ -9,7 +9,7 @@ class PreviewFieldAsset extends AssetBundle
 {
     public function init()
     {
-        $this->sourcePath = "@weareferal/matrixfieldpreview/assets/previewfield/dist";
+        $this->sourcePath = "@weareferal/matrixfieldpreview/assets/PreviewField/dist";
 
         $this->depends = [
             CpAsset::class

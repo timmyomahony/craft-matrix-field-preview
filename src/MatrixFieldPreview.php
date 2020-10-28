@@ -15,7 +15,7 @@ use weareferal\matrixfieldpreview\services\BlockTypeConfigService;
 use weareferal\matrixfieldpreview\services\FieldConfigService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
-use weareferal\matrixfieldpreview\assets\previewfield\PreviewFieldAsset;
+use weareferal\matrixfieldpreview\assets\PreviewField\PreviewFieldAsset;
 
 use Craft;
 use craft\base\Plugin;
@@ -112,7 +112,7 @@ class MatrixFieldPreview extends Plugin
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
             function (TemplateEvent $event) {
                 if (Craft::$app->request->isCpRequest) {
-                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/matrixfieldpreviewsettings/dist/img/no-dummy-image.svg', true);
+                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/no-dummy-image.svg', true);
                     $view = Craft::$app->getView();
                     $view->registerAssetBundle(PreviewFieldAsset::class);
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
