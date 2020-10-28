@@ -39,40 +39,23 @@ class Install extends Migration
     {
         $tablesCreated = false;
 
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_blocktypes_config}}');
+        // matrixfieldpreview_previewrecord table
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_previewrecord}}');
         if ($tableSchema === null) {
             $tablesCreated = true;
             $this->createTable(
-                '{{%matrixfieldpreview_blocktypes_config}}',
+                '{{%matrixfieldpreview_previewrecord}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
+                    // Custom columns in the table
+                    'matrixFieldHandle' => $this->string(1024)->notNull()->defaultValue(''),
                     'blockTypeId' => $this->integer()->notNull(),
-                    'fieldId' => $this->integer()->notNull(),
                     'previewImageId' => $this->integer(),
                     'siteId' => $this->integer()->notNull(),
                     'description' => $this->string(1024)->notNull()->defaultValue(''),
-                ]
-            );
-        }
-
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_fields_config}}');
-        if ($tableSchema === null) {
-            $tablesCreated = true;
-            $this->createTable(
-                '{{%matrixfieldpreview_fields_config}}',
-                [
-                    'id' => $this->primaryKey(),
-                    'dateCreated' => $this->dateTime()->notNull(),
-                    'dateUpdated' => $this->dateTime()->notNull(),
-                    'uid' => $this->uid(),
-                    'siteId' => $this->integer()->notNull(),
-                    // Custom columns in the table
-                    'fieldId' => $this->integer()->notNull(),
-                    'enablePreviews' => $this->boolean(true),
-                    'enableTakeover' => $this->boolean(true)
                 ]
             );
         }
@@ -93,10 +76,10 @@ class Install extends Migration
 
     protected function addForeignKeys()
     {
-        // block type config
+        // matrixfieldpreview_previewrecord table
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', 'siteId'),
-            '{{%matrixfieldpreview_blocktypes_config}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'siteId'),
+            '{{%matrixfieldpreview_previewrecord}}',
             'siteId',
             '{{%sites}}',
             'id',
@@ -105,18 +88,8 @@ class Install extends Migration
         );
 
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', 'fieldId'),
-            '{{%matrixfieldpreview_blocktypes_config}}',
-            'fieldId',
-            '{{%fields}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', 'blockTypeId'),
-            '{{%matrixfieldpreview_blocktypes_config}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'blockTypeId'),
+            '{{%matrixfieldpreview_previewrecord}}',
             'blockTypeId',
             '{{%matrixblocktypes}}',
             'id',
@@ -125,31 +98,10 @@ class Install extends Migration
         );
 
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', 'previewImageId'),
-            '{{%matrixfieldpreview_blocktypes_config}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'previewImageId'),
+            '{{%matrixfieldpreview_previewrecord}}',
             'previewImageId',
             '{{%assets}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
-        // fields config
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_fields_config}}', 'siteId'),
-            '{{%matrixfieldpreview_fields_config}}',
-            'siteId',
-            '{{%sites}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_fields_config}}', 'fieldId'),
-            '{{%matrixfieldpreview_fields_config}}',
-            'fieldId',
-            '{{%fields}}',
             'id',
             'CASCADE',
             'CASCADE'
@@ -162,8 +114,7 @@ class Install extends Migration
 
     protected function removeTables()
     {
+        // matrixfieldpreview_previewrecord table
         $this->dropTableIfExists('{{%matrixfieldpreview_previewrecord}}');
-        $this->dropTableIfExists('{{%matrixfieldpreview_blocktypes_config}}');
-        $this->dropTableIfExists('{{%matrixfieldpreview_fields_config}}');
     }
 }

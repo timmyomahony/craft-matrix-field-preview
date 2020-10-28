@@ -1,0 +1,45 @@
+{% requireAdmin %}
+
+{% set crumbs = [
+    { label: "Settings"|t('app'), url: url('settings') },
+    { label: "Plugins"|t('app'), url: url('settings/plugins') },
+    { label: plugin.name, url: url('settings/plugins/matrix-field-preview') }
+] %}
+
+{% set fullPageForm = true %}
+
+{% do view.registerAssetBundle("craft\\web\\assets\\fileupload\\FileUploadAsset") %}
+
+{% extends "_layouts/cp" %}
+
+{% set title = preview.blockType.name %}
+{% set docTitle = title ~ ' - ' ~ plugin.name ~ ' - ' ~ "Plugins"|t('app') %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+    {{ csrfInput() }}
+    {{ actionInput('matrix-field-preview/settings/block-type', {blockTypeId: preview.blockType.id}) }}
+
+    {{ forms.textareaField({
+        first: true,
+        label: "Description"|t('matrix-field-preview'),
+        instructions: "A short description of this matrix block"|t('matrix-field-preview'),
+        id: "description",
+        name: "description",
+        value: preview.description,
+        errors: preview.getErrors("description")
+    }) }}
+
+    {{ forms.field(
+            {
+                instructions: "Upload a screenshot of your matrix field block here. This will be visible when publishing content via the matrix field",
+                label: "Preview Image"|t('matrix-field-preview'),
+                id: 'preview'
+            },
+            include('matrix-field-preview/_includes/preview-image', with_context = true)
+        )
+    }}
+
+    
+{% endblock %}
