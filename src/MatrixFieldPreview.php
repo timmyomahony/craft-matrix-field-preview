@@ -134,13 +134,15 @@ class MatrixFieldPreview extends Plugin
                     'matrix-field-preview/settings/block-types' => 'matrix-field-preview/settings/block-types',
                     'matrix-field-preview/settings/block-type' => 'matrix-field-preview/settings/block-type'
                 ];
-                $neoPlugin = Craft::$app->plugins->getPlugin("neo", false);
-                if ($neoPlugin->isInstalled) {
+
+                // Neo support
+                if (Craft::$app->plugins->getPlugin("neo", false)->isInstalled) {
                     $urls = array_merge($urls, [
                         'matrix-field-preview/settings/neo/fields' => 'matrix-field-preview/settings/neo/fields',
                         'matrix-field-preview/settings/neo/block-types' => 'matrix-field-preview/settings/neo/block-types',
                     ]);
                 }
+
                 $event->rules = array_merge($event->rules, $urls);
             }
         );
