@@ -195,6 +195,22 @@ class SettingsController extends Controller
         );
     }
 
+    public function actionNeoFields()
+    {
+        return $this->renderTemplate(
+            'matrix-field-preview/settings/neo/fields',
+            []
+        );
+    }
+
+    public function actionNeoBlockTypes()
+    {
+        return $this->renderTemplate(
+            'matrix-field-preview/settings/neo/block-types',
+            []
+        );
+    }
+
     /**
      *
      */

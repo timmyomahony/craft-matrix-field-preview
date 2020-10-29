@@ -128,12 +128,20 @@ class MatrixFieldPreview extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules = array_merge($event->rules, [
+                $urls = [
                     'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
                     'matrix-field-preview/settings/fields' => 'matrix-field-preview/settings/fields',
                     'matrix-field-preview/settings/block-types' => 'matrix-field-preview/settings/block-types',
                     'matrix-field-preview/settings/block-type' => 'matrix-field-preview/settings/block-type'
-                ]);
+                ];
+                $neoPlugin = Craft::$app->plugins->getPlugin("neo", false);
+                if ($neoPlugin->isInstalled) {
+                    $urls = array_merge($urls, [
+                        'matrix-field-preview/settings/neo/fields' => 'matrix-field-preview/settings/neo/fields',
+                        'matrix-field-preview/settings/neo/block-types' => 'matrix-field-preview/settings/neo/block-types',
+                    ]);
+                }
+                $event->rules = array_merge($event->rules, $urls);
             }
         );
     }

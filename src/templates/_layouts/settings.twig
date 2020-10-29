@@ -26,6 +26,20 @@
     },
 } %}
 
+{% set plugin = craft.app.plugins.getPlugin('neo', false) %}
+{% if plugin is not null and plugin.isInstalled %}
+    {% set navItems = navItems | merge({
+        "neo-fields": {
+            title: "Neo Fields"|t('matrix-field-preview'),
+            children: []
+        },
+        "neo-block-types": {
+            title: "Neo Block Types"|t('matrix-field-preview'),
+            children: []
+        },
+    }) %}
+{% endif %}
+
 {% set selectedItem = craft.app.request.getSegment(3)|default("fields") %}
 
 {% block sidebar %}
