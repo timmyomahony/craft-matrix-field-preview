@@ -22,7 +22,7 @@ class SettingsController extends Controller
     protected $allowAnonymous = [];
 
     /**
-     * General plugin settings
+     * General Plugin Settings
      */
     public function actionGeneral()
     {
@@ -38,7 +38,8 @@ class SettingsController extends Controller
     }
 
     /**
-     * Enable/disable previews on matrix fields
+     * Matrix Fields Settings
+     * 
      */
     public function actionFields()
     {
@@ -47,9 +48,6 @@ class SettingsController extends Controller
         $request = Craft::$app->request;
 
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-
-        // Get all sections and matrix fields
-        $sections = Craft::$app->sections->getAllSections();
 
         if ($request->isPost) {
             $post = $request->post();
@@ -65,25 +63,24 @@ class SettingsController extends Controller
             }
         }
 
-        $matrixFields = $plugin->blockTypeConfigService->getAllMatrixFields();
+        $fields = $plugin->fieldConfigService->getAllFields();
         $fieldConfigs = $plugin->fieldConfigService->getAll();
 
         usort($fieldConfigs, function ($a, $b) {
             return strcmp($a->field->name, $b->field->name);
         });
 
-        // Craft::info($sections, "matrix-field-previews");
-
         return $this->renderTemplate('matrix-field-preview/settings/fields', [
             'settings' => $settings,
             'plugin' => $plugin,
-            'matrixFields' => $matrixFields,
+            'fields' => $fields,
             'fieldConfigs' => $fieldConfigs
         ]);
     }
 
     /**
-     * Add images and descriptions to individual matrix field block types
+     * Matrix Block Types Settings
+     * 
      */
     public function actionBlockTypes()
     {
@@ -145,8 +142,8 @@ class SettingsController extends Controller
     }
 
     /**
-     * Configure an individual matrix field block type preview. Upload an
-     * image and a custom description
+     * Matrix Block Type Settings
+     * 
      */
     public function actionBlockType($blockTypeId)
     {
@@ -197,10 +194,7 @@ class SettingsController extends Controller
 
     public function actionNeoFields()
     {
-        return $this->renderTemplate(
-            'matrix-field-preview/settings/neo/fields',
-            []
-        );
+        return $this->renderTemplate('matrix-field-preview/settings/fields', []);
     }
 
     public function actionNeoBlockTypes()

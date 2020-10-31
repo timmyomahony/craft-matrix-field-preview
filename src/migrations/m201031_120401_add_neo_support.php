@@ -32,9 +32,9 @@ class m201031_120401_add_neo_support extends Migration
 
     protected function createNeoFieldTables()
     {
-        if (Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_neo_fields}}') === null) {
+        if (Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_neo_fields_config}}') === null) {
             $this->createTable(
-                '{{%matrixfieldpreview_neo_fields}}',
+                '{{%matrixfieldpreview_neo_fields_config}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
@@ -47,9 +47,9 @@ class m201031_120401_add_neo_support extends Migration
             );
         }
 
-        if (Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_neo_blocktypes}}') === null) {
+        if (Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_neo_blocktypes_config}}') === null) {
             $this->createTable(
-                '{{%matrixfieldpreview_neo_blocktypes}}',
+                '{{%matrixfieldpreview_neo_blocktypes_config}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
@@ -68,8 +68,8 @@ class m201031_120401_add_neo_support extends Migration
     {
         // Neo fields
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields}}', 'siteId'),
-            '{{%matrixfieldpreview_neo_fields}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields_config}}', 'siteId'),
+            '{{%matrixfieldpreview_neo_fields_config}}',
             'siteId',
             '{{%sites}}',
             'id',
@@ -78,8 +78,8 @@ class m201031_120401_add_neo_support extends Migration
         );
 
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields}}', 'fieldId'),
-            '{{%matrixfieldpreview_neo_fields}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields_config}}', 'fieldId'),
+            '{{%matrixfieldpreview_neo_fields_config}}',
             'fieldId',
             '{{%fields}}',
             'id',
@@ -89,8 +89,8 @@ class m201031_120401_add_neo_support extends Migration
 
         // Neo blocktypes
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_blocktypes}}', 'fieldId'),
-            '{{%matrixfieldpreview_neo_blocktypes}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_blocktypes_config}}', 'fieldId'),
+            '{{%matrixfieldpreview_neo_blocktypes_config}}',
             'fieldId',
             '{{%fields}}',
             'id',
@@ -99,8 +99,8 @@ class m201031_120401_add_neo_support extends Migration
         );
 
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_blocktypes}}', 'blockTypeId'),
-            '{{%matrixfieldpreview_neo_blocktypes}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_blocktypes_config}}', 'blockTypeId'),
+            '{{%matrixfieldpreview_neo_blocktypes_config}}',
             'blockTypeId',
             '{{%neoblocktypes}}',
             'id',
@@ -109,8 +109,8 @@ class m201031_120401_add_neo_support extends Migration
         );
 
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_blocktypes}}', 'previewImageId'),
-            '{{%matrixfieldpreview_neo_blocktypes}}',
+            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_blocktypes_config}}', 'previewImageId'),
+            '{{%matrixfieldpreview_neo_blocktypes_config}}',
             'previewImageId',
             '{{%assets}}',
             'id',
@@ -121,7 +121,7 @@ class m201031_120401_add_neo_support extends Migration
 
     protected function removeNeoFieldTables()
     {
-        $this->dropTableIfExists('{{%matrixfieldpreview_neo_blocktypes}}');
-        $this->dropTableIfExists('{{%matrixfieldpreview_neo_fields}}');
+        $this->dropTableIfExists('{{%matrixfieldpreview_neo_blocktypes_config}}');
+        $this->dropTableIfExists('{{%matrixfieldpreview_neo_fields_config}}');
     }
 }

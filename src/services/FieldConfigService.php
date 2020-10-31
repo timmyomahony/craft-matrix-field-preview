@@ -7,23 +7,12 @@ use weareferal\matrixfieldpreview\records\FieldConfigRecord;
 
 use Craft;
 use craft\base\Component;
-use craft\fields\Matrix;
-use craft\helpers\Assets as AssetsHelper;
-use craft\elements\Asset;
-use craft\errors\VolumeException;
-use craft\helpers\Image;
-use craft\errors\ImageException;
-use craft\errors\InvalidSubpathException;
 
-/**
- * Field Config Servilce
- *
- * @author    Timmy O'Mahony 
- * @package   MatrixFieldPreview
- * @since     1.2.0
- */
-class FieldConfigService extends Component
+
+abstract class BaseFieldConfigService extends Component
 {
+    protected $FieldRecordClass;
+    protected $fieldType;
     /**
      * Get All
      * 
@@ -32,18 +21,15 @@ class FieldConfigService extends Component
      */
     public function getAll()
     {
-        $plugin = MatrixFieldPreview::getInstance();
-        $matrixFields = $plugin->blockTypeConfigService->getAllMatrixFields();
-
         // TODO: performance can be improved here
-        foreach ($matrixFields as $matrixField) {
-            $record = FieldConfigRecord::findOne([
-                'fieldId' => $matrixField->id
+        foreach ($this->getAllFields() as $field) {
+            $record = $this->FieldRecordClass::findOne([
+                'fieldId' => $field->id
             ]);
 
             if (!$record) {
-                $fieldConfig = new FieldConfigRecord();
-                $fieldConfig->fieldId = $matrixField->id ?? null;
+                $fieldConfig = new $this->FieldRecordClass();
+                $fieldConfig->fieldId = $field->id ?? null;
                 $fieldConfig->siteId = Craft::$app->getSites()->currentSite->id;
                 $fieldConfig->enablePreviews = true;
                 $fieldConfig->enableTakeover = true;
@@ -51,7 +37,7 @@ class FieldConfigService extends Component
             }
         }
 
-        return FieldConfigRecord::find()->all();
+        return $this->FieldRecordClass::find()->all();
     }
 
     /**
@@ -61,16 +47,16 @@ class FieldConfigService extends Component
      */
     public function getByHandle($handle)
     {
-        $matrixField = Craft::$app->getFields()->getFieldByHandle($handle);
+        $field = Craft::$app->getFields()->getFieldByHandle($handle);
 
-        if ($matrixField) {
-            $record = FieldConfigRecord::findOne([
-                'fieldId' => $matrixField->id
+        if ($field) {
+            $record = $this->FieldRecordClass::findOne([
+                'fieldId' => $field->id
             ]);
 
             if (!$record) {
-                $record = new FieldConfigRecord();
-                $record->fieldId = $matrixField->id ?? null;
+                $record = new $this->FieldRecordClass();
+                $record->fieldId = $field->id ?? null;
                 $record->siteId = Craft::$app->getSites()->currentSite->id;
                 $record->enablePreviews = true;
                 $record->enableTakeover = true;
@@ -84,7 +70,7 @@ class FieldConfigService extends Component
     }
 
     /**
-     * Get all matrix fields
+     * Get all fields
      * 
      * There is already a method in the fields service to get all fields
      * by a particular element type:
@@ -97,15 +83,22 @@ class FieldConfigService extends Component
      * 
      * So instead, we have our own function here
      */
-    public function getAllMatrixFields()
+    public function getAllFields()
     {
         $results = [];
         foreach (Craft::$app->getFields()->getAllFields() as $field) {
             // @fixme: is this really the best way to get matrix fields?
-            if (get_class($field) == 'craft\fields\Matrix') {
+            if (get_class($field) == $this->fieldType) {
                 array_push($results, $field);
             }
         }
         return $results;
     }
+}
+
+
+class FieldConfigService extends BaseFieldConfigService
+{
+    protected $FieldRecordClass = FieldConfigRecord::class;
+    protected $fieldType = 'craft\fields\Matrix';
 }

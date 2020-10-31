@@ -16,7 +16,7 @@
                 <label>{{ "Configure Matrix Fields"|t('matrix-field-preview') }}</label>
                 <div class="instructions"><p>{{ "Use this page to select the matrix fields you want preview images and descriptions to appear on." | t('matrix-field-preview') }}</p></div>
             </div>
-            {% if matrixFields | length <= 0 %}
+            {% if fields | length <= 0 %}
                 <p class="error">{{ "No matrix blocks exists yet"|t('matrix-field-preview') }}</p>
             {% else %}
                 <table id="fields" class="data fullwidth">
@@ -27,22 +27,22 @@
                     </thead>
                     <tbody>
                         {% for fieldConfig in fieldConfigs %}
-                            {% set matrixField = fieldConfig.field %}
-                            <tr data-id="{{ loop.index }}" data-name="{{ matrixField.handle }}">
+                            {% set field = fieldConfig.field %}
+                            <tr data-id="{{ loop.index }}" data-name="{{ field.handle }}">
                                 <td scope="row" data-title="Matrix Field">
-                                    <strong>{{ matrixField.name }}</strong>
+                                    <strong>{{ field.name }}</strong>
                                 </td>
                                 <td scope="row" data-title="Enable/Disable">
                                     {{ forms.lightswitchField({
-                                        name: 'settings[' ~ matrixField.handle ~ '][enablePreviews]',
-                                        id: matrixField.handle ~ '-enablePreviews',
+                                        name: 'settings[' ~ field.handle ~ '][enablePreviews]',
+                                        id: field.handle ~ '-enablePreviews',
                                         on: fieldConfig.enablePreviews
                                     }) }}
                                 </td>
                                 <td scope="row" data-title="Takeover">
                                     {{ forms.lightswitchField({
-                                        name: 'settings[' ~ matrixField.handle ~ '][enableTakeover]',
-                                        id:  matrixField.handle ~ '-enableTakeover',
+                                        name: 'settings[' ~ field.handle ~ '][enableTakeover]',
+                                        id:  field.handle ~ '-enableTakeover',
                                         on: fieldConfig.enableTakeover
                                     }) }}
                                 </td>
