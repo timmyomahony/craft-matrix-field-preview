@@ -90,9 +90,6 @@ class SettingsController extends Controller
         $fields = $fieldService->getAllFields();
         $fieldConfigs = $fieldService->getAll();
 
-        Craft::info("FOOBAR", 'matrix-field-preview');
-        Craft::info($fields, 'matrix-field-preview');
-
         usort($fieldConfigs, function ($a, $b) {
             return strcmp($a->field->name, $b->field->name);
         });
