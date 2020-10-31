@@ -53,7 +53,6 @@ class Install extends Migration
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                    'siteId' => $this->integer()->notNull(),
                     'fieldId' => $this->integer()->notNull(),
                     'enablePreviews' => $this->boolean(true),
                     'enableTakeover' => $this->boolean(true)
@@ -73,7 +72,6 @@ class Install extends Migration
                     'blockTypeId' => $this->integer()->notNull(),
                     'fieldId' => $this->integer()->notNull(),
                     'previewImageId' => $this->integer(),
-                    'siteId' => $this->integer()->notNull(),
                     'description' => $this->string(1024)->notNull()->defaultValue(''),
                 ]
             );
@@ -85,16 +83,6 @@ class Install extends Migration
     {
         // Matrix fields
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_fields_config}}', 'siteId'),
-            '{{%matrixfieldpreview_fields_config}}',
-            'siteId',
-            '{{%sites}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
-        $this->addForeignKey(
             $this->db->getForeignKeyName('{{%matrixfieldpreview_fields_config}}', 'fieldId'),
             '{{%matrixfieldpreview_fields_config}}',
             'fieldId',
@@ -105,16 +93,6 @@ class Install extends Migration
         );
 
         // Matrix block types
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', 'siteId'),
-            '{{%matrixfieldpreview_blocktypes_config}}',
-            'siteId',
-            '{{%sites}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
         $this->addForeignKey(
             $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', 'fieldId'),
             '{{%matrixfieldpreview_blocktypes_config}}',
@@ -190,16 +168,6 @@ class Install extends Migration
     protected function addNeoFieldForeignKeys()
     {
         // Neo fields
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields_config}}', 'siteId'),
-            '{{%matrixfieldpreview_neo_fields_config}}',
-            'siteId',
-            '{{%sites}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
         $this->addForeignKey(
             $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields_config}}', 'fieldId'),
             '{{%matrixfieldpreview_neo_fields_config}}',

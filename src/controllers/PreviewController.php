@@ -31,7 +31,7 @@ class PreviewController extends Controller
     public function actionGetPreviews($matrixFieldHandle)
     {
         $plugin = MatrixFieldPreview::getInstance();
-        $fieldConfig = $plugin->fieldConfigService->getByHandle($matrixFieldHandle);
+        $fieldConfig = $plugin->matrixFieldConfigService->getByHandle($matrixFieldHandle);
 
         $response = [
             "success" => false,

@@ -2,9 +2,6 @@
 
 namespace weareferal\matrixfieldpreview\services;
 
-use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\records\FieldConfigRecord;
-
 use Craft;
 use craft\base\Component;
 
@@ -30,7 +27,6 @@ abstract class BaseFieldConfigService extends Component
             if (!$record) {
                 $fieldConfig = new $this->FieldRecordClass();
                 $fieldConfig->fieldId = $field->id ?? null;
-                $fieldConfig->siteId = Craft::$app->getSites()->currentSite->id;
                 $fieldConfig->enablePreviews = true;
                 $fieldConfig->enableTakeover = true;
                 $fieldConfig->save();
@@ -57,7 +53,6 @@ abstract class BaseFieldConfigService extends Component
             if (!$record) {
                 $record = new $this->FieldRecordClass();
                 $record->fieldId = $field->id ?? null;
-                $record->siteId = Craft::$app->getSites()->currentSite->id;
                 $record->enablePreviews = true;
                 $record->enableTakeover = true;
                 $record->save();
@@ -94,11 +89,4 @@ abstract class BaseFieldConfigService extends Component
         }
         return $results;
     }
-}
-
-
-class FieldConfigService extends BaseFieldConfigService
-{
-    protected $FieldRecordClass = FieldConfigRecord::class;
-    protected $fieldType = 'craft\fields\Matrix';
 }

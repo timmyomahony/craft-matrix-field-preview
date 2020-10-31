@@ -12,7 +12,8 @@
 namespace weareferal\matrixfieldpreview;
 
 use weareferal\matrixfieldpreview\services\BlockTypeConfigService;
-use weareferal\matrixfieldpreview\services\FieldConfigService;
+use weareferal\matrixfieldpreview\services\MatrixFieldConfigService;
+use weareferal\matrixfieldpreview\services\NeoFieldConfigService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\PreviewField\PreviewFieldAsset;
@@ -49,7 +50,7 @@ class MatrixFieldPreview extends Plugin
 {
     public static $plugin;
 
-    public $schemaVersion = '1.2.0';
+    public $schemaVersion = '1.2.1';
     public $hasCpSettings = true;
     public $hasCpSection = false;
 
@@ -80,7 +81,8 @@ class MatrixFieldPreview extends Plugin
     {
         $this->setComponents([
             'previewImageService' => PreviewImageService::class,
-            'fieldConfigService' => FieldConfigService::class,
+            'matrixFieldConfigService' => MatrixFieldConfigService::class,
+            'neoFieldConfigService' => NeoFieldConfigService::class,
             'blockTypeConfigService' => BlockTypeConfigService::class
         ]);
     }
@@ -138,8 +140,9 @@ class MatrixFieldPreview extends Plugin
                 // Neo support
                 if (Craft::$app->plugins->getPlugin("neo", false)->isInstalled) {
                     $urls = array_merge($urls, [
-                        'matrix-field-preview/settings/neo/fields' => 'matrix-field-preview/settings/neo/fields',
-                        'matrix-field-preview/settings/neo/block-types' => 'matrix-field-preview/settings/neo/block-types',
+                        'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/settings/neo-fields',
+                        'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/settings/neo-block-types',
+                        'matrix-field-preview/settings/neo-block-type' => 'matrix-field-preview/settings/neo-block-type',
                     ]);
                 }
 

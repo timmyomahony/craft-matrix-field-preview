@@ -1,0 +1,49 @@
+{% import '_includes/forms' as forms %}
+
+{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
+
+{% set fullPageForm = true %}
+
+<input type="hidden" name="pluginHandle" value="matrix-field-preview">
+{{ actionInput("matrix-field-preview/settings/" ~ type | lower ~ "-fields") }}
+<div class="field mfp-settings-table">
+    <div class="heading">
+        <label>{{ "Configure " ~ type ~ " Fields"|t('matrix-field-preview') }}</label>
+        <div class="instructions"><p>{{ "Use this page to select the " ~ type | lower ~ " fields you want preview images and descriptions to appear on." | t('matrix-field-preview') }}</p></div>
+    </div>
+    {% if fields | length <= 0 %}
+        <p class="error">{{ "No " ~ type | lower ~ " blocks exists yet"|t('matrix-field-preview') }}</p>
+    {% else %}
+        <table id="fields" class="data fullwidth">
+            <thead>
+                <th scope="col">{{ type | capitalize ~ " Field"|t('matrix-field-preview') }}</th>
+                <th scope="col">{{ "Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field." | t('matrix-field-preview') }}</p></span></th>
+                <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default " ~ type | lower ~" field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
+            </thead>
+            <tbody>
+                {% for fieldConfig in fieldConfigs %}
+                    {% set field = fieldConfig.field %}
+                    <tr data-id="{{ loop.index }}" data-name="{{ field.handle }}">
+                        <td scope="row" data-title="{{ type | capitalize }} Field">
+                            <strong>{{ field.name }}</strong>
+                        </td>
+                        <td scope="row" data-title="Enable/Disable">
+                            {{ forms.lightswitchField({
+                                name: 'settings[' ~ field.handle ~ '][enablePreviews]',
+                                id: field.handle ~ '-enablePreviews',
+                                on: fieldConfig.enablePreviews
+                            }) }}
+                        </td>
+                        <td scope="row" data-title="Takeover">
+                            {{ forms.lightswitchField({
+                                name: 'settings[' ~ field.handle ~ '][enableTakeover]',
+                                id:  field.handle ~ '-enableTakeover',
+                                on: fieldConfig.enableTakeover
+                            }) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>

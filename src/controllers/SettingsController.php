@@ -44,6 +44,30 @@ class SettingsController extends Controller
     public function actionMatrixFields()
     {
         $plugin = MatrixFieldPreview::getInstance();
+        return $this->actionFields(
+            $plugin->matrixFieldConfigService,
+            'matrix-field-preview/settings/matrix-fields'
+        );
+    }
+
+    /**
+     * Neo Fields Settings
+     */
+    public function actionNeoFields()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->actionFields(
+            $plugin->neoFieldConfigService,
+            'matrix-field-preview/settings/neo-fields'
+        );
+    }
+
+    /**
+     * Base Field Settings
+     */
+    private function actionFields($fieldService, $template)
+    {
+        $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
         $request = Craft::$app->request;
 
@@ -52,7 +76,7 @@ class SettingsController extends Controller
         if ($request->isPost) {
             $post = $request->post();
             foreach ($post['settings'] as $handle => $values) {
-                $fieldConfig = $plugin->fieldConfigService->getByHandle($handle);
+                $fieldConfig = $fieldService->getByHandle($handle);
                 if ($fieldConfig) {
                     $fieldConfig->enablePreviews = $values['enablePreviews'];
                     $fieldConfig->enableTakeover = $values['enableTakeover'];
@@ -63,14 +87,17 @@ class SettingsController extends Controller
             }
         }
 
-        $fields = $plugin->fieldConfigService->getAllFields();
-        $fieldConfigs = $plugin->fieldConfigService->getAll();
+        $fields = $fieldService->getAllFields();
+        $fieldConfigs = $fieldService->getAll();
+
+        Craft::info("FOOBAR", 'matrix-field-preview');
+        Craft::info($fields, 'matrix-field-preview');
 
         usort($fieldConfigs, function ($a, $b) {
             return strcmp($a->field->name, $b->field->name);
         });
 
-        return $this->renderTemplate('matrix-field-preview/settings/matrix-fields', [
+        return $this->renderTemplate($template, [
             'settings' => $settings,
             'plugin' => $plugin,
             'fields' => $fields,
@@ -105,7 +132,7 @@ class SettingsController extends Controller
         foreach ($blockTypes as $blockType) {
             $matrixField = $blockType->field;
 
-            $fieldConfig = $plugin->fieldConfigService->getByHandle($matrixField->handle);
+            $fieldConfig = $plugin->matrixFieldConfigService->getByHandle($matrixField->handle);
 
             // Initialise an array for each matrix field
             if (!array_key_exists($matrixField->id, $matrixFieldsMap)) {
@@ -190,11 +217,6 @@ class SettingsController extends Controller
                 'settings' => $settings
             ]
         );
-    }
-
-    public function actionNeoFields()
-    {
-        return $this->renderTemplate('matrix-field-preview/settings/neo-fields', []);
     }
 
     public function actionNeoBlockTypes()
@@ -302,7 +324,7 @@ class SettingsController extends Controller
         $settings = MatrixFieldPreview::getInstance()->getSettings();
         $view = $this->getView();
         $templateMode = $view->getTemplateMode();
-        return $view->renderTemplate('matrix-field-preview/_includes/preview-image-field', [
+        return $view->renderTemplate('matrix-field-preview/_includes/settings/preview-image-field', [
             'settings' => $settings,
             'blockTypeConfig' => $blockTypeConfig
         ], $templateMode);
