@@ -82,4 +82,30 @@ class FieldConfigService extends Component
 
         return null;
     }
+
+    /**
+     * Get all matrix fields
+     * 
+     * There is already a method in the fields service to get all fields
+     * by a particular element type:
+     * 
+     * https://docs.craftcms.com/api/v3/craft-services-fields.html#public-methods
+     * 
+     * but this method is misleading as there is no matrix element type, just
+     * a matrix _block_ element types. So you can only use it to search for matrix
+     * blocks by type, not actual matrix fields themselves. 
+     * 
+     * So instead, we have our own function here
+     */
+    public function getAllMatrixFields()
+    {
+        $results = [];
+        foreach (Craft::$app->getFields()->getAllFields() as $field) {
+            // @fixme: is this really the best way to get matrix fields?
+            if (get_class($field) == 'craft\fields\Matrix') {
+                array_push($results, $field);
+            }
+        }
+        return $results;
+    }
 }
