@@ -27,21 +27,21 @@
                                 <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
                             </thead>
                             <tbody>
-                                {% for row in group.rows %}
-                                    <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
+                                {% for blockTypeConfig in group.blockTypeConfigs %}
+                                    <tr data-id="{{ loop.index }}" data-name="{{ blockTypeConfig.blockType.name }}">
                                         <td scope="row" data-title="Name">
                                             <a href="{{ url('matrix-field-preview/settings/' ~ type | lower ~ '-block-type', {
-                                                blockTypeId: row.blockType.id
+                                                blockTypeId: blockTypeConfig.blockType.id
                                             }) }}">
-                                            <strong>{{ row.blockType.name }}</strong></a>
+                                            <strong>{{ blockTypeConfig.blockType.name }}</strong></a>
                                         </td>
-                                        <td scope="row" data-title="Description" {% if row.blockTypeConfig and row.blockTypeConfig.description %}title="{{ row.blockTypeConfig.description }}"{% endif %}>
-                                            {% if row.blockTypeConfig and row.blockTypeConfig.description %}
+                                        <td scope="row" data-title="Description" {% if blockTypeConfig and blockTypeConfig.description %}title="{{ blockTypeConfig.description }}"{% endif %}>
+                                            {% if blockTypeConfig and blockTypeConfig.description %}
                                                 <img class="mfp-settings-table__icon" src="{{ assets.success }}">
                                             {% endif %}
                                         </td>
                                         <td scope="row" data-title="Preview Image">
-                                            {% if row.blockTypeConfig and row.blockTypeConfig.previewImageId %}
+                                            {% if blockTypeConfig and blockTypeConfig.previewImageId %}
                                                 <img class="mfp-settings-table__icon" src="{{ assets.success }}">
                                             {% endif %}
                                         </td>
@@ -57,10 +57,10 @@
                                 <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
                             </thead>
                             <tbody>
-                                {% for row in group.rows %}
-                                    <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
+                                {% for blockTypeConfig in group.blockTypeConfigs %}
+                                    <tr data-id="{{ loop.index }}" data-name="{{ blockTypeConfig.blockType.name }}">
                                         <td scope="row" data-title="Name">
-                                            <strong>{{ row.blockType.name }}</strong>
+                                            <strong>{{ blockTypeConfig.blockType.name }}</strong>
                                         </td>
                                         <td scope="row" data-title="Description"></td>
                                         <td scope="row" data-title="Preview Image"></td>

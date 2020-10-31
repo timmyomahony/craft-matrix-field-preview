@@ -31,7 +31,7 @@ class PreviewController extends Controller
     public function actionGetPreviews($matrixFieldHandle)
     {
         $plugin = MatrixFieldPreview::getInstance();
-        $fieldConfig = $plugin->matrixFieldConfigService->getByHandle($matrixFieldHandle);
+        $fieldConfig = $plugin->matrixFieldConfigService->getByFieldHandle($matrixFieldHandle);
 
         $response = [
             "success" => false,
@@ -50,7 +50,7 @@ class PreviewController extends Controller
             "enableTakeover" => $fieldConfig->enableTakeover,
         ];
 
-        $blockTypeConfigs = $plugin->blockTypeConfigService->getByHandle($matrixFieldHandle);
+        $blockTypeConfigs = $plugin->blockTypeConfigService->getByFieldHandle($matrixFieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
             $result = [

@@ -8,6 +8,6 @@ use weareferal\matrixfieldpreview\records\NeoFieldConfigRecord;
 
 class NeoFieldConfigService extends BaseFieldConfigService
 {
-    protected $FieldRecordClass = NeoFieldConfigRecord::class;
+    protected $FieldRecordConfigClass = NeoFieldConfigRecord::class;
     protected $fieldType = 'benf\neo\Field';
 }

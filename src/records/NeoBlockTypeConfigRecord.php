@@ -3,7 +3,7 @@
 namespace weareferal\matrixfieldpreview\records;
 
 use weareferal\matrixfieldpreview\records\BaseBlockTypeConfigRecord;
-use neo\records\BlockType;
+use benf\neo\records\BlockType;
 
 
 class NeoBlockTypeConfigRecord extends BaseBlockTypeConfigRecord

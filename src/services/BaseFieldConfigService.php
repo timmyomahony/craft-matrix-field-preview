@@ -8,7 +8,7 @@ use craft\base\Component;
 
 abstract class BaseFieldConfigService extends Component
 {
-    protected $FieldRecordClass;
+    protected $FieldRecordConfigClass;
     protected $fieldType;
     /**
      * Get All
@@ -20,12 +20,12 @@ abstract class BaseFieldConfigService extends Component
     {
         // TODO: performance can be improved here
         foreach ($this->getAllFields() as $field) {
-            $record = $this->FieldRecordClass::findOne([
+            $record = $this->FieldRecordConfigClass::findOne([
                 'fieldId' => $field->id
             ]);
 
             if (!$record) {
-                $fieldConfig = new $this->FieldRecordClass();
+                $fieldConfig = new $this->FieldRecordConfigClass();
                 $fieldConfig->fieldId = $field->id ?? null;
                 $fieldConfig->enablePreviews = true;
                 $fieldConfig->enableTakeover = true;
@@ -33,7 +33,7 @@ abstract class BaseFieldConfigService extends Component
             }
         }
 
-        return $this->FieldRecordClass::find()->all();
+        return $this->FieldRecordConfigClass::find()->all();
     }
 
     /**
@@ -41,17 +41,17 @@ abstract class BaseFieldConfigService extends Component
      * 
      * Get a field config row based on it's associated matrix field handle
      */
-    public function getByHandle($handle)
+    public function getOrCreateByFieldHandle($handle)
     {
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
 
         if ($field) {
-            $record = $this->FieldRecordClass::findOne([
+            $record = $this->FieldRecordConfigClass::findOne([
                 'fieldId' => $field->id
             ]);
 
-            if (!$record) {
-                $record = new $this->FieldRecordClass();
+            if ($record == null) {
+                $record = new $this->FieldRecordConfigClass();
                 $record->fieldId = $field->id ?? null;
                 $record->enablePreviews = true;
                 $record->enableTakeover = true;
@@ -80,13 +80,13 @@ abstract class BaseFieldConfigService extends Component
      */
     public function getAllFields()
     {
-        $results = [];
+        $fields = [];
         foreach (Craft::$app->getFields()->getAllFields() as $field) {
             // @fixme: is this really the best way to get matrix fields?
             if (get_class($field) == $this->fieldType) {
-                array_push($results, $field);
+                array_push($fields, $field);
             }
         }
-        return $results;
+        return $fields;
     }
 }
