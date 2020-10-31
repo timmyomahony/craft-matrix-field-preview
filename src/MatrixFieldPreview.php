@@ -130,9 +130,9 @@ class MatrixFieldPreview extends Plugin
             function (RegisterUrlRulesEvent $event) {
                 $urls = [
                     'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
-                    'matrix-field-preview/settings/fields' => 'matrix-field-preview/settings/fields',
-                    'matrix-field-preview/settings/block-types' => 'matrix-field-preview/settings/block-types',
-                    'matrix-field-preview/settings/block-type' => 'matrix-field-preview/settings/block-type'
+                    'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/settings/matrix-fields',
+                    'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/settings/matrix-block-types',
+                    'matrix-field-preview/settings/matrix-block-type' => 'matrix-field-preview/settings/matrix-block-type'
                 ];
 
                 // Neo support

@@ -6,12 +6,12 @@
 
 {% set fullPageForm = true %}
 
-{% set title = "Block Types Configuration" | t("matrix-field-preview") %}
+{% set title = "Matrix Block Types Configuration" | t("matrix-field-preview") %}
 
 {% block submitButton %}{% endblock %}
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
-    {{ actionInput('matrix-field-preview/settings/block-types') }}
+    {{ actionInput('matrix-field-preview/settings/matrix-block-types') }}
 
     {% namespace 'settings' %}
         <div class="field mfp-settings-table">
@@ -36,7 +36,7 @@
                                     {% for row in group.rows %}
                                         <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
                                             <td scope="row" data-title="Name">
-                                                <a href="{{ url('matrix-field-preview/settings/block-type', {
+                                                <a href="{{ url('matrix-field-preview/settings/matrix-block-type', {
                                                     blockTypeId: row.blockType.id
                                                 }) }}">
                                                 <strong>{{ row.blockType.name }}</strong></a>

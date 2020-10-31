@@ -41,7 +41,7 @@ class SettingsController extends Controller
      * Matrix Fields Settings
      * 
      */
-    public function actionFields()
+    public function actionMatrixFields()
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
@@ -70,7 +70,7 @@ class SettingsController extends Controller
             return strcmp($a->field->name, $b->field->name);
         });
 
-        return $this->renderTemplate('matrix-field-preview/settings/fields', [
+        return $this->renderTemplate('matrix-field-preview/settings/matrix-fields', [
             'settings' => $settings,
             'plugin' => $plugin,
             'fields' => $fields,
@@ -82,7 +82,7 @@ class SettingsController extends Controller
      * Matrix Block Types Settings
      * 
      */
-    public function actionBlockTypes()
+    public function actionMatrixBlockTypes()
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
@@ -133,7 +133,7 @@ class SettingsController extends Controller
             array_push($matrixFields, $value);
         }
 
-        return $this->renderTemplate('matrix-field-preview/settings/block-types', [
+        return $this->renderTemplate('matrix-field-preview/settings/matrix-block-types', [
             'settings' => $settings,
             'plugin' => $plugin,
             'assets' => $assets,
@@ -145,7 +145,7 @@ class SettingsController extends Controller
      * Matrix Block Type Settings
      * 
      */
-    public function actionBlockType($blockTypeId)
+    public function actionMatrixBlockType($blockTypeId)
     {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
@@ -175,14 +175,14 @@ class SettingsController extends Controller
             if ($blockTypeConfig->validate()) {
                 $blockTypeConfig->save();
                 Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
-                return $this->redirect('matrix-field-preview/settings/block-types');
+                return $this->redirect('matrix-field-preview/settings/matrix-block-types');
             } else {
                 Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
             }
         }
 
         return $this->renderTemplate(
-            'matrix-field-preview/settings/block-type',
+            'matrix-field-preview/settings/matrix-block-type',
             [
                 'blockTypeConfig' => $blockTypeConfig,
                 'plugin' => $plugin,
@@ -194,13 +194,21 @@ class SettingsController extends Controller
 
     public function actionNeoFields()
     {
-        return $this->renderTemplate('matrix-field-preview/settings/fields', []);
+        return $this->renderTemplate('matrix-field-preview/settings/neo-fields', []);
     }
 
     public function actionNeoBlockTypes()
     {
         return $this->renderTemplate(
-            'matrix-field-preview/settings/neo/block-types',
+            'matrix-field-preview/settings/neo-block-types',
+            []
+        );
+    }
+
+    public function actionNeoBlockType()
+    {
+        return $this->renderTemplate(
+            'matrix-field-preview/settings/neo-block-type',
             []
         );
     }

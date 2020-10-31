@@ -12,12 +12,12 @@
 
 {% set crumbs = [
     { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
-    { label: "Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/block-types') }
+    { label: "Matrix Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/matrix-block-types') }
 ] %}
 
 {% block content %}
     <input type="hidden" name="pluginHandle" value="matrix-field-preview">
-    {{ actionInput('matrix-field-preview/settings/block-type', {blockTypeId: blockTypeConfig.blockType.id}) }}
+    {{ actionInput('matrix-field-preview/settings/matrix-block-type', {blockTypeId: blockTypeConfig.blockType.id}) }}
     {% namespace 'settings' %}
         {{ forms.textareaField({
             first: true,
