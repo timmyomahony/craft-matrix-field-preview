@@ -11,9 +11,10 @@
 
 namespace weareferal\matrixfieldpreview;
 
-use weareferal\matrixfieldpreview\services\BlockTypeConfigService;
+use weareferal\matrixfieldpreview\services\MatrixBlockTypeConfigService;
 use weareferal\matrixfieldpreview\services\MatrixFieldConfigService;
 use weareferal\matrixfieldpreview\services\NeoFieldConfigService;
+use weareferal\matrixfieldpreview\services\NeoBlockTypeConfigService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\PreviewField\PreviewFieldAsset;
@@ -79,12 +80,21 @@ class MatrixFieldPreview extends Plugin
 
     private function _setPluginComponents()
     {
-        $this->setComponents([
+        $components = [
             'previewImageService' => PreviewImageService::class,
             'matrixFieldConfigService' => MatrixFieldConfigService::class,
-            'neoFieldConfigService' => NeoFieldConfigService::class,
-            'blockTypeConfigService' => BlockTypeConfigService::class
-        ]);
+            'matrixBlockTypeConfigService' => MatrixBlockTypeConfigService::class
+        ];
+
+        // Neo support
+        if (Craft::$app->plugins->getPlugin("neo", false)->isInstalled) {
+            $components = array_merge($components, [
+                'neoFieldConfigService' => NeoFieldConfigService::class,
+                'neoBlockTypeConfigService' => NeoBlockTypeConfigService::class,
+            ]);
+        }
+
+        $this->setComponents($components);
     }
 
     private function _registerMatrixFieldPreviews()

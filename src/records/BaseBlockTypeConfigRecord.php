@@ -6,7 +6,6 @@ use yii\db\ActiveQueryInterface;
 
 use Craft;
 use craft\db\ActiveRecord;
-use craft\records\MatrixBlockType;
 use craft\records\Asset;
 
 
@@ -86,16 +85,5 @@ abstract class BaseBlockTypeConfigRecord extends ActiveRecord
         }
 
         return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/dummy-image.svg', true);
-    }
-}
-
-
-class BlockTypeConfigRecord extends BaseBlockTypeConfigRecord
-{
-    protected $BlockTypeClass = MatrixBlockType::class;
-
-    public static function tableName()
-    {
-        return '{{%matrixfieldpreview_blocktypes_config}}';
     }
 }

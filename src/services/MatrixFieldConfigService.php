@@ -3,11 +3,11 @@
 namespace weareferal\matrixfieldpreview\services;
 
 use weareferal\matrixfieldpreview\services\BaseFieldConfigService;
-use weareferal\matrixfieldpreview\records\FieldConfigRecord;
+use weareferal\matrixfieldpreview\records\MatrixFieldConfigRecord;
 
 
 class MatrixFieldConfigService extends BaseFieldConfigService
 {
-    protected $FieldRecordClass = FieldConfigRecord::class;
+    protected $FieldRecordClass = MatrixFieldConfigRecord::class;
     protected $fieldType = 'craft\fields\Matrix';
 }

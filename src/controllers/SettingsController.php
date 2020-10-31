@@ -109,6 +109,30 @@ class SettingsController extends Controller
     public function actionMatrixBlockTypes()
     {
         $plugin = MatrixFieldPreview::getInstance();
+        $blockTypes = Craft::$app->matrix->getAllBlockTypes();
+        return $this->actionBlockTypes(
+            $plugin->matrixBlockTypeConfigService,
+            $plugin->matrixFieldConfigService,
+            $blockTypes,
+            'matrix-field-preview/settings/matrix-block-types'
+        );
+    }
+
+    public function actionNeoBlockTypes()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        $blockTypes = Craft::$app->matrix->getAllBlockTypes();
+        return $this->actionBlockTypes(
+            $plugin->neoBlockTypeConfigService,
+            $plugin->neoFieldConfigService,
+            $blockTypes,
+            'matrix-field-preview/settings/neo-block-types'
+        );
+    }
+
+    private function actionBlockTypes($blockTypeConfigService, $fieldConfigService, $blockTypes, $template)
+    {
+        $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
@@ -117,24 +141,23 @@ class SettingsController extends Controller
             'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
         ];
 
-        $blockTypes = Craft::$app->matrix->getAllBlockTypes();
-        $blockTypeConfigs = $plugin->blockTypeConfigService->getAll();
+        $blockTypeConfigs = $blockTypeConfigService->getAll();
 
         $blockTypeConfigMap = [];
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockTypeConfigMap[$blockTypeConfig->blockType->id] = $blockTypeConfig;
         }
 
-        $matrixFieldsMap = [];
+        $fieldsMap = [];
         foreach ($blockTypes as $blockType) {
-            $matrixField = $blockType->field;
+            $field = $blockType->field;
 
-            $fieldConfig = $plugin->matrixFieldConfigService->getByHandle($matrixField->handle);
+            $fieldConfig = $fieldConfigService->getByHandle($field->handle);
 
             // Initialise an array for each matrix field
-            if (!array_key_exists($matrixField->id, $matrixFieldsMap)) {
-                $matrixFieldsMap[$matrixField->id] = [
-                    'matrixField' => $matrixField,
+            if (!array_key_exists($field->id, $fieldsMap)) {
+                $fieldsMap[$field->id] = [
+                    'field' => $field,
                     'fieldConfig' => $fieldConfig,
                     'rows' => []
                 ];
@@ -146,22 +169,22 @@ class SettingsController extends Controller
                 $blockTypeConfig = $blockTypeConfigMap[$blockType->id];
             }
 
-            array_push($matrixFieldsMap[$matrixField->id]['rows'], [
+            array_push($fieldsMap[$field->id]['rows'], [
                 'blockType' => $blockType,
                 'blockTypeConfig' => $blockTypeConfig
             ]);
         }
 
-        $matrixFields = [];
-        foreach ($matrixFieldsMap as $key => $value) {
-            array_push($matrixFields, $value);
+        $fields = [];
+        foreach ($fieldsMap as $key => $value) {
+            array_push($fields, $value);
         }
 
-        return $this->renderTemplate('matrix-field-preview/settings/matrix-block-types', [
+        return $this->renderTemplate($template, [
             'settings' => $settings,
             'plugin' => $plugin,
             'assets' => $assets,
-            'matrixFields' => $matrixFields
+            'fields' => $fields
         ]);
     }
 
@@ -213,14 +236,6 @@ class SettingsController extends Controller
                 'fullPageForm' => true,
                 'settings' => $settings
             ]
-        );
-    }
-
-    public function actionNeoBlockTypes()
-    {
-        return $this->renderTemplate(
-            'matrix-field-preview/settings/neo-block-types',
-            []
         );
     }
 

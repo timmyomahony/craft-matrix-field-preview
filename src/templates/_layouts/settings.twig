@@ -27,7 +27,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url('matrix-field-preview/settings/matrix-block-types') }}"{% if selectedItem == ["matrix-block-types", "matrix-block-type"] %} class="sel"{% endif %}>
+                <a href="{{ url('matrix-field-preview/settings/matrix-block-types') }}"{% if selectedItem in ["matrix-block-types", "matrix-block-type"] %} class="sel"{% endif %}>
                     {{ "Matrix Block Types"|t("matrix-field-preview")}}
                 </a>
             </li>

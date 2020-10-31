@@ -2,8 +2,6 @@
 
 namespace weareferal\matrixfieldpreview\services;
 
-use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
-
 use Craft;
 use craft\base\Component;
 
@@ -76,13 +74,4 @@ abstract class BaseBlockTypeConfigService extends Component
 
         return $record;
     }
-}
-
-
-/**
- * 
- */
-class BlockTypeConfigService extends BaseBlockTypeConfigService
-{
-    protected $BlockTypeRecordClass = BlockTypeConfigRecord::class;
 }

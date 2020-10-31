@@ -1,0 +1,77 @@
+{% import '_includes/forms' as forms %}
+
+{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
+
+{% set fullPageForm = true %}
+
+<input type="hidden" name="pluginHandle" value="matrix-field-preview">
+{{ actionInput('matrix-field-preview/settings/matrix-block-types') }}
+
+{% namespace 'settings' %}
+    <div class="field mfp-settings-table">
+        <div class="heading">
+            <label>{{ "Configure " ~ type | capitalize ~ " Block Types"|t('matrix-field-preview') }}</label>
+            <div class="instructions"><p>{{ "Use this page to configure the images and descriptions that appear for your " ~ type | capitalize ~ " field block types." | t('matrix-field-preview') }}</p></div>
+        </div>
+        {% if fields | length <= 0 %}
+            <p class="error">{{ "No " ~ type | lower ~" blocks exists yet"|t('matrix-field-preview') }}</p>
+        {% else %}
+            {% for group in fields %}
+                <h4><em>{{ group.field.name }}</em> {{ type | capitalize ~ " Field" | t("matrix-field-preview") }}</h4>
+                <div class="mfp-settings-table__table">
+                    {% if group.fieldConfig.enablePreviews %}
+                        <table id="fields" class="data fullwidth">
+                            <thead>
+                                <th scope="col">{{ "Block Type"|t('matrix-field-preview') }}</th>
+                                <th scope="col">{{ "Description"|t('matrix-field-preview') }}</th>
+                                <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
+                            </thead>
+                            <tbody>
+                                {% for row in group.rows %}
+                                    <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
+                                        <td scope="row" data-title="Name">
+                                            <a href="{{ url('matrix-field-preview/settings/' ~ type | lower ~ '-block-type', {
+                                                blockTypeId: row.blockType.id
+                                            }) }}">
+                                            <strong>{{ row.blockType.name }}</strong></a>
+                                        </td>
+                                        <td scope="row" data-title="Description" {% if row.blockTypeConfig and row.blockTypeConfig.description %}title="{{ row.blockTypeConfig.description }}"{% endif %}>
+                                            {% if row.blockTypeConfig and row.blockTypeConfig.description %}
+                                                <img class="mfp-settings-table__icon" src="{{ assets.success }}">
+                                            {% endif %}
+                                        </td>
+                                        <td scope="row" data-title="Preview Image">
+                                            {% if row.blockTypeConfig and row.blockTypeConfig.previewImageId %}
+                                                <img class="mfp-settings-table__icon" src="{{ assets.success }}">
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <table id="fields" class="data fullwidth">
+                            <thead>
+                                <th scope="col">{{ "Block Type"|t('matrix-field-preview') }}</th>
+                                <th scope="col">{{ "Description"|t('matrix-field-preview') }}</th>
+                                <th scope="col">{{ "Preview Image"|t('matrix-field-preview') }}</th>
+                            </thead>
+                            <tbody>
+                                {% for row in group.rows %}
+                                    <tr data-id="{{ loop.index }}" data-name="{{ row.blockType.name }}">
+                                        <td scope="row" data-title="Name">
+                                            <strong>{{ row.blockType.name }}</strong>
+                                        </td>
+                                        <td scope="row" data-title="Description"></td>
+                                        <td scope="row" data-title="Preview Image"></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="mfp-settings-table__overlay" title="{{ 'This ' ~ type | lower ~ ' field is not configured for preview descriptions and images.' | t('matrix-field-preview') }}"></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endnamespace %}

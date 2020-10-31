@@ -7,7 +7,7 @@ use craft\db\ActiveRecord;
 use craft\records\Field;
 
 
-class FieldConfigRecord extends ActiveRecord
+class MatrixFieldConfigRecord extends ActiveRecord
 {
     public static function tableName()
     {

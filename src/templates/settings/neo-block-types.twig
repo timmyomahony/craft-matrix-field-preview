@@ -1,13 +1,10 @@
 {% extends "matrix-field-preview/_layouts/settings" %}
 
-{% import '_includes/forms' as forms %}
-
-{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
-
-{% set fullPageForm = true %}
-
 {% set title = "Neo Block Types Configuration" | t("matrix-field-preview") %}
 
+{% block submitButton %}{% endblock %}
 {% block content %}
-    Neo Block Types
+    {% include "matrix-field-preview/_includes/settings/block-types.twig" with {
+        type: "neo",
+    } %}
 {% endblock %}
