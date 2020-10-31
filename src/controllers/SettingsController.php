@@ -161,27 +161,41 @@ class SettingsController extends Controller
      */
     public function actionMatrixBlockType($blockTypeId)
     {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionBlockType(
+            $blockTypeId,
+            $plugin->matrixBlockTypeConfigService,
+            'matrix-field-preview/settings/matrix-block-types',
+            'matrix-field-preview/settings/matrix-block-type'
+        );
+    }
+
+    public function actionNeoBlockType($blockTypeId)
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionBlockType(
+            $blockTypeId,
+            $plugin->neoBlockTypeConfigService,
+            'matrix-field-preview/settings/neo-block-types',
+            'matrix-field-preview/settings/neo-block-type'
+        );
+    }
+
+    private function _actionBlockType($blockTypeId, $blockTypeConfigService, $redirect, $template)
+    {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
-        $siteId = Craft::$app->getSites()->currentSite->id;
         $request = Craft::$app->request;
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
-        $blockType = Craft::$app->matrix->getBlockTypeById($blockTypeId);
+        // First check that block type is valid
+        $blockType = $blockTypeConfigService->getBlockTypeById($blockTypeId);
         if (!$blockType) {
             throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
         }
 
-        $blockTypeConfig = $plugin->blockTypeConfigService->getByBlockTypeId($blockTypeId);
-        if (!$blockTypeConfig) {
-            $blockTypeConfig = new BlockTypeConfigRecord();
-            $blockTypeConfig->siteId = $siteId;
-            $blockTypeConfig->description = "";
-            $blockTypeConfig->fieldId = $blockType->field->id;
-            $blockTypeConfig->blockTypeId = $blockType->id;
-            $blockTypeConfig->save();
-        }
+        $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
 
         if ($request->isPost) {
             $post = $request->post();
@@ -189,28 +203,20 @@ class SettingsController extends Controller
             if ($blockTypeConfig->validate()) {
                 $blockTypeConfig->save();
                 Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
-                return $this->redirect('matrix-field-preview/settings/matrix-block-types');
+                return $this->redirect($redirect);
             } else {
                 Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
             }
         }
 
         return $this->renderTemplate(
-            'matrix-field-preview/settings/matrix-block-type',
+            $template,
             [
                 'blockTypeConfig' => $blockTypeConfig,
                 'plugin' => $plugin,
                 'fullPageForm' => true,
                 'settings' => $settings
             ]
-        );
-    }
-
-    public function actionNeoBlockType()
-    {
-        return $this->renderTemplate(
-            'matrix-field-preview/settings/neo-block-type',
-            []
         );
     }
 

@@ -12,12 +12,12 @@ class NeoBlockTypeConfigService extends BaseBlockTypeConfigService
 {
     protected $BlockTypeRecordConfigClass = NeoBlockTypeConfigRecord::class;
 
-    protected function getBlockTypeById($blockTypeId)
+    public function getBlockTypeById($blockTypeId)
     {
         return Neo::getInstance()->blockTypes->getById($blockTypeId);
     }
 
-    protected function getBlockTypeByFieldHandle($handle)
+    public function getBlockTypeByFieldHandle($handle)
     {
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
         if ($field) {

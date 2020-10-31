@@ -1,10 +1,4 @@
-{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
-
 {% extends "matrix-field-preview/_layouts/settings" %}
-
-{% import '_includes/forms' as forms %}
-
-{% set fullPageForm = true %}
 
 {% do view.registerAssetBundle("craft\\web\\assets\\fileupload\\FileUploadAsset") %}
 
@@ -12,30 +6,11 @@
 
 {% set crumbs = [
     { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
-    { label: "Matrix Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/matrix-block-types') }
+    { label: "Matrix Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/neo-block-types') }
 ] %}
 
 {% block content %}
-    <input type="hidden" name="pluginHandle" value="matrix-field-preview">
-    {{ actionInput('matrix-field-preview/settings/matrix-block-type', {blockTypeId: blockTypeConfig.blockType.id}) }}
-    {% namespace 'settings' %}
-        {{ forms.textareaField({
-            first: true,
-            label: "Description"|t('matrix-field-preview'),
-            instructions: "A short description of this matrix block"|t('matrix-field-preview'),
-            id: "description",
-            name: "description",
-            value: blockTypeConfig.description,
-            errors: blockTypeConfig.getErrors("description")
-        }) }}
-
-        {{ forms.field(
-            {
-                instructions: "Upload a screenshot of your matrix field block here. This will be visible when publishing content via the matrix field",
-                label: "Preview Image"|t('matrix-field-preview'),
-                id: 'preview'
-            },
-            include('matrix-field-preview/_includes/settings/preview-image-field', with_context = true)
-        )}}
-    {% endnamespace %}
+    {% include "matrix-field-preview/_includes/settings/block-type.twig" with {
+        type: "matrix",
+    } %}
 {% endblock %}

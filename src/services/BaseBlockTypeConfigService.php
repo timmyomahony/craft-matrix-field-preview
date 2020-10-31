@@ -46,7 +46,7 @@ abstract class BaseBlockTypeConfigService extends Component
      * 
      * Get all block type *config* rows from their related block type ID
      */
-    public function getByBlockTypeId($blockTypeId, $create = true)
+    public function getOrCreateByBlockTypeId($blockTypeId, $create = true)
     {
         $record = $this->BlockTypeRecordConfigClass::findOne([
             'blockTypeId' => $blockTypeId
@@ -106,7 +106,7 @@ abstract class BaseBlockTypeConfigService extends Component
      * 
      * Get a block type (not config) by ID
      */
-    protected function getBlockTypeById($blockTypeId)
+    public function getBlockTypeById($blockTypeId)
     {
         throw new \BadMethodCallException("Method not implemented");
     }
@@ -116,7 +116,7 @@ abstract class BaseBlockTypeConfigService extends Component
      * 
      * Get a block type (not config) by ID
      */
-    protected function getBlockTypeByFieldHandle($handle)
+    public function getBlockTypeByFieldHandle($handle)
     {
         throw new \BadMethodCallException("Method not implemented");
     }
