@@ -1,11 +1,11 @@
 <?php
 
-
 namespace weareferal\matrixfieldpreview\controllers;
+
+use yii\web\BadRequestHttpException;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
-use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
 
 use Craft;
 use craft\web\Controller;
@@ -55,6 +55,10 @@ class SettingsController extends Controller
      */
     public function actionNeoFields()
     {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
         $plugin = MatrixFieldPreview::getInstance();
         return $this->_actionFields(
             $plugin->neoFieldConfigService,
@@ -76,7 +80,7 @@ class SettingsController extends Controller
         if ($request->isPost) {
             $post = $request->post();
             foreach ($post['settings'] as $handle => $values) {
-                $fieldConfig = $fieldService->getByFieldHandle($handle);
+                $fieldConfig = $fieldService->getOrCreateByFieldHandle($handle);
                 if ($fieldConfig) {
                     $fieldConfig->enablePreviews = $values['enablePreviews'];
                     $fieldConfig->enableTakeover = $values['enableTakeover'];
@@ -118,6 +122,10 @@ class SettingsController extends Controller
 
     public function actionNeoBlockTypes()
     {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
         $plugin = MatrixFieldPreview::getInstance();
         return $this->_actionBlockTypes(
             $plugin->neoBlockTypeConfigService,
@@ -172,6 +180,10 @@ class SettingsController extends Controller
 
     public function actionNeoBlockType($blockTypeId)
     {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
         $plugin = MatrixFieldPreview::getInstance();
         return $this->_actionBlockType(
             $blockTypeId,

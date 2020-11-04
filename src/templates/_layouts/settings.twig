@@ -32,7 +32,7 @@
                 </a>
             </li>
 
-            {% if neo is not null and neo.isInstalled %}
+            {% if neo != false and neo.isInstalled %}
                 <li class="heading"><span>{{ "Neo" | t }}</span></li>
                 <li>
                     <a href="{{ url('matrix-field-preview/settings/neo-fields') }}"{% if selectedItem == "neo-fields" %} class="sel"{% endif %}>
