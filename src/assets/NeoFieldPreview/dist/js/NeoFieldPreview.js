@@ -3,14 +3,16 @@
     init: function () {
       this.defaultImageUrl = fieldPreviewDefaultImage;
 
-      window.Garnish.on(
-        window.Neo.Input,
-        "addBlock",
-        {},
-        function (ev) {
-          this.blockAdded($(ev.block));
-        }.bind(this)
-      );
+      if (typeof window.Neo !== "undefined") {
+        window.Garnish.on(
+          window.Neo.Input,
+          "addBlock",
+          {},
+          function (ev) {
+            this.blockAdded($(ev.block));
+          }.bind(this)
+        );
+      }
     },
 
     blockAdded($block) {
