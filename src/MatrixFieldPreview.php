@@ -135,7 +135,7 @@ class MatrixFieldPreview extends Plugin
                     if (Craft::$app->plugins->isPluginEnabled("neo")) {
                         $view->registerAssetBundle(NeoFieldPreviewAsset::class);
                         $view->registerJsVar('fieldPreviewDefaultImage', $defaultImage);
-                        $view->registerJs('new Craft.NeoFieldPreview(".matrix-field");', View::POS_READY, 'neo-field-preview');
+                        $view->registerJs('new Craft.NeoFieldPreview();', View::POS_READY, 'neo-field-preview');
                     }
                 }
             }
