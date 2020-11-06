@@ -1,4 +1,6 @@
 (function ($) {
+  Craft.BaseMatrixFieldPreview = Garnish.Base.extend({});
+
   /**
    * Create Matrix Field Preview
    *
@@ -27,10 +29,9 @@
    * See the existing comments in the MatrixFieldPreview.php file that loads
    * this asset bundle for more details
    */
-  Craft.MatrixFieldPreview = Garnish.Base.extend({
+  Craft.MatrixFieldPreview = Craft.BaseMatrixFieldPreview.extend({
     $fields: null,
     fields: {},
-    settingsUrl: "matrix-field-preview/preview/get-settings",
     previewsUrl: "matrix-field-preview/preview/get-previews",
     configs: {},
     // FIXME: I'm not sure why, but every time you insert a block
@@ -49,14 +50,14 @@
 
             $field.addClass("mfp-matrix-field");
 
-            var fieldHandle = this.getMatrixFieldHandle($field);
+            var fieldHandle = this.getFieldHandle($field);
             if (!this.fields.hasOwnProperty(fieldHandle)) {
               console.debug(
                 "Initialising matrix-field-preview plugin on field '" +
                   fieldHandle +
                   "'"
               );
-              this.setupMatrixField($field, fieldHandle);
+              this.setupPreviewField($field, fieldHandle);
             } else {
               console.warn(
                 "Matrix field '" + fieldHandle + "' is already initialised"
@@ -67,7 +68,7 @@
       }
     },
 
-    setupMatrixField: function ($field, fieldHandle) {
+    setupPreviewField: function ($field, fieldHandle) {
       $.get({
         url: Craft.getActionUrl(this.previewsUrl),
         data: {
@@ -421,7 +422,7 @@
      *
      * Retrieve the handle from the data attribute in the matrix field
      */
-    getMatrixFieldHandle: function ($field) {
+    getFieldHandle: function ($field) {
       return $field
         .siblings('input[type="hidden"]')
         .attr("name")
