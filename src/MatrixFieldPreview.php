@@ -86,7 +86,6 @@ class MatrixFieldPreview extends Plugin
             'matrixFieldConfigService' => MatrixFieldConfigService::class,
             'matrixBlockTypeConfigService' => MatrixBlockTypeConfigService::class
         ];
-
         // Neo support
         if (Craft::$app->plugins->isPluginEnabled("neo")) {
             $components = array_merge($components, [

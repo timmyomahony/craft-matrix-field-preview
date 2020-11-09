@@ -43,6 +43,6 @@
         "class": "weareferal\\matrixfieldpreview\\MatrixFieldPreview"
     },
     "suggest": {
-        "spicyweb/craft-neo": "For NEO field support"
+        "spicyweb/craft-neo": "Matrix Field Preview support Neo > 2.8.14"
     }
 }
