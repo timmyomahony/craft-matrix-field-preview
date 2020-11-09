@@ -69,7 +69,7 @@ class SettingsController extends Controller
     /**
      * Base Field Settings
      */
-    private function _actionFields($fieldService, $template)
+    private function _actionFields($fieldService, $template, $templateVars = [])
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
@@ -98,12 +98,12 @@ class SettingsController extends Controller
             return strcmp($a->field->name, $b->field->name);
         });
 
-        return $this->renderTemplate($template, [
+        return $this->renderTemplate($template, array_merge($templateVars, [
             'settings' => $settings,
             'plugin' => $plugin,
             'fields' => $fields,
             'fieldConfigs' => $fieldConfigs
-        ]);
+        ]));
     }
 
     /**
@@ -134,7 +134,7 @@ class SettingsController extends Controller
         );
     }
 
-    private function _actionBlockTypes($blockTypeConfigService, $fieldConfigService, $template)
+    private function _actionBlockTypes($blockTypeConfigService, $fieldConfigService, $template, $templateVars = [])
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
@@ -155,12 +155,12 @@ class SettingsController extends Controller
             ]);
         }
 
-        return $this->renderTemplate($template, [
+        return $this->renderTemplate($template, array_merge($templateVars, [
             'settings' => $settings,
             'plugin' => $plugin,
             'assets' => $assets,
             'fields' => $fields
-        ]);
+        ]));
     }
 
     /**
@@ -193,7 +193,7 @@ class SettingsController extends Controller
         );
     }
 
-    private function _actionBlockType($blockTypeId, $blockTypeConfigService, $redirect, $template)
+    private function _actionBlockType($blockTypeId, $blockTypeConfigService, $redirect, $template, $templateVars = [])
     {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
@@ -223,12 +223,12 @@ class SettingsController extends Controller
 
         return $this->renderTemplate(
             $template,
-            [
+            array_merge($templateVars, [
                 'blockTypeConfig' => $blockTypeConfig,
                 'plugin' => $plugin,
                 'fullPageForm' => true,
                 'settings' => $settings
-            ]
+            ])
         );
     }
 

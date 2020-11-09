@@ -15,6 +15,7 @@ use weareferal\matrixfieldpreview\services\MatrixBlockTypeConfigService;
 use weareferal\matrixfieldpreview\services\MatrixFieldConfigService;
 use weareferal\matrixfieldpreview\services\NeoFieldConfigService;
 use weareferal\matrixfieldpreview\services\NeoBlockTypeConfigService;
+use weareferal\matrixfieldpreview\services\UtilsService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreview\MatrixFieldPreviewAsset;
@@ -26,6 +27,7 @@ use craft\web\View;
 use craft\helpers\UrlHelper;
 use craft\events\TemplateEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 
 use yii\base\Event;
@@ -65,6 +67,7 @@ class MatrixFieldPreview extends Plugin
         $this->_setPluginComponents();
         $this->_registerCpRoutes();
         $this->_registerMatrixFieldPreviews();
+        $this->_setTemplateVariables();
     }
 
     protected function createSettingsModel()
@@ -84,7 +87,8 @@ class MatrixFieldPreview extends Plugin
         $components = [
             'previewImageService' => PreviewImageService::class,
             'matrixFieldConfigService' => MatrixFieldConfigService::class,
-            'matrixBlockTypeConfigService' => MatrixBlockTypeConfigService::class
+            'matrixBlockTypeConfigService' => MatrixBlockTypeConfigService::class,
+            'utilsService' => UtilsService::class
         ];
         // Neo support
         if (Craft::$app->plugins->isPluginEnabled("neo")) {
@@ -95,6 +99,22 @@ class MatrixFieldPreview extends Plugin
         }
 
         $this->setComponents($components);
+    }
+
+    private function _setTemplateVariables()
+    {
+        // Add our helper service as a template variable {{ craft.mfpNeoHelper... }}
+        // so that we can easily
+        if (Craft::$app->plugins->isPluginEnabled("neo")) {
+            Event::on(
+                CraftVariable::class,
+                CraftVariable::EVENT_INIT,
+                function (Event $event) {
+                    $variable = $event->sender;
+                    $variable->set('matrixFieldPreview', UtilsService::class);
+                }
+            );
+        }
     }
 
     private function _registerMatrixFieldPreviews()

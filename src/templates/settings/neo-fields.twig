@@ -3,6 +3,10 @@
 {% set title = "Neo Fields Configuration" | t("matrix-field-preview") %}
 
 {% block content %}
+    {% if not craft.matrixFieldPreview.neoIsCompatibleVersion() %}
+        <p class="warning with-icon">{{ "Neo version >= 2.8.14 is required for this integration to work properly. You'll still be able to configure the plugin in the meantime, but previews will not appear in the CP for user." | t("matrix-field-preview") }}</p>
+        <hr>        
+    {% endif %}
     {% include "matrix-field-preview/_includes/settings/fields.twig" with {
         type: "neo"
     } %}
