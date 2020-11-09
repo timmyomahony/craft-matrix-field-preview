@@ -6,17 +6,27 @@
       if (typeof window.Neo !== "undefined") {
         window.Garnish.on(
           window.Neo.Input,
-          "addBlock",
+          "afterInit",
           {},
           function (ev) {
-            this.blockAdded($(ev.block));
+            this.onInputLoaded(ev.target);
           }.bind(this)
         );
       }
     },
 
-    blockAdded($block) {
-      console.log($block);
+    onInputLoaded: function (neoInput) {
+      console.log(neoInput);
+      neoInput.on(
+        "addBlock",
+        function (ev) {
+          this.onBlockAdded(ev.target);
+        }.bind(this)
+      );
+    },
+
+    onBlockAdded: function (block) {
+      console.log(block);
     },
   });
 })(jQuery);
