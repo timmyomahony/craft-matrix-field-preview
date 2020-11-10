@@ -101,19 +101,58 @@
      * Create dom elements for a particular neo block
      */
     setupBlock: function (neoBlock, config) {
-      console.debug("Setting up block:", neoBlock);
-
+      console.debug("Setting up block:", neoBlock._blockType._handle, neoBlock);
       var blockTypeHandle = neoBlock._blockType._handle;
       var blockTypeConfig = config["blockTypes"][blockTypeHandle];
 
-      if (blockTypeConfig["image"] || blockTypeConfig["description"]) {
-        var $blockTypePreview = this.createBlockTypePreview(blockTypeConfig);
-        neoBlock.$bodyContainer.prepend($blockTypePreview);
+      if (!blockTypeConfig["image"] && !blockTypeConfig["description"]) {
+        console.warn("No block types configured for this block");
+        return;
       }
 
+      // Add inline preview
+      var $blockTypePreview = this.createBlockTypePreview(blockTypeConfig);
+      neoBlock.$bodyContainer.prepend($blockTypePreview);
+
+      // Add modal previews
       if (neoBlock.$buttonsContainer.length > 0) {
-        var $button = this.createButton(config);
-        neoBlock.$buttonsContainer.find(".ni_buttons").append($button);
+        // Filter out the block types we need to display for this particular
+        // neo block. Not all neo blocks show all block types, so we should
+        // only display those relevant
+        var filteredConfig = {};
+        var neoBlockTypes = neoBlock.getButtons().getBlockTypes();
+        for (var i = 0; i < neoBlockTypes.length; i++) {
+          var neoBlockType = neoBlockTypes[i];
+          var _config = config["blockTypes"][neoBlockType["_handle"]];
+          if (_config) {
+            filteredConfig[_config["handle"]] = _config;
+          }
+        }
+
+        // Create button
+        neoBlock.$mfpButton = this.createButton(config);
+
+        // Create modal
+        neoBlock.$mfpButton.on(
+          "click",
+          function () {
+            if (neoBlock.$mfpModal) {
+              neoBlock.mfpModal.show();
+            } else {
+              neoBlock.mfpModal = this.createModal();
+              neoBlock.mfpModal = this.populateModal(
+                neoBlock.mfpModal,
+                filteredConfig
+              );
+              neoBlock.$container.append(neoBlock.mfpModal);
+              neoBlock.mfpModal.show();
+            }
+          }.bind(this)
+        );
+
+        neoBlock.$buttonsContainer
+          .find(".ni_buttons")
+          .append(neoBlock.$mfpButton);
       }
     },
 
@@ -185,6 +224,92 @@
     },
 
     /**
+     * Create modal
+     *
+     * An empty Craft Garnish modal
+     */
+    createModal: function () {
+      var $modal = $('<form class="modal fitted mfp-modal"/>'),
+        $body = $('<div class="body"/>').appendTo($modal).html(),
+        $footer = $('<footer class="footer"/>').appendTo($modal),
+        $buttons = $('<div class="buttons right"/>').appendTo($footer),
+        $cancelBtn = $(
+          '<div class="btn">' + Craft.t("app", "Close") + "</div>"
+        ).appendTo($buttons);
+
+      Craft.initUiElements($body);
+
+      var modal = new Garnish.Modal($modal, {
+        autoShow: false,
+        hideOnEsc: true,
+        desiredWidth: 600,
+      });
+
+      this.addListener($cancelBtn, "click", function () {
+        modal.hide();
+      });
+
+      return modal;
+    },
+
+    /**
+     * Populate modal
+     *
+     * Create previews and add to modal body
+     */
+    populateModal: function (modal, blockTypesConfigs) {
+      var $grid = $("<div>", {
+        class: "mfp-modal__grid",
+      });
+
+      $.each(
+        blockTypesConfigs,
+        function (i, blockTypeConfig) {
+          var $item = $("<div>", {
+            class: "mfp-modal__item",
+          }).attr("data-block-type", blockTypeConfig.handle);
+
+          var $img = $("<div>", {
+            class: "mfp-modal__image mfp-modal__image--default",
+          }).append($("<img>").attr("src", this.defaultImageUrl));
+
+          var $name = $("<h2>", {
+            class: "mfp-modal__name",
+            text: blockTypeConfig.name,
+          });
+
+          var $description = $("<p>", {
+            class: "mfp-modal__description",
+          });
+
+          if (blockTypeConfig["image"]) {
+            $img.removeClass("mfp-modal__image--default");
+            $img.children("img").attr("src", blockTypeConfig["image"]);
+          }
+          if (blockTypeConfig["name"]) {
+            $name.text(blockTypeConfig["name"]);
+          }
+          if (blockTypeConfig["description"]) {
+            $description.text(blockTypeConfig["description"]);
+          }
+
+          $item.prepend($img, $name, $description);
+
+          $grid.append($item);
+
+          // Add a new block type when an item in the modal is clicked
+          this.addListener($item, "click", function (ev) {
+            console.log("test");
+            //modal.hide();
+          });
+        }.bind(this)
+      );
+
+      modal.$container.find(".body").append($grid);
+      return modal;
+    },
+
+    /**
      * Create button
      *
      * Button that launches a modal overlay for a particular neo block
@@ -195,7 +320,5 @@
         .addClass("mfp-modal-trigger btn icon dashed search")
         .text("Block Previews");
     },
-
-    createModal: function () {},
   });
 })(jQuery);
