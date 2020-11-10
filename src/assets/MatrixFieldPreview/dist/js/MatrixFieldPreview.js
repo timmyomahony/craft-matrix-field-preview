@@ -1,6 +1,6 @@
-(function ($) {
-  Craft.BaseMatrixFieldPreview = Garnish.Base.extend({});
+var MFP = MFP || {};
 
+(function ($) {
   /**
    * Create Matrix Field Preview
    *
@@ -29,7 +29,7 @@
    * See the existing comments in the MatrixFieldPreview.php file that loads
    * this asset bundle for more details
    */
-  Craft.MatrixFieldPreview = Craft.BaseMatrixFieldPreview.extend({
+  MFP.MatrixFieldPreview = Garnish.Base.extend({
     $fields: null,
     fields: {},
     previewsUrl: "matrix-field-preview/preview/get-previews",

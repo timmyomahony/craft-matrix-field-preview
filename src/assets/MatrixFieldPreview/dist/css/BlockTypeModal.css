@@ -1,0 +1,20 @@
+.modal.mfp-modal {
+  display: none;
+  width: 1000px;
+  max-width: 80%;
+  height: 80vh;
+}
+
+.modal.mfp-modal .body {
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 60px;
+}
+
+.modal.mfp-modal .footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}

@@ -16,10 +16,16 @@ class MatrixFieldPreviewAsset extends AssetBundle
         ];
 
         $this->js = [
+            'js/BlockTypeInlinePreview.js',
+            'js/BlockTypeGrid.js',
+            'js/BlockTypeModal.js',
             'js/MatrixFieldPreview.js',
         ];
 
         $this->css = [
+            'css/BlockTypeInlinePreview.css',
+            'css/BlockTypeGrid.css',
+            'css/BlockTypeModal.css',
             'css/MatrixFieldPreview.css',
         ];
 

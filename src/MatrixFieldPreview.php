@@ -144,17 +144,20 @@ class MatrixFieldPreview extends Plugin
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
             function (TemplateEvent $event) {
                 if (Craft::$app->request->isCpRequest) {
-                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/no-dummy-image.png', true);
                     $view = Craft::$app->getView();
 
-                    $view->registerAssetBundle(MatrixFieldPreviewAsset::class);
+                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/no-dummy-image.png', true);
+                    $iconImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/preview-icon.svg', true);
+
                     $view->registerJsVar('fieldPreviewDefaultImage', $defaultImage);
-                    $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field");', View::POS_READY, 'matrix-field-preview');
+                    $view->registerJsVar('previewIcon', $iconImage);
+
+                    $view->registerAssetBundle(MatrixFieldPreviewAsset::class);
+                    $view->registerJs('new MFP.MatrixFieldPreview();', View::POS_READY, 'matrix-field-preview');
 
                     if (Craft::$app->plugins->isPluginEnabled("neo")) {
                         $view->registerAssetBundle(NeoFieldPreviewAsset::class);
-                        $view->registerJsVar('fieldPreviewDefaultImage', $defaultImage);
-                        $view->registerJs('new Craft.NeoFieldPreview();', View::POS_READY, 'neo-field-preview');
+                        $view->registerJs('new MFP.NeoFieldPreview();', View::POS_READY, 'neo-field-preview');
                     }
                 }
             }
