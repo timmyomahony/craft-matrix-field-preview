@@ -241,8 +241,9 @@
 
       var modal = new Garnish.Modal($modal, {
         autoShow: false,
+        closeOtherModals: true,
         hideOnEsc: true,
-        desiredWidth: 600,
+        resizable: false,
       });
 
       this.addListener($cancelBtn, "click", function () {

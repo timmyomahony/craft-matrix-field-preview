@@ -173,6 +173,8 @@ class SettingsController extends Controller
         return $this->_actionBlockType(
             $blockTypeId,
             $plugin->matrixBlockTypeConfigService,
+            'matrix-field-preview/settings/matrix-upload-preview-image',
+            'matrix-field-preview/settings/matrix-delete-preview-image',
             'matrix-field-preview/settings/matrix-block-types',
             'matrix-field-preview/settings/matrix-block-type'
         );
@@ -188,13 +190,24 @@ class SettingsController extends Controller
         return $this->_actionBlockType(
             $blockTypeId,
             $plugin->neoBlockTypeConfigService,
+            'matrix-field-preview/settings/neo-upload-preview-image',
+            'matrix-field-preview/settings/neo-delete-preview-image',
             'matrix-field-preview/settings/neo-block-types',
             'matrix-field-preview/settings/neo-block-type'
         );
     }
 
-    private function _actionBlockType($blockTypeId, $blockTypeConfigService, $redirect, $template, $templateVars = [])
-    {
+    private function _actionBlockType(
+        $blockTypeId,
+        $blockTypeConfigService,
+        $uploadImageUrl,
+        $deleteImageUrl,
+        $redirect,
+        $template,
+        $templateVars = []
+    ) {
+        $this->view->registerJsVar('uploadImageUrl', $uploadImageUrl);
+        $this->view->registerJsVar('deleteImageUrl', $deleteImageUrl);
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $request = Craft::$app->request;
@@ -232,17 +245,32 @@ class SettingsController extends Controller
         );
     }
 
-    /**
-     *
-     */
-    public function actionUploadPreviewImage()
+    public function actionMatrixUploadPreviewImage()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionDeletePreviewImage(
+            $plugin->matrixBlockTypeConfigService
+        );
+    }
+
+    public function actionNeoUploadPreviewImage()
+    {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionUploadPreviewImage(
+            $plugin->neoBlockTypeConfigService
+        );
+    }
+
+    public function _actionUploadPreviewImage($blockTypeConfigService)
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
 
         $previewImageService = MatrixFieldPreview::getInstance()->previewImageService;
-        $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
-
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
         $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
         if (!$blockTypeConfig) {
@@ -285,15 +313,31 @@ class SettingsController extends Controller
         }
     }
 
-    /**
-     * 
-     */
-    public function actionDeletePreviewImage()
+    public function actionMatrixDeletePreviewImage()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionDeletePreviewImage(
+            $plugin->matrixBlockTypeConfigService
+        );
+    }
+
+    public function actionNeoDeletePreviewImage()
+    {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionDeletePreviewImage(
+            $plugin->neoBlockTypeConfigService
+        );
+    }
+
+    private function _actionDeletePreviewImage($blockTypeConfigService)
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
 
-        $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
         $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
 
