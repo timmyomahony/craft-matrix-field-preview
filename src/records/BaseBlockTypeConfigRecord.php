@@ -84,6 +84,6 @@ abstract class BaseBlockTypeConfigRecord extends ActiveRecord
             }
         }
 
-        return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/dummy-image.svg', true);
+        return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/dummy-image.png', true);
     }
 }

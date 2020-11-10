@@ -31,9 +31,11 @@ class PreviewController extends Controller
     public function actionGetPreviews($type, $fieldHandle)
     {
         $plugin = MatrixFieldPreview::getInstance();
+        $settings = $plugin->getSettings();
         $response = [
             "success" => false,
             "config" => [
+                "general" => [],
                 "field" => null,
                 "blockTypes" => []
             ]

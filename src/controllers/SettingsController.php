@@ -29,8 +29,6 @@ class SettingsController extends Controller
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-
         return $this->renderTemplate('matrix-field-preview/settings/general', [
             'settings' => $settings,
             'plugin' => $plugin

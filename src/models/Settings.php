@@ -14,7 +14,7 @@ class Settings extends Model
     {
         return [
             [['previewVolumeUid', 'previewSubpath'], 'string'],
-            [['previewVolumeUid'], 'required'],
+            [['previewVolumeUid'], 'required']
         ];
     }
 }

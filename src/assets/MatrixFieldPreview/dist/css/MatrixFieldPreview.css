@@ -79,6 +79,22 @@
   padding-bottom: 60px;
 }
 
+.mfp-modal--1-cols .mfp-modal__grid {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.mfp-modal--2-cols .mfp-modal__grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.mfp-modal--3-cols .mfp-modal__grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mfp-modal--4-cols .mfp-modal__grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .mfp-modal__item {
   cursor: pointer;
 }
@@ -86,18 +102,25 @@
 .mfp-modal__image {
   box-sizing: border-box;
   width: 100%;
-  height: 250px;
   border-radius: 5px;
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mfp-modal--show-borders .mfp-modal__image {
   border: 1px solid rgba(96, 125, 159, 0.25);
 }
 
 .mfp-modal__image img {
   max-height: 100%;
   max-width: 100%;
+}
+
+.mfp-modal__image--default {
+  min-height: 250px;
+  background-color: #f3f3f3;
 }
 
 .mfp-modal__image--default img {
