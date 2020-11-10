@@ -79,10 +79,20 @@
 
       var $button = this.createButton(config);
       neoInput.$buttonsContainer.find("> .ni_buttons").append($button);
+      neoInput._blocks.forEach(
+        function (block) {
+          this.setupBlock(block, config);
+        }.bind(this)
+      );
     },
 
     setupBlock: function (neoBlock, config) {
       console.debug("Setting up block:", neoBlock);
+
+      if (neoBlock.$buttonsContainer.length > 0) {
+        var $button = this.createButton(config);
+        neoBlock.$buttonsContainer.find(".ni_buttons").append($button);
+      }
     },
 
     getConfig: function (fieldHandle) {
