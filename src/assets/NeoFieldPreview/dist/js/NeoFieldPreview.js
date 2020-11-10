@@ -318,7 +318,7 @@
       // NOTE: unlike Matrix fields, neo fields cannot be "taken over"
       return $("<div>")
         .addClass("mfp-modal-trigger btn icon dashed search")
-        .text("Block Previews");
+        .text(config["field"]["buttonText"]);
     },
   });
 })(jQuery);

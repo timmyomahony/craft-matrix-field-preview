@@ -65,6 +65,8 @@ class PreviewController extends Controller
             "handle" => $fieldConfig->field->handle,
             "enablePreviews" => $fieldConfig->enablePreviews,
             "enableTakeover" => $fieldConfig->enableTakeover,
+            // TODO: make this configurable via the settings
+            "buttonText" => "Content Previews"
         ];
 
         $blockTypeConfigs = $blockTypeService->getOrCreateByFieldHandle($fieldHandle);
