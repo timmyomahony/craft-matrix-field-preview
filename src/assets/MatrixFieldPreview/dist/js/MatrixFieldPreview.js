@@ -48,7 +48,7 @@
           function (i, field) {
             var $field = $(field);
 
-            $field.addClass("mfp-matrix-field");
+            $field.addClass("mfp-field");
 
             var fieldHandle = this.getFieldHandle($field);
             if (!this.fields.hasOwnProperty(fieldHandle)) {
@@ -72,6 +72,7 @@
       $.get({
         url: Craft.getActionUrl(this.previewsUrl),
         data: {
+          type: "matrix",
           fieldHandle: fieldHandle,
         },
         dataType: "json",
@@ -81,10 +82,10 @@
               "Received response from matrix field config endpoint: ",
               response
             );
-            this.configs[fieldHandle] = response;
+            this.configs[fieldHandle] = response["config"];
 
             // Skip if previews are not enabled for this matrix field
-            if (!response["fieldConfig"]["enablePreviews"]) {
+            if (!response["config"]["field"]["enablePreviews"]) {
               console.debug(
                 "Previews are not enabled for this matrix field " + fieldHandle
               );
@@ -92,7 +93,7 @@
             }
 
             // Take over the existing matrix field dropdown
-            if (response["fieldConfig"]["enableTakeover"]) {
+            if (response["config"]["field"]["enableTakeover"]) {
               $field.addClass("mfp-take-over");
             }
 
@@ -105,9 +106,7 @@
                 var $blockType = $(blockType);
                 var blockTypeHandle = $blockType.attr("data-type");
                 var config = this.configs[fieldHandle];
-                if (
-                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
-                ) {
+                if (config["blockTypes"].hasOwnProperty(blockTypeHandle)) {
                   // Insert block type previews for all the static block types
                   console.debug(
                     "Creating preview thumbnail for existing block type " +
@@ -117,7 +116,7 @@
                   );
                   this.createBlockTypePreview(
                     $blockType,
-                    config["blockTypeConfigs"][blockTypeHandle]
+                    config["blockTypes"][blockTypeHandle]
                   );
                 } else {
                   console.debug(
@@ -141,11 +140,9 @@
                   fieldHandle,
                   blockTypeHandle,
                   config,
-                  config["blockTypeConfigs"]
+                  config["blockTypes"]
                 );
-                if (
-                  config["blockTypeConfigs"].hasOwnProperty(blockTypeHandle)
-                ) {
+                if (config["blockTypes"].hasOwnProperty(blockTypeHandle)) {
                   console.debug(
                     "Inserting preview thumbnail for new block type " +
                       blockTypeHandle +
@@ -154,7 +151,7 @@
                   );
                   this.createBlockTypePreview(
                     $blockType,
-                    config["blockTypeConfigs"][blockTypeHandle]
+                    config["blockTypes"][blockTypeHandle]
                   );
                 } else {
                   console.debug(
@@ -253,8 +250,8 @@
             class: "mfp-modal__description",
           });
 
-          if (config["blockTypeConfigs"].hasOwnProperty(blockType.handle)) {
-            var blockTypeConfig = config["blockTypeConfigs"][blockType.handle];
+          if (config["blockTypes"].hasOwnProperty(blockType.handle)) {
+            var blockTypeConfig = config["blockTypes"][blockType.handle];
             if (blockTypeConfig["image"]) {
               $img.removeClass("mfp-modal__image--default");
               $img.children("img").attr("src", blockTypeConfig["image"]);
@@ -325,7 +322,7 @@
       var buttonText = $field.find(".menubtn").text();
       var buttonIcon = "add";
       var config = this.configs[fieldHandle];
-      if (!config["fieldConfig"]["enableTakeover"]) {
+      if (!config["field"]["enableTakeover"]) {
         buttonText = "Preview Blocks";
         buttonIcon = "search";
       }

@@ -28,29 +28,46 @@ class PreviewController extends Controller
      * NOTE: there are two "handles" in play here: the matrix field handle
      * as well as the block type handles
      */
-    public function actionGetPreviews($fieldHandle)
+    public function actionGetPreviews($type, $fieldHandle)
     {
         $plugin = MatrixFieldPreview::getInstance();
-        $fieldConfig = $plugin->matrixFieldConfigService->getOrCreateByFieldHandle($fieldHandle);
-
         $response = [
             "success" => false,
-            "fieldConfig" => null,
-            "blockTypeConfigs" => []
+            "config" => [
+                "field" => null,
+                "blockTypes" => []
+            ]
         ];
+
+        switch ($type) {
+            case "matrix":
+                $fieldService = $plugin->matrixFieldConfigService;
+                $blockTypeService = $plugin->matrixBlockTypeConfigService;
+                break;
+            case "neo":
+                $fieldService = $plugin->neoFieldConfigService;
+                $blockTypeService = $plugin->neoBlockTypeConfigService;
+                break;
+            default:
+                $response["error"] = "'type' must be 'matrix' or 'neo'";
+                return $this->asJson($response);
+        }
+
+
+        $fieldConfig = $fieldService->getOrCreateByFieldHandle($fieldHandle);
 
         if (!$fieldConfig) {
             return $this->asJson($response);
         }
 
-        $response['fieldConfig'] = [
+        $response['config']['field'] = [
             "name" => $fieldConfig->field->name,
             "handle" => $fieldConfig->field->handle,
             "enablePreviews" => $fieldConfig->enablePreviews,
             "enableTakeover" => $fieldConfig->enableTakeover,
         ];
 
-        $blockTypeConfigs = $plugin->matrixBlockTypeConfigService->getOrCreateByFieldHandle($fieldHandle);
+        $blockTypeConfigs = $blockTypeService->getOrCreateByFieldHandle($fieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
             $result = [
@@ -69,7 +86,7 @@ class PreviewController extends Controller
                 ]) : "";
                 $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";
             }
-            $response["blockTypeConfigs"][$blockType->handle] = $result;
+            $response['config']["blockTypes"][$blockType->handle] = $result;
         }
 
         $response["success"] = true;

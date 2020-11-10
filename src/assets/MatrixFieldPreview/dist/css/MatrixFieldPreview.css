@@ -1,4 +1,4 @@
-.mfp-matrix-field {
+.mfp-field {
 }
 
 /* Block type preview in CP */
@@ -119,12 +119,35 @@
   width: 100%;
 }
 
+/* Matrix fields */
+.mfp-matrix-field {
+}
+
 /* Takeover */
-.mfp-matrix-field.mfp-take-over .buttons .btngroup,
-.mfp-matrix-field.mfp-take-over .buttons .menubtn {
+.mfp-matrix-field.mfp-field--takeover .buttons .btngroup,
+.mfp-matrix-field.mfp-field--takeover .buttons .menubtn {
   display: none !important;
 }
 
-.mfp-matrix-field.mfp-take-over .mfp-modal-trigger {
+.mfp-matrix-field.mfp-field--takeover .mfp-modal-trigger {
   margin-left: 0;
+}
+
+/* Neo fields */
+.mfp-neo-field {
+}
+
+.mfp-neo-field .mfp-modal-trigger {
+  margin-left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.mfp-neo-field.mfp-field--takeover .mfp-modal-trigger {
+  position: block;
+}
+
+/* Takeover */
+.mfp-neo-field.mfp-field--takeover {
 }
