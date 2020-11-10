@@ -84,13 +84,48 @@ var MFP = MFP || {};
      */
     setupNeoInput: function (neoInput, config) {
       console.debug("Setting up input: ", neoInput);
+      var neoBlockTypes = neoInput.getBlockTypes();
+      var modal, modalButton;
 
       neoInput.$container.addClass("mfp-field mfp-neo-field");
+      if (neoBlockTypes.length > 0) {
+        // Create modal trigger button
+        modalButton = this.createModalButton(
+          neoInput.$buttonsContainer.find("> .ni_buttons"),
+          config,
+          neoInput
+        );
 
-      var modalButton = new MFP.BlockTypeModalButton($("<div>"), config);
-      neoInput.$buttonsContainer
-        .find("> .ni_buttons")
-        .append(modalButton.$target);
+        // Create modal and grid
+        modal = this.createModal(
+          neoInput.$container,
+          config["blockTypes"],
+          neoInput,
+          neoBlockTypes
+        );
+
+        // When preview button clicked
+        modalButton.on("click", function () {
+          modal.show();
+        });
+
+        // When a modal grid item is clicked
+        modal.on(
+          "gridItemClicked",
+          {},
+          function (event) {
+            var neoBlockType = this.searchNeoBlockTypes(
+              neoBlockTypes,
+              event.config.handle
+            );
+            // FIXME: not sure is this the best way to trigger a new block
+            neoInput["@newBlock"]({
+              blockType: neoBlockType,
+            });
+            modal.hide();
+          }.bind(this)
+        );
+      }
 
       // Now handle all child blocks
       neoInput._blocks.forEach(
@@ -110,7 +145,7 @@ var MFP = MFP || {};
       var blockTypeHandle = neoBlock._blockType._handle;
       var blockTypeConfig = config["blockTypes"][blockTypeHandle];
       var neoBlockTypes = neoBlock.getButtons().getBlockTypes();
-      var modal, modalButton, grid, inlinePreview;
+      var inlinePreview, modal, modalButton, grid;
 
       if (!blockTypeConfig["image"] && !blockTypeConfig["description"]) {
         console.warn("No block types configured for this Neo block");
@@ -118,14 +153,13 @@ var MFP = MFP || {};
       }
 
       // Add inline preview
-      inlinePreview = new MFP.BlockTypeInlinePreview(
-        $("<div>"),
+      inlinePreview = this.createInlinePreview(
+        neoBlock.$bodyContainer,
         blockTypeConfig,
-        this.defaultImageUrl
+        neoBlock
       );
-      neoBlock.$bodyContainer.prepend(inlinePreview.$target);
 
-      if (neoBlock.$buttonsContainer.length > 0) {
+      if (neoBlockTypes.length > 0) {
         // Filter out the block types we need to display for this particular
         // neo block. Not all neo blocks show all block types, so we should
         // only display those relevant
@@ -134,26 +168,20 @@ var MFP = MFP || {};
           config
         );
 
-        // Create preview trigger button
-        modalButton = new MFP.BlockTypeModalButton($("<div>"), config);
-        neoBlock.$buttonsContainer
-          .find(".ni_buttons")
-          .append(modalButton.$target);
-
-        // Create modal and grid
-        modal = new MFP.BlockTypeModal($("<div>"), {
-          autoShow: false,
-          closeOtherModals: true,
-          hideOnEsc: true,
-          resizable: false,
-        });
-        grid = new MFP.BlockTypeGrid(
-          $("<div>"),
-          filteredConfig,
-          this.defaultImageUrl
+        // Create modal trigger button
+        var modalButton = this.createModalButton(
+          neoBlock.$buttonsContainer.find(".ni_buttons"),
+          config,
+          neoBlock
         );
-        modal.$body.append(grid.$target);
-        neoBlock.$container.append(modal.$container);
+
+        // Create modal
+        var modal = this.createModal(
+          neoBlock.$container,
+          filteredConfig,
+          neoBlock,
+          neoBlockTypes
+        );
 
         // When preview button clicked
         modalButton.on("click", function () {
@@ -161,13 +189,14 @@ var MFP = MFP || {};
         });
 
         // When a modal grid item is clicked
-        grid.on(
+        modal.on(
           "gridItemClicked",
           {},
           function (event) {
-            var neoBlockType = $.grep(neoBlockTypes, function (neoBlockType) {
-              return neoBlockType.getHandle() === event.config.handle;
-            })[0];
+            var neoBlockType = this.searchNeoBlockTypes(
+              neoBlockTypes,
+              event.config.handle
+            );
             neoBlock.trigger("newBlock", {
               blockType: neoBlockType,
               level: neoBlock.getLevel() + 1,
@@ -178,10 +207,42 @@ var MFP = MFP || {};
       }
     },
 
+    createInlinePreview: function ($target, config, neoBlock) {
+      var inlinePreview = new MFP.BlockTypeInlinePreview(
+        $("<div>"),
+        config,
+        this.defaultImageUrl
+      );
+      neoBlock.$bodyContainer.prepend(inlinePreview.$target);
+      return inlinePreview;
+    },
+
+    createModalButton: function ($target, config, neoBlock) {
+      var modalButton = new MFP.BlockTypeModalButton($("<div>"), config);
+      $target.append(modalButton.$target);
+      return modalButton;
+    },
+
+    createModal: function ($target, config, neoBlock, neoBlockTypes) {
+      var modal = new MFP.BlockTypeModal(
+        $("<div>"),
+        {
+          autoShow: false,
+          closeOtherModals: true,
+          hideOnEsc: true,
+          resizable: false,
+        },
+        config,
+        this.defaultImageUrl
+      );
+      $target.append(modal.$container);
+      return modal;
+    },
+
     /**
      *
      */
-    filterConfigForBlockTypes(neoBlockTypes, config) {
+    filterConfigForBlockTypes: function (neoBlockTypes, config) {
       var filteredConfigs = {};
       for (var i = 0; i < neoBlockTypes.length; i++) {
         var neoBlockType = neoBlockTypes[i];
@@ -191,6 +252,12 @@ var MFP = MFP || {};
         }
       }
       return filteredConfigs;
+    },
+
+    searchNeoBlockTypes: function (neoBlockTypes, handle) {
+      return $.grep(neoBlockTypes, function (neoBlockType) {
+        return neoBlockType.getHandle() === handle;
+      })[0];
     },
 
     /**
