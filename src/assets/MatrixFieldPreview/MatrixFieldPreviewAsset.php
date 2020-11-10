@@ -19,6 +19,7 @@ class MatrixFieldPreviewAsset extends AssetBundle
             'js/BlockTypeInlinePreview.js',
             'js/BlockTypeGrid.js',
             'js/BlockTypeModal.js',
+            'js/BlockTypeModalButton.js',
             'js/MatrixFieldPreview.js',
         ];
 
@@ -26,6 +27,7 @@ class MatrixFieldPreviewAsset extends AssetBundle
             'css/BlockTypeInlinePreview.css',
             'css/BlockTypeGrid.css',
             'css/BlockTypeModal.css',
+            'css/BlockTypeModalButton.css',
             'css/MatrixFieldPreview.css',
         ];
 

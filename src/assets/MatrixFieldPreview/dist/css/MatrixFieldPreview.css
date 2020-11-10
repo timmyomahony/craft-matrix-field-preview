@@ -1,15 +1,6 @@
 .mfp-field {
 }
 
-/* Modal trigger button */
-.mfp-modal-trigger {
-  margin-left: 10px;
-  /* background-position: 10px center;
-  background-repeat: no-repeat;
-  padding-left: 35px;
-  background-size: 20px auto; */
-}
-
 /**
  * Matrix fields
  **/
@@ -22,7 +13,7 @@
   display: none !important;
 }
 
-.mfp-matrix-field.mfp-field--takeover .mfp-modal-trigger {
+.mfp-matrix-field.mfp-field--takeover .mfp-modal-button {
   margin-left: 0;
 }
 
@@ -47,13 +38,13 @@
 }
 
 /* Move block preview button to the right */
-.mfp-neo-field .mfp-modal-trigger {
+.mfp-neo-field .mfp-modal-button {
   margin-left: 0;
   position: absolute;
   right: 0;
   top: 0;
 }
 
-.mfp-neo-field.mfp-field--takeover .mfp-modal-trigger {
+.mfp-neo-field.mfp-field--takeover .mfp-modal-button {
   position: block;
 }

@@ -87,8 +87,10 @@ var MFP = MFP || {};
 
       neoInput.$container.addClass("mfp-field mfp-neo-field");
 
-      var $button = this.createButton(config);
-      neoInput.$buttonsContainer.find("> .ni_buttons").append($button);
+      var modalButton = new MFP.BlockTypeModalButton($("<div>"), config);
+      neoInput.$buttonsContainer
+        .find("> .ni_buttons")
+        .append(modalButton.$target);
 
       // Now handle all child blocks
       neoInput._blocks.forEach(
@@ -108,6 +110,7 @@ var MFP = MFP || {};
       var blockTypeHandle = neoBlock._blockType._handle;
       var blockTypeConfig = config["blockTypes"][blockTypeHandle];
       var neoBlockTypes = neoBlock.getButtons().getBlockTypes();
+      var modal, modalButton, grid, inlinePreview;
 
       if (!blockTypeConfig["image"] && !blockTypeConfig["description"]) {
         console.warn("No block types configured for this Neo block");
@@ -115,12 +118,12 @@ var MFP = MFP || {};
       }
 
       // Add inline preview
-      neoBlock.mfpBlockTypePreview = new MFP.BlockTypeInlinePreview(
+      inlinePreview = new MFP.BlockTypeInlinePreview(
         $("<div>"),
         blockTypeConfig,
         this.defaultImageUrl
       );
-      neoBlock.$bodyContainer.prepend(neoBlock.mfpBlockTypePreview.$target);
+      neoBlock.$bodyContainer.prepend(inlinePreview.$target);
 
       if (neoBlock.$buttonsContainer.length > 0) {
         // Filter out the block types we need to display for this particular
@@ -132,33 +135,33 @@ var MFP = MFP || {};
         );
 
         // Create preview trigger button
-        neoBlock.$mfpButton = this.createButton(config);
+        modalButton = new MFP.BlockTypeModalButton($("<div>"), config);
         neoBlock.$buttonsContainer
           .find(".ni_buttons")
-          .append(neoBlock.$mfpButton);
+          .append(modalButton.$target);
 
         // Create modal and grid
-        neoBlock.mfpModal = new MFP.BlockTypeModal($("<div>"), {
+        modal = new MFP.BlockTypeModal($("<div>"), {
           autoShow: false,
           closeOtherModals: true,
           hideOnEsc: true,
           resizable: false,
         });
-        neoBlock.mfpGrid = new MFP.BlockTypeGrid(
+        grid = new MFP.BlockTypeGrid(
           $("<div>"),
           filteredConfig,
           this.defaultImageUrl
         );
-        neoBlock.mfpModal.$body.append(neoBlock.mfpGrid.$target);
-        neoBlock.$container.append(neoBlock.mfpModal.$container);
+        modal.$body.append(grid.$target);
+        neoBlock.$container.append(modal.$container);
 
         // When preview button clicked
-        neoBlock.$mfpButton.on("click", function () {
-          neoBlock.mfpModal.show();
+        modalButton.on("click", function () {
+          modal.show();
         });
 
         // When a modal grid item is clicked
-        neoBlock.mfpGrid.on(
+        grid.on(
           "gridItemClicked",
           {},
           function (event) {
@@ -169,7 +172,7 @@ var MFP = MFP || {};
               blockType: neoBlockType,
               level: neoBlock.getLevel() + 1,
             });
-            neoBlock.mfpModal.hide();
+            modal.hide();
           }.bind(this)
         );
       }
@@ -204,22 +207,6 @@ var MFP = MFP || {};
         },
         dataType: "json",
       });
-    },
-
-    /**
-     * Create button
-     *
-     * Button that launches a modal overlay for a particular neo block
-     */
-    createButton: function (config) {
-      // NOTE: unlike Matrix fields, neo fields cannot be "taken over"
-      return (
-        $("<div>", {
-          class: "mfp-modal-trigger btn dashed",
-        })
-          // .css("background-image", "url('" + this.previewIconUrl + "')")
-          .text(config["field"]["buttonText"])
-      );
     },
   });
 })(jQuery);
