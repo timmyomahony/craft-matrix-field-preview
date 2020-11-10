@@ -62,21 +62,13 @@ class m201031_120401_add_neo_support extends Migration
                 ]
             );
         }
+
+        return true;
     }
 
     protected function addNeoFieldForeignKeys()
     {
         // Neo fields
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields_config}}', 'siteId'),
-            '{{%matrixfieldpreview_neo_fields_config}}',
-            'siteId',
-            '{{%sites}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
         $this->addForeignKey(
             $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_fields_config}}', 'fieldId'),
             '{{%matrixfieldpreview_neo_fields_config}}',
@@ -117,11 +109,14 @@ class m201031_120401_add_neo_support extends Migration
             'CASCADE',
             'CASCADE'
         );
+
+        return true;
     }
 
     protected function removeNeoFieldTables()
     {
         $this->dropTableIfExists('{{%matrixfieldpreview_neo_blocktypes_config}}');
         $this->dropTableIfExists('{{%matrixfieldpreview_neo_fields_config}}');
+        return true;
     }
 }

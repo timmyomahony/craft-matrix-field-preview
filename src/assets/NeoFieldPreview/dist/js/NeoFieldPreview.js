@@ -9,6 +9,7 @@
           "afterInit",
           {},
           function (ev) {
+            console.debug("Neo input initialised:", ev);
             this.onInputLoaded(ev.target);
           }.bind(this)
         );
@@ -16,17 +17,40 @@
     },
 
     onInputLoaded: function (neoInput) {
-      console.log(neoInput);
       neoInput.on(
         "addBlock",
         function (ev) {
-          this.onBlockAdded(ev.target);
+          this.onBlockAdded(ev.block);
+        }.bind(this)
+      );
+
+      neoInput.on(
+        "removeBlock",
+        function (ev) {
+          this.onBlockRemoved(ev.block);
         }.bind(this)
       );
     },
 
-    onBlockAdded: function (block) {
-      console.log(block);
+    onBlockRemoved: function (block) {
+      console.debug("Block removed: ", block);
     },
+
+    onBlockAdded: function (block) {
+      console.debug("Block added: ", block);
+      this.setupBlock(block);
+    },
+
+    setupBlock: function (block) {
+      // Find all children
+    },
+
+    getConfig: function () {},
+
+    createInlinePreview: function () {},
+
+    createButtons: function () {},
+
+    createModal: function () {},
   });
 })(jQuery);
