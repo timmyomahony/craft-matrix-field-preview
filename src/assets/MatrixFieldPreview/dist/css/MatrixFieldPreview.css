@@ -119,7 +119,9 @@
   width: 100%;
 }
 
-/* Matrix fields */
+/**
+ * Matrix fields
+ **/
 .mfp-matrix-field {
 }
 
@@ -133,10 +135,27 @@
   margin-left: 0;
 }
 
-/* Neo fields */
+/**
+ * Neo fields
+ **/
 .mfp-neo-field {
 }
 
+/* Fix the neo tab border */
+.mfp-neo-field .mfp-block-type-preview {
+  padding: 12px 0 0 0;
+  margin: 0;
+  border-top: 1px solid #e3e5e8;
+}
+
+.mfp-neo-field
+  .mfp-block-type-preview
+  + .ni_block_content
+  > .ni_block_content_tab {
+  border: 0;
+}
+
+/* Move block preview button to the right */
 .mfp-neo-field .mfp-modal-trigger {
   margin-left: 0;
   position: absolute;
@@ -146,8 +165,4 @@
 
 .mfp-neo-field.mfp-field--takeover .mfp-modal-trigger {
   position: block;
-}
-
-/* Takeover */
-.mfp-neo-field.mfp-field--takeover {
 }
