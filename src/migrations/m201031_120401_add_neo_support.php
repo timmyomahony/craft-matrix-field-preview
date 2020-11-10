@@ -42,7 +42,7 @@ class m201031_120401_add_neo_support extends Migration
                     'uid' => $this->uid(),
                     'fieldId' => $this->integer()->notNull(),
                     'enablePreviews' => $this->boolean(true),
-                    'enableTakeover' => $this->boolean(true)
+                    'enableTakeover' => $this->boolean(false)
                 ]
             );
         }

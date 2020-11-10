@@ -55,7 +55,7 @@
       neoInput.on(
         "addBlock",
         function (ev) {
-          this.setupBlock(ev.block);
+          this.setupBlock(ev.block, config);
         }.bind(this)
       );
 
@@ -73,9 +73,6 @@
       console.debug("Setting up input: ", neoInput);
 
       neoInput.$container.addClass("mfp-field mfp-neo-field");
-      if (config["field"]["enableTakeover"]) {
-        neoInput.$container.addClass("mfp-field--takeover");
-      }
 
       var $button = this.createButton(config);
       neoInput.$buttonsContainer.find("> .ni_buttons").append($button);
@@ -109,19 +106,10 @@
     createInlinePreview: function () {},
 
     createButton: function (config) {
-      var buttonText = "Add Block";
-      var buttonIcon = "add";
-      var classes = "mfp-modal-trigger btn icon dashed ";
-      if (!config["field"]["enableTakeover"]) {
-        buttonText = "Preview Blocks";
-        buttonIcon = "search";
-      } else {
-        classes = classes + "mfp-modal-trigger--takeover ";
-      }
-      var $button = $("<div>")
-        .addClass(classes + buttonIcon)
-        .text(buttonText);
-      return $button;
+      // NOTE: unlike Matrix fields, neo fields cannot be "taken over"
+      return $("<div>")
+        .addClass("mfp-modal-trigger btn icon dashed search")
+        .text("Block Previews");
     },
 
     createModal: function () {},

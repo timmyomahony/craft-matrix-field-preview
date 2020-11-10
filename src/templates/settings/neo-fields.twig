@@ -10,6 +10,7 @@
         <hr>        
     {% endif %}
     {% include "matrix-field-preview/_includes/settings/fields.twig" with {
-        type: "neo"
+        type: "neo",
+        showTakeover: false
     } %}
 {% endblock %}

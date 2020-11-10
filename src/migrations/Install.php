@@ -76,6 +76,7 @@ class Install extends Migration
                 ]
             );
         }
+
         return true;
     }
 
@@ -122,6 +123,8 @@ class Install extends Migration
             'CASCADE',
             'CASCADE'
         );
+
+        return true;
     }
 
     protected function removeMatrixFieldTables()
@@ -129,6 +132,8 @@ class Install extends Migration
         $this->dropTableIfExists('{{%matrixfieldpreview_previewrecord}}');
         $this->dropTableIfExists('{{%matrixfieldpreview_blocktypes_config}}');
         $this->dropTableIfExists('{{%matrixfieldpreview_fields_config}}');
+
+        return true;
     }
 
     protected function createNeoFieldTables()
@@ -143,7 +148,7 @@ class Install extends Migration
                     'uid' => $this->uid(),
                     'fieldId' => $this->integer()->notNull(),
                     'enablePreviews' => $this->boolean(true),
-                    'enableTakeover' => $this->boolean(true)
+                    'enableTakeover' => $this->boolean(false)
                 ]
             );
         }
@@ -163,6 +168,8 @@ class Install extends Migration
                 ]
             );
         }
+
+        return true;
     }
 
     protected function addNeoFieldForeignKeys()
@@ -208,11 +215,15 @@ class Install extends Migration
             'CASCADE',
             'CASCADE'
         );
+
+        return true;
     }
 
     protected function removeNeoFieldTables()
     {
         $this->dropTableIfExists('{{%matrixfieldpreview_neo_blocktypes_config}}');
         $this->dropTableIfExists('{{%matrixfieldpreview_neo_fields_config}}');
+
+        return true;
     }
 }
