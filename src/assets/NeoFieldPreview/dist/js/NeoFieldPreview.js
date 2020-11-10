@@ -51,6 +51,11 @@
         );
     },
 
+    /**
+     * Initialise
+     *
+     * Add event handlers for a particular input and initialise it
+     */
     initialiseInput: function (neoInput, config) {
       neoInput.on(
         "addBlock",
@@ -69,6 +74,11 @@
       this.setupInput(neoInput, config);
     },
 
+    /**
+     * Setup input
+     *
+     * Create dom elements for an initial entire neo input
+     */
     setupInput: function (neoInput, config) {
       console.debug("Setting up input: ", neoInput);
 
@@ -76,6 +86,8 @@
 
       var $button = this.createButton(config);
       neoInput.$buttonsContainer.find("> .ni_buttons").append($button);
+
+      // Now handle all child blocks
       neoInput._blocks.forEach(
         function (block) {
           this.setupBlock(block, config);
@@ -83,6 +95,11 @@
       );
     },
 
+    /**
+     * Setup block
+     *
+     * Create dom elements for a particular neo block
+     */
     setupBlock: function (neoBlock, config) {
       console.debug("Setting up block:", neoBlock);
 
@@ -100,6 +117,11 @@
       }
     },
 
+    /**
+     * Get config
+     *
+     * Get the config for a particular neo input from the server
+     */
     getConfig: function (fieldHandle) {
       return $.get({
         url: Craft.getActionUrl(this.previewsUrl),
@@ -114,10 +136,9 @@
     /**
      * Create block type preview
      *
-     * Create the inline preview with image and description
+     * An inline preview for a particular neo block
      */
     createBlockTypePreview: function (blockTypeConfig) {
-      console.log(blockTypeConfig);
       var $div = $("<div>", {
         class: "mfp-block-type-preview",
       });
@@ -163,6 +184,11 @@
       return $div.append($thumb, $text, $img);
     },
 
+    /**
+     * Create button
+     *
+     * Button that launches a modal overlay for a particular neo block
+     */
     createButton: function (config) {
       // NOTE: unlike Matrix fields, neo fields cannot be "taken over"
       return $("<div>")
