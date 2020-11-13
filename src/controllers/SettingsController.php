@@ -73,8 +73,6 @@ class SettingsController extends Controller
         $settings = $plugin->getSettings();
         $request = Craft::$app->request;
 
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-
         if ($request->isPost) {
             $post = $request->post();
             foreach ($post['settings'] as $handle => $values) {

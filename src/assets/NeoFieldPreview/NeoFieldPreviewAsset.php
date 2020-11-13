@@ -21,6 +21,10 @@ class NeoFieldPreviewAsset extends AssetBundle
             'js/NeoFieldPreview.js',
         ];
 
+        $this->css = [
+            'css/NeoFieldPreview.css',
+        ];
+
         parent::init();
     }
 }

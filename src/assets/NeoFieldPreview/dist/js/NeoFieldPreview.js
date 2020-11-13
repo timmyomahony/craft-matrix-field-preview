@@ -1,26 +1,26 @@
 var MFP = MFP || {};
 
 (function ($) {
-  MFP.NeoFieldPreview = Garnish.Base.extend({
+  MFP.NeoFieldPreview = MFP.BaseFieldPreview.extend({
     configs: {},
     previewsUrl: "matrix-field-preview/preview/get-previews",
+    inputType: "neo",
+    // init: function () {
+    //   this.defaultImageUrl = fieldPreviewDefaultImage;
+    //   this.previewIconUrl = previewIcon;
 
-    init: function () {
-      this.defaultImageUrl = fieldPreviewDefaultImage;
-      this.previewIconUrl = previewIcon;
-
-      if (typeof Neo !== "undefined") {
-        Garnish.on(
-          window.Neo.Input,
-          "afterInit",
-          {},
-          function (ev) {
-            console.debug("Neo input initialised:", ev);
-            this.onInputLoaded(ev.target);
-          }.bind(this)
-        );
-      }
-    },
+    //   if (typeof Neo !== "undefined") {
+    //     Garnish.on(
+    //       window.Neo.Input,
+    //       "afterInit",
+    //       {},
+    //       function (ev) {
+    //         console.debug("Neo input initialised:", ev);
+    //         this.onInputLoaded(ev.target);
+    //       }.bind(this)
+    //     );
+    //   }
+    // },
 
     /**
      * Input loaded
@@ -28,42 +28,45 @@ var MFP = MFP || {};
      * When this neo field has loaded, fetch the config from the server and
      * initialise the field and block types.
      */
-    onInputLoaded: function (neoInput) {
-      var fieldHandle = neoInput._name;
-      this.getConfig(fieldHandle)
-        .done(
-          function (response) {
-            if (response["success"]) {
-              console.debug("Preview config fetched:", response);
-              var config = response["config"];
-              this.configs[fieldHandle] = config;
-              this.initialiseNeoInput(neoInput, config);
-            } else {
-              console.error(response["error"]);
-            }
-          }.bind(this)
-        )
-        .fail(
-          function (response) {
-            console.error(
-              "Error fetching config for neo field:",
-              fieldHandle,
-              response
-            );
-          }.bind(this)
-        );
-    },
+    // onInputLoaded: function (neoInput) {
+    //   var fieldHandle = this.getFieldHandle();
+    //   this.getConfig(fieldHandle)
+    //     .done(
+    //       function (response) {
+    //         if (response["success"]) {
+    //           console.debug("Preview config fetched:", response);
+    //           var config = response["config"];
+    //           if (!config["field"]["enablePreviews"]) {
+    //             return;
+    //           }
+    //           this.configs[fieldHandle] = config;
+    //           this.initialiseInput(neoInput, config);
+    //         } else {
+    //           console.error(response["error"]);
+    //         }
+    //       }.bind(this)
+    //     )
+    //     .fail(
+    //       function (response) {
+    //         console.error(
+    //           "Error fetching config for neo field:",
+    //           fieldHandle,
+    //           response
+    //         );
+    //       }.bind(this)
+    //     );
+    // },
 
     /**
      * Initialise
      *
      * Add event handlers for a particular input and initialise it
      */
-    initialiseNeoInput: function (neoInput, config) {
+    initialiseInput: function (neoInput, config) {
       neoInput.on(
         "addBlock",
         function (ev) {
-          this.setupNeoBlock(ev.block, config);
+          this.setupBlock(ev.block, config);
         }.bind(this)
       );
 
@@ -74,7 +77,7 @@ var MFP = MFP || {};
         }.bind(this)
       );
 
-      this.setupNeoInput(neoInput, config);
+      this.setupInput(neoInput, config);
     },
 
     /**
@@ -82,7 +85,7 @@ var MFP = MFP || {};
      *
      * Create dom elements for an initial entire neo input
      */
-    setupNeoInput: function (neoInput, config) {
+    setupInput: function (neoInput, config) {
       console.debug("Setting up input: ", neoInput);
       var neoBlockTypes = neoInput.getBlockTypes();
       var modal, modalButton;
@@ -92,17 +95,11 @@ var MFP = MFP || {};
         // Create modal trigger button
         modalButton = this.createModalButton(
           neoInput.$buttonsContainer.find("> .ni_buttons"),
-          config,
-          neoInput
+          config
         );
 
         // Create modal and grid
-        modal = this.createModal(
-          neoInput.$container,
-          config["blockTypes"],
-          neoInput,
-          neoBlockTypes
-        );
+        modal = this.createModal(neoInput.$container, config["blockTypes"]);
 
         // When preview button clicked
         modalButton.on("click", function () {
@@ -130,7 +127,7 @@ var MFP = MFP || {};
       // Now handle all child blocks
       neoInput._blocks.forEach(
         function (neoBlock) {
-          this.setupNeoBlock(neoBlock, config);
+          this.setupBlock(neoBlock, config);
         }.bind(this)
       );
     },
@@ -140,14 +137,14 @@ var MFP = MFP || {};
      *
      * Create dom elements for a particular neo block
      */
-    setupNeoBlock: function (neoBlock, config) {
+    setupBlock: function (neoBlock, config) {
       console.debug("Setting up block:", neoBlock._blockType._handle, neoBlock);
-      var blockTypeHandle = neoBlock._blockType._handle;
-      var blockTypeConfig = config["blockTypes"][blockTypeHandle];
+      var blockHandle = neoBlock._blockType._handle;
+      var blockConfig = config["blockTypes"][blockHandle];
       var neoBlockTypes = neoBlock.getButtons().getBlockTypes();
       var inlinePreview, modal, modalButton, grid;
 
-      if (!blockTypeConfig["image"] && !blockTypeConfig["description"]) {
+      if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn("No block types configured for this Neo block");
         return;
       }
@@ -155,7 +152,7 @@ var MFP = MFP || {};
       // Add inline preview
       inlinePreview = this.createInlinePreview(
         neoBlock.$bodyContainer,
-        blockTypeConfig,
+        blockConfig,
         neoBlock
       );
 
@@ -170,9 +167,7 @@ var MFP = MFP || {};
 
         // Create modal trigger button
         var modalButton = this.createModalButton(
-          neoBlock.$buttonsContainer.find(".ni_buttons"),
-          config,
-          neoBlock
+          neoBlock.$buttonsContainer.find(".ni_buttons")
         );
 
         // Create modal
@@ -207,41 +202,6 @@ var MFP = MFP || {};
       }
     },
 
-    createInlinePreview: function ($target, config, neoBlock) {
-      var inlinePreview = new MFP.BlockTypeInlinePreview(
-        $("<div>"),
-        config,
-        this.defaultImageUrl
-      );
-      neoBlock.$bodyContainer.prepend(inlinePreview.$target);
-      return inlinePreview;
-    },
-
-    createModalButton: function ($target, config, neoBlock) {
-      var modalButton = new MFP.BlockTypeModalButton($("<div>"), config);
-      $target.append(modalButton.$target);
-      return modalButton;
-    },
-
-    createModal: function ($target, config, neoBlock, neoBlockTypes) {
-      var modal = new MFP.BlockTypeModal(
-        $("<div>"),
-        {
-          autoShow: false,
-          closeOtherModals: true,
-          hideOnEsc: true,
-          resizable: false,
-        },
-        config,
-        this.defaultImageUrl
-      );
-      $target.append(modal.$container);
-      return modal;
-    },
-
-    /**
-     *
-     */
     filterConfigForBlockTypes: function (neoBlockTypes, config) {
       var filteredConfigs = {};
       for (var i = 0; i < neoBlockTypes.length; i++) {
@@ -260,20 +220,16 @@ var MFP = MFP || {};
       })[0];
     },
 
-    /**
-     * Get config
-     *
-     * Get the config for a particular neo input from the server
-     */
-    getConfig: function (fieldHandle) {
-      return $.get({
-        url: Craft.getActionUrl(this.previewsUrl),
-        data: {
-          type: "neo",
-          fieldHandle: fieldHandle,
-        },
-        dataType: "json",
-      });
+    getInputClass: function () {
+      try {
+        return window.Neo.Input;
+      } catch (err) {
+        return undefined;
+      }
+    },
+
+    getFieldHandle: function (input) {
+      return input._name;
     },
   });
 })(jQuery);
