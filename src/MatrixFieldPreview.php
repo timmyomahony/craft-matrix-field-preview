@@ -149,7 +149,7 @@ class MatrixFieldPreview extends Plugin
                     $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/no-dummy-image.png', true);
                     $iconImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/preview-icon.svg', true);
 
-                    $view->registerJsVar('fieldPreviewDefaultImage', $defaultImage);
+                    $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
                     $view->registerJsVar('previewIcon', $iconImage);
 
                     $view->registerAssetBundle(MatrixFieldPreviewAsset::class);

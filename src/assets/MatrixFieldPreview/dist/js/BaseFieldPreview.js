@@ -8,15 +8,19 @@ var MFP = MFP || {};
     inputType: null,
     init: function () {
       if (typeof this.getInputClass() !== "undefined") {
-        this.defaultImageUrl = fieldPreviewDefaultImage; // via $view->registerJsVar
-        Garnish.on(
-          this.getInputClass(),
-          "afterInit",
-          {},
-          function (ev) {
-            this.onInputLoaded(ev.target);
-          }.bind(this)
-        );
+        this.defaultImageUrl = matrixFieldPreviewDefaultImage; // via $view->registerJsVar
+
+        var Input = this.getInputClass();
+        if (typeof Input !== "undefined") {
+          Garnish.on(
+            this.getInputClass(),
+            "afterInit",
+            {},
+            function (ev) {
+              this.onInputLoaded(ev.target);
+            }.bind(this)
+          );
+        }
       }
     },
     onInputLoaded: function (input) {
@@ -105,7 +109,6 @@ var MFP = MFP || {};
       $target.append(modal.$container);
       return modal;
     },
-
     getInputClass: function () {
       return this.inputClass;
     },

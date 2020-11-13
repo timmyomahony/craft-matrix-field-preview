@@ -3,7 +3,6 @@ var MFP = MFP || {};
 (function ($) {
   MFP.MatrixFieldPreview = MFP.BaseFieldPreview.extend({
     previewsUrl: "matrix-field-preview/preview/get-previews",
-    inputClass: Craft.MatrixInput,
     inputType: "matrix",
     initialiseInput: function (input, config) {
       input.$container.addClass("mfp-field mfp-matrix-field");
