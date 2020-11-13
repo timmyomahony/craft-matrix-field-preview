@@ -135,8 +135,6 @@ class SettingsController extends Controller
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-
         $assets = [
             'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
         ];
