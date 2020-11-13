@@ -8,8 +8,9 @@ var MFP = MFP || {};
     inputType: null,
     init: function () {
       if (typeof this.getInputClass() !== "undefined") {
-        this.defaultImageUrl = matrixFieldPreviewDefaultImage; // via $view->registerJsVar
-
+        // via $view->registerJsVar
+        this.defaultImageUrl = matrixFieldPreviewDefaultImage;
+        this.previewIcon = matrixFieldPreviewIcon;
         var Input = this.getInputClass();
         if (typeof Input !== "undefined") {
           Garnish.on(
@@ -60,21 +61,17 @@ var MFP = MFP || {};
       return inlinePreview;
     },
     createModalButton: function ($target, config) {
-      var buttonText = this.getModalButtonText(config);
-      var extraClasses = this.getModalButtonExtraClasses(config);
+      var settings = this.getModalButtonSettings(config);
       var modalButton = new MFP.BlockTypeModalButton(
         $("<div>"),
-        buttonText,
-        extraClasses
+        settings,
+        this.previewIcon
       );
       $target.append(modalButton.$target);
       return modalButton;
     },
-    getModalButtonText: function (config) {
-      return config["field"]["buttonText"];
-    },
-    getModalButtonExtraClasses: function (config) {
-      return undefined;
+    getModalButtonSettings: function (config) {
+      return {};
     },
     updateModalButton: function (input) {
       // FIXME: There is a bug in Craft. When we remove a block Craft fires

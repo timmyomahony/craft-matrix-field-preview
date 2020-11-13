@@ -90,19 +90,13 @@ var MFP = MFP || {};
     getInputClass: function () {
       return Craft.MatrixInput;
     },
-    getModalButtonText: function (config) {
-      if (!config["field"]["enableTakeover"]) {
-        return config["field"]["buttonText"];
-      } else {
-        return "Add Block";
-      }
-    },
-    getModalButtonExtraClasses: function (config) {
+    getModalButtonSettings: function (config) {
       if (config["field"]["enableTakeover"]) {
-        return "icon add";
-      } else {
-        return undefined;
+        return {
+          takeover: true,
+        };
       }
+      return {};
     },
     getFieldHandle: function (input) {
       return input.id.replace("fields-", "");

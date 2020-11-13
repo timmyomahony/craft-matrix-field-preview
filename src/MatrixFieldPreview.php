@@ -150,7 +150,7 @@ class MatrixFieldPreview extends Plugin
                     $iconImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/preview-icon.svg', true);
 
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
-                    $view->registerJsVar('previewIcon', $iconImage);
+                    $view->registerJsVar('matrixFieldPreviewIcon', $iconImage);
 
                     $view->registerAssetBundle(MatrixFieldPreviewAsset::class);
                     $view->registerJs('new MFP.MatrixFieldPreview();', View::POS_READY, 'matrix-field-preview');
