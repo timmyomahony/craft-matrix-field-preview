@@ -10,10 +10,16 @@ use craft\db\Migration;
  */
 class m201031_120401_add_neo_support extends Migration
 {
+    private function neoInstalled()
+    {
+        $neo = Craft::$app->plugins->getPlugin("neo", false);
+        return $neo && $neo->isInstalled;
+    }
+
     public function safeUp()
     {
         // Neo support
-        if (Craft::$app->plugins->getPlugin("neo", false)->isInstalled) {
+        if ($this->neoInstalled()) {
             if ($this->createNeoFieldTables()) {
                 $this->addNeoFieldForeignKeys();
                 Craft::$app->db->schema->refresh();
@@ -24,7 +30,7 @@ class m201031_120401_add_neo_support extends Migration
 
     public function safeDown()
     {
-        if (Craft::$app->plugins->getPlugin("neo", false)->isInstalled) {
+        if ($this->neoInstalled()) {
             $this->removeNeoFieldTables();
         }
         return true;

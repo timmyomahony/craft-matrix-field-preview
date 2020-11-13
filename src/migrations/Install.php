@@ -11,6 +11,12 @@ class Install extends Migration
 {
     public $driver;
 
+    private function neoInstalled()
+    {
+        $neo = Craft::$app->plugins->getPlugin("neo", false);
+        return $neo && $neo->isInstalled;
+    }
+
     public function safeUp()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
@@ -21,7 +27,7 @@ class Install extends Migration
         }
 
         // Neo support
-        if (Craft::$app->plugins->getPlugin("neo", false)->isInstalled) {
+        if ($this->neoInstalled()) {
             if ($this->createNeoFieldTables()) {
                 $this->addNeoFieldForeignKeys();
                 Craft::$app->db->schema->refresh();
@@ -35,7 +41,7 @@ class Install extends Migration
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
         $this->removeMatrixFieldTables();
-        if (Craft::$app->plugins->getPlugin("neo", false)->isInstalled) {
+        if ($this->neoInstalled()) {
             $this->removeNeoFieldTables();
         }
         return true;
