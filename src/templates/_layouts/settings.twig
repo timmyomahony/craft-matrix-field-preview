@@ -8,36 +8,43 @@
     {% set title = plugin.name %}
 {% endif %}
 
-{% set navItems = {
-    heading: {
-        heading: "Settings" | t('matrix-field-preview')
-    },
-    general: {
-        title: "General"|t('matrix-field-preview'),
-        children: []
-    },
-    fields: {
-        title: "Matrix Fields"|t('matrix-field-preview'),
-        children: []
-    },
-    "block-types": {
-        title: "Matrix Block Types"|t('matrix-field-preview'),
-        children: ['block-type',]
-    },
-} %}
-
+{% set neo = craft.app.plugins.getPlugin('neo', false) %}
 {% set selectedItem = craft.app.request.getSegment(3)|default("fields") %}
 
 {% block sidebar %}
     <nav>
         <ul>
-            {% for id, item in navItems %}
-                {% if item.heading is defined %}
-                    <li class="heading"><span>{{ item.heading }}</span></li>
-                {% else %}
-                    <li><a href="{{ url('matrix-field-preview/settings/' ~ id) }}"{% if id == selectedItem or (item.children is defined and selectedItem in item.children) %} class="sel"{% endif %}>{{ item.title }}</a></li>
-                {% endif %}
-            {% endfor %}
+            <li class="heading"><span>{{ "Settings" | t }}</span></li>
+            <li>
+                <a href="{{ url('matrix-field-preview/settings/general') }}"{% if selectedItem == "general" %} class="sel"{% endif %}>
+                    {{ "General"|t("matrix-field-preview")}}
+                </a>
+            </li>
+            <li class="heading"><span>{{ "Craft" | t }}</span></li>
+            <li>
+                <a href="{{ url('matrix-field-preview/settings/matrix-fields') }}"{% if selectedItem == "matrix-fields" %} class="sel"{% endif %}>
+                    {{ "Matrix Fields"|t("matrix-field-preview")}}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('matrix-field-preview/settings/matrix-block-types') }}"{% if selectedItem in ["matrix-block-types", "matrix-block-type"] %} class="sel"{% endif %}>
+                    {{ "Matrix Block Types"|t("matrix-field-preview")}}
+                </a>
+            </li>
+
+            {% if neo != false and neo.isInstalled %}
+                <li class="heading"><span>{{ "Neo" | t }}</span> {% if not craft.matrixFieldPreview.neoIsCompatibleVersion() %}<span title="Incompatible Neo version (>= 2.8.14 required)" aria-label="Incompatible Neo version" data-icon="alert"></span>{% endif %}</li>
+                <li>
+                    <a href="{{ url('matrix-field-preview/settings/neo-fields') }}"{% if selectedItem == "neo-fields" %} class="sel"{% endif %}>
+                        {{ "Neo Fields"|t("matrix-field-preview")}}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('matrix-field-preview/settings/neo-block-types') }}"{% if selectedItem in ["neo-block-types", "neo-block-type"] %} class="sel"{% endif %}>
+                        {{ "Neo Block Types"|t("matrix-field-preview")}}
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </nav>
 {% endblock %}

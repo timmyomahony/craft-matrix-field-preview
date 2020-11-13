@@ -92,6 +92,14 @@ Alternatively, if you choose not to "takeover", the existing matrix field block 
 
 This can be configured in the "Matrix Fields" panel in the settings.
 
+## Neo Support
+
+Craft Matrix Field now support [Craft Neo Fields too](https://github.com/spicywebau/craft-neo)! When you have Neo installed, you can configure your Neo field just like you would Matrix fields:
+
+![Neo field settings](resources/img/screenshot-11.png)
+
+**Bear in mind that you need to be using Neo >= 2.8.14 for Matrix Field Preview to work with Neo.**
+
 ## Support
 
 <img src="resources/img/feral-logo.svg" width="250px">

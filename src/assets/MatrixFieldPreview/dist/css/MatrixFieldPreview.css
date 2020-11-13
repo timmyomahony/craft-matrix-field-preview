@@ -1,0 +1,16 @@
+.mfp-matrix-field .mfp-modal-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Takeover */
+.mfp-matrix-field.mfp-field--takeover .buttons .btngroup,
+.mfp-matrix-field.mfp-field--takeover .buttons .menubtn {
+  display: none !important;
+}
+
+.mfp-matrix-field.mfp-field--takeover .mfp-modal-button {
+  position: static;
+  margin-left: 0;
+}

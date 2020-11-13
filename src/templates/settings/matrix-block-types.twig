@@ -1,0 +1,10 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% set title = "Matrix Block Types Configuration" | t("matrix-field-preview") %}
+
+{% block submitButton %}{% endblock %}
+{% block content %}
+    {% include "matrix-field-preview/_includes/settings/block-types.twig" with {
+        type: "matrix",
+    } %}
+{% endblock %}

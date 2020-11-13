@@ -3,7 +3,6 @@
 namespace weareferal\matrixfieldpreview\services;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
 
 use Craft;
 use craft\base\Component;

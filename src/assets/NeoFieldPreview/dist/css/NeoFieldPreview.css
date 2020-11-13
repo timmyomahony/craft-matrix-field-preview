@@ -1,0 +1,29 @@
+/* Neo Fields */
+.mfp-neo-field {
+}
+
+/* Fix the neo tab border */
+.mfp-neo-field .mfp-block-type-preview {
+  padding: 12px 0 0 0;
+  margin: 0;
+  border-top: 1px solid #e3e5e8;
+}
+
+.mfp-neo-field
+  .mfp-block-type-preview
+  + .ni_block_content
+  > .ni_block_content_tab {
+  border: 0;
+}
+
+/* Move block preview button to the right */
+.mfp-neo-field .mfp-modal-button {
+  margin-left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.mfp-neo-field.mfp-field--takeover .mfp-modal-button {
+  position: block;
+}

@@ -1,11 +1,11 @@
 <?php
 
-
 namespace weareferal\matrixfieldpreview\controllers;
+
+use yii\web\BadRequestHttpException;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
-use weareferal\matrixfieldpreview\records\BlockTypeConfigRecord;
 
 use Craft;
 use craft\web\Controller;
@@ -22,14 +22,12 @@ class SettingsController extends Controller
     protected $allowAnonymous = [];
 
     /**
-     * General plugin settings
+     * General Plugin Settings
      */
     public function actionGeneral()
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
-
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         return $this->renderTemplate('matrix-field-preview/settings/general', [
             'settings' => $settings,
@@ -38,23 +36,47 @@ class SettingsController extends Controller
     }
 
     /**
-     * Enable/disable previews on matrix fields
+     * Matrix Fields Settings
+     * 
      */
-    public function actionFields()
+    public function actionMatrixFields()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionFields(
+            $plugin->matrixFieldConfigService,
+            'matrix-field-preview/settings/matrix-fields'
+        );
+    }
+
+    /**
+     * Neo Fields Settings
+     */
+    public function actionNeoFields()
+    {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionFields(
+            $plugin->neoFieldConfigService,
+            'matrix-field-preview/settings/neo-fields'
+        );
+    }
+
+    /**
+     * Base Field Settings
+     */
+    private function _actionFields($fieldService, $template, $templateVars = [])
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
         $request = Craft::$app->request;
 
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-
-        // Get all sections and matrix fields
-        $sections = Craft::$app->sections->getAllSections();
-
         if ($request->isPost) {
             $post = $request->post();
             foreach ($post['settings'] as $handle => $values) {
-                $fieldConfig = $plugin->fieldConfigService->getByHandle($handle);
+                $fieldConfig = $fieldService->getOrCreateByFieldHandle($handle);
                 if ($fieldConfig) {
                     $fieldConfig->enablePreviews = $values['enablePreviews'];
                     $fieldConfig->enableTakeover = $values['enableTakeover'];
@@ -65,27 +87,50 @@ class SettingsController extends Controller
             }
         }
 
-        $matrixFields = $plugin->blockTypeConfigService->getAllMatrixFields();
-        $fieldConfigs = $plugin->fieldConfigService->getAll();
+        $fields = $fieldService->getAllFields();
+        $fieldConfigs = $fieldService->getAll();
 
         usort($fieldConfigs, function ($a, $b) {
             return strcmp($a->field->name, $b->field->name);
         });
 
-        // Craft::info($sections, "matrix-field-previews");
-
-        return $this->renderTemplate('matrix-field-preview/settings/fields', [
+        return $this->renderTemplate($template, array_merge($templateVars, [
             'settings' => $settings,
             'plugin' => $plugin,
-            'matrixFields' => $matrixFields,
+            'fields' => $fields,
             'fieldConfigs' => $fieldConfigs
-        ]);
+        ]));
     }
 
     /**
-     * Add images and descriptions to individual matrix field block types
+     * Matrix Block Types Settings
+     * 
      */
-    public function actionBlockTypes()
+    public function actionMatrixBlockTypes()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionBlockTypes(
+            $plugin->matrixBlockTypeConfigService,
+            $plugin->matrixFieldConfigService,
+            'matrix-field-preview/settings/matrix-block-types'
+        );
+    }
+
+    public function actionNeoBlockTypes()
+    {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionBlockTypes(
+            $plugin->neoBlockTypeConfigService,
+            $plugin->neoFieldConfigService,
+            'matrix-field-preview/settings/neo-block-types'
+        );
+    }
+
+    private function _actionBlockTypes($blockTypeConfigService, $fieldConfigService, $template, $templateVars = [])
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
@@ -96,81 +141,82 @@ class SettingsController extends Controller
             'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
         ];
 
-        $blockTypes = Craft::$app->matrix->getAllBlockTypes();
-        $blockTypeConfigs = $plugin->blockTypeConfigService->getAll();
-
-        $blockTypeConfigMap = [];
-        foreach ($blockTypeConfigs as $blockTypeConfig) {
-            $blockTypeConfigMap[$blockTypeConfig->blockType->id] = $blockTypeConfig;
-        }
-
-        $matrixFieldsMap = [];
-        foreach ($blockTypes as $blockType) {
-            $matrixField = $blockType->field;
-
-            $fieldConfig = $plugin->fieldConfigService->getByHandle($matrixField->handle);
-
-            // Initialise an array for each matrix field
-            if (!array_key_exists($matrixField->id, $matrixFieldsMap)) {
-                $matrixFieldsMap[$matrixField->id] = [
-                    'matrixField' => $matrixField,
-                    'fieldConfig' => $fieldConfig,
-                    'rows' => []
-                ];
-            }
-
-            // Get the block type config for this block type if it exists
-            $blockTypeConfig = null;
-            if (array_key_exists($blockType->id, $blockTypeConfigMap)) {
-                $blockTypeConfig = $blockTypeConfigMap[$blockType->id];
-            }
-
-            array_push($matrixFieldsMap[$matrixField->id]['rows'], [
-                'blockType' => $blockType,
-                'blockTypeConfig' => $blockTypeConfig
+        $fields = [];
+        foreach ($fieldConfigService->getAllFields() as $field) {
+            $fieldConfig = $fieldConfigService->getOrCreateByFieldHandle($field->handle);
+            array_push($fields, [
+                'field' => $field,
+                'fieldConfig' => $fieldConfig,
+                'blockTypeConfigs' => $blockTypeConfigService->getOrCreateByFieldHandle($field->handle)
             ]);
         }
 
-        $matrixFields = [];
-        foreach ($matrixFieldsMap as $key => $value) {
-            array_push($matrixFields, $value);
-        }
-
-        return $this->renderTemplate('matrix-field-preview/settings/block-types', [
+        return $this->renderTemplate($template, array_merge($templateVars, [
             'settings' => $settings,
             'plugin' => $plugin,
             'assets' => $assets,
-            'matrixFields' => $matrixFields
-        ]);
+            'fields' => $fields
+        ]));
     }
 
     /**
-     * Configure an individual matrix field block type preview. Upload an
-     * image and a custom description
+     * Matrix Block Type Settings
+     * 
      */
-    public function actionBlockType($blockTypeId)
+    public function actionMatrixBlockType($blockTypeId)
     {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionBlockType(
+            $blockTypeId,
+            $plugin->matrixBlockTypeConfigService,
+            'matrix-field-preview/settings/matrix-upload-preview-image',
+            'matrix-field-preview/settings/matrix-delete-preview-image',
+            'matrix-field-preview/settings/matrix-block-types',
+            'matrix-field-preview/settings/matrix-block-type'
+        );
+    }
+
+    public function actionNeoBlockType($blockTypeId)
+    {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionBlockType(
+            $blockTypeId,
+            $plugin->neoBlockTypeConfigService,
+            'matrix-field-preview/settings/neo-upload-preview-image',
+            'matrix-field-preview/settings/neo-delete-preview-image',
+            'matrix-field-preview/settings/neo-block-types',
+            'matrix-field-preview/settings/neo-block-type'
+        );
+    }
+
+    private function _actionBlockType(
+        $blockTypeId,
+        $blockTypeConfigService,
+        $uploadImageUrl,
+        $deleteImageUrl,
+        $redirect,
+        $template,
+        $templateVars = []
+    ) {
+        $this->view->registerJsVar('uploadImageUrl', $uploadImageUrl);
+        $this->view->registerJsVar('deleteImageUrl', $deleteImageUrl);
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
-        $siteId = Craft::$app->getSites()->currentSite->id;
         $request = Craft::$app->request;
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
-        $blockType = Craft::$app->matrix->getBlockTypeById($blockTypeId);
+        // First check that block type is valid
+        $blockType = $blockTypeConfigService->getBlockTypeById($blockTypeId);
         if (!$blockType) {
             throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
         }
 
-        $blockTypeConfig = $plugin->blockTypeConfigService->getByBlockTypeId($blockTypeId);
-        if (!$blockTypeConfig) {
-            $blockTypeConfig = new BlockTypeConfigRecord();
-            $blockTypeConfig->siteId = $siteId;
-            $blockTypeConfig->description = "";
-            $blockTypeConfig->fieldId = $blockType->field->id;
-            $blockTypeConfig->blockTypeId = $blockType->id;
-            $blockTypeConfig->save();
-        }
+        $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
 
         if ($request->isPost) {
             $post = $request->post();
@@ -178,34 +224,49 @@ class SettingsController extends Controller
             if ($blockTypeConfig->validate()) {
                 $blockTypeConfig->save();
                 Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
-                return $this->redirect('matrix-field-preview/settings/block-types');
+                return $this->redirect($redirect);
             } else {
                 Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
             }
         }
 
         return $this->renderTemplate(
-            'matrix-field-preview/settings/block-type',
-            [
+            $template,
+            array_merge($templateVars, [
                 'blockTypeConfig' => $blockTypeConfig,
                 'plugin' => $plugin,
                 'fullPageForm' => true,
                 'settings' => $settings
-            ]
+            ])
         );
     }
 
-    /**
-     *
-     */
-    public function actionUploadPreviewImage()
+    public function actionMatrixUploadPreviewImage()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionDeletePreviewImage(
+            $plugin->matrixBlockTypeConfigService
+        );
+    }
+
+    public function actionNeoUploadPreviewImage()
+    {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionUploadPreviewImage(
+            $plugin->neoBlockTypeConfigService
+        );
+    }
+
+    public function _actionUploadPreviewImage($blockTypeConfigService)
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
 
         $previewImageService = MatrixFieldPreview::getInstance()->previewImageService;
-        $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
-
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
         $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
         if (!$blockTypeConfig) {
@@ -248,15 +309,31 @@ class SettingsController extends Controller
         }
     }
 
-    /**
-     * 
-     */
-    public function actionDeletePreviewImage()
+    public function actionMatrixDeletePreviewImage()
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionDeletePreviewImage(
+            $plugin->matrixBlockTypeConfigService
+        );
+    }
+
+    public function actionNeoDeletePreviewImage()
+    {
+        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
+            throw new BadRequestHttpException('Plugin is not enabled');
+        }
+
+        $plugin = MatrixFieldPreview::getInstance();
+        return $this->_actionDeletePreviewImage(
+            $plugin->neoBlockTypeConfigService
+        );
+    }
+
+    private function _actionDeletePreviewImage($blockTypeConfigService)
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
 
-        $blockTypeConfigService = MatrixFieldPreview::getInstance()->blockTypeConfigService;
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
         $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
 
@@ -284,7 +361,7 @@ class SettingsController extends Controller
         $settings = MatrixFieldPreview::getInstance()->getSettings();
         $view = $this->getView();
         $templateMode = $view->getTemplateMode();
-        return $view->renderTemplate('matrix-field-preview/_includes/preview-image-field', [
+        return $view->renderTemplate('matrix-field-preview/_includes/settings/preview-image-field', [
             'settings' => $settings,
             'blockTypeConfig' => $blockTypeConfig
         ], $templateMode);

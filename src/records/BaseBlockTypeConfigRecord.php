@@ -6,16 +6,27 @@ use yii\db\ActiveQueryInterface;
 
 use Craft;
 use craft\db\ActiveRecord;
-use craft\records\MatrixBlockType;
-use craft\records\Matrix;
 use craft\records\Asset;
-use craft\services\Elements;
 
-class BlockTypeConfigRecord extends ActiveRecord
+
+abstract class BaseBlockTypeConfigRecord extends ActiveRecord
 {
-    public static function tableName()
+    protected $BlockTypeClass;
+
+    /**
+     * 
+     */
+    public function getField(): ActiveQueryInterface
     {
-        return '{{%matrixfieldpreview_blocktypes_config}}';
+        return $this->hasOne(Field::class, ['id' => 'fieldId']);
+    }
+
+    /**
+     * 
+     */
+    public function setField($field)
+    {
+        $this->fieldId = $field->id ?? null;
     }
 
     /**
@@ -27,22 +38,12 @@ class BlockTypeConfigRecord extends ActiveRecord
      */
     public function getBlockType(): ActiveQueryInterface
     {
-        return $this->hasOne(MatrixBlockType::className(), ['id' => 'blockTypeId']);
+        return $this->hasOne($this->BlockTypeClass, ['id' => 'blockTypeId']);
     }
 
     public function setBlockType($blockType)
     {
         $this->blockTypeId = $blockType->id ?? null;
-    }
-
-    public function getField(): ActiveQueryInterface
-    {
-        return $this->hasOne(Field::class, ['id' => 'fieldId']);
-    }
-
-    public function setField($field)
-    {
-        $this->fieldId = $field->id ?? null;
     }
 
     /**
@@ -83,6 +84,6 @@ class BlockTypeConfigRecord extends ActiveRecord
             }
         }
 
-        return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/dummy-image.svg', true);
+        return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/dummy-image.png', true);
     }
 }

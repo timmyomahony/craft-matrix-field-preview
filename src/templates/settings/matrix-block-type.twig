@@ -1,0 +1,16 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% do view.registerAssetBundle("craft\\web\\assets\\fileupload\\FileUploadAsset") %}
+
+{% set title = "'" ~ blockTypeConfig.blockType.name ~ "' Preview" %}
+
+{% set crumbs = [
+    { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
+    { label: "Matrix Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/neo-block-types') }
+] %}
+
+{% block content %}
+    {% include "matrix-field-preview/_includes/settings/block-type.twig" with {
+        type: "matrix",
+    } %}
+{% endblock %}

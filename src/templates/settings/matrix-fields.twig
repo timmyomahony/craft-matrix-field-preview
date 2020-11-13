@@ -1,0 +1,11 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% set title = "Matrix Fields Configuration" | t("matrix-field-preview") %}
+
+{% set fullPageForm = true %}
+
+{% block content %}
+    {% include "matrix-field-preview/_includes/settings/fields.twig" with {
+        type: "matrix",
+    } %}
+{% endblock %}

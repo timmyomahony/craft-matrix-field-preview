@@ -1,0 +1,14 @@
+/* Modal trigger button */
+.mfp-modal-button {
+}
+
+.mfp-modal-button--primary {
+  margin-left: 10px;
+}
+
+.mfp-modal-button--secondary {
+  background-position: 10px 52%;
+  background-repeat: no-repeat;
+  padding-left: 35px;
+  background-size: 19px auto;
+}
