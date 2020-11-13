@@ -73,7 +73,7 @@ var MFP = MFP || {};
     getModalButtonSettings: function (config) {
       return {};
     },
-    updateModalButton: function (input) {
+    updateModalButton: function (button, callback) {
       // FIXME: There is a bug in Craft. When we remove a block Craft fires
       // the event before the actual element has been removed from the DOM:
       //
@@ -82,10 +82,10 @@ var MFP = MFP || {};
       // So we have to use this timeout hack as a fix
       setTimeout(
         function () {
-          if (input.canAddMoreBlocks()) {
-            input.modalButton.enable();
+          if (callback()) {
+            button.enable();
           } else {
-            input.modalButton.disable();
+            button.disable();
           }
         }.bind(this),
         600

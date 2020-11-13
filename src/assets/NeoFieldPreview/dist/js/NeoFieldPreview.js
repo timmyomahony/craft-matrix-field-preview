@@ -8,34 +8,34 @@ var MFP = MFP || {};
       neoInput.on(
         "addBlock",
         function (ev) {
-          this.setupBlock(ev.block, config);
+          this.blockAdded(ev.block, config);
         }.bind(this)
       );
 
       neoInput.on(
         "removeBlock",
         function (ev) {
-          console.debug("Block removed: ", ev.block);
+          this.blockRemoved(ev.block);
         }.bind(this)
       );
 
       this.setupInput(neoInput, config);
     },
     setupInput: function (neoInput, config) {
-      console.debug("Setting up input: ", neoInput);
+      var neoBlocks = neoInput.getBlocks();
       var neoBlockTypes = neoInput.getBlockTypes();
       var modal, modalButton;
 
       neoInput.$container.addClass("mfp-field mfp-neo-field");
       if (neoBlockTypes.length > 0) {
         // Create modal trigger button
-        modalButton = this.createModalButton(
+        var modalButton = this.createModalButton(
           neoInput.$buttonsContainer.find("> .ni_buttons"),
           config
         );
 
         // Create modal and grid
-        modal = this.createModal(neoInput.$container, config["blockTypes"]);
+        var modal = this.createModal(neoInput.$container, config["blockTypes"]);
 
         // When preview button clicked
         modalButton.on("click", function () {
@@ -58,21 +58,22 @@ var MFP = MFP || {};
             modal.hide();
           }.bind(this)
         );
+
+        neoInput.modal = modal;
+        neoInput.modalButtons = modalButton;
       }
 
       // Now handle all child blocks
-      neoInput._blocks.forEach(
+      neoBlocks.forEach(
         function (neoBlock) {
-          this.setupBlock(neoBlock, config);
+          this.blockAdded(neoBlock, config);
         }.bind(this)
       );
     },
-    setupBlock: function (neoBlock, config) {
-      console.debug("Setting up block:", neoBlock._blockType._handle, neoBlock);
+    blockAdded: function (neoBlock, config) {
       var blockHandle = neoBlock._blockType._handle;
       var blockConfig = config["blockTypes"][blockHandle];
       var neoBlockTypes = neoBlock.getButtons().getBlockTypes();
-      var inlinePreview, modal, modalButton, grid;
 
       if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn("No block types configured for this Neo block");
@@ -80,11 +81,13 @@ var MFP = MFP || {};
       }
 
       // Add inline preview
-      inlinePreview = this.createInlinePreview(
+      var inlinePreview = this.createInlinePreview(
         neoBlock.$bodyContainer,
         blockConfig,
         neoBlock
       );
+
+      neoBlock.inlinePreview = inlinePreview;
 
       if (neoBlockTypes.length > 0) {
         // Filter out the block types we need to display for this particular
@@ -101,6 +104,8 @@ var MFP = MFP || {};
           config
         );
 
+        neoBlock.modalButton = modalButton;
+
         // Create modal
         var modal = this.createModal(
           neoBlock.$container,
@@ -108,6 +113,8 @@ var MFP = MFP || {};
           neoBlock,
           neoBlockTypes
         );
+
+        neoBlock.modal = modal;
 
         // When preview button clicked
         modalButton.on("click", function () {
@@ -131,6 +138,11 @@ var MFP = MFP || {};
           }.bind(this)
         );
       }
+    },
+    blockRemoved: function (neoBlock) {
+      this.updateModalButton(neoBlock.modalButton, function () {
+        return false;
+      });
     },
     filterConfigForBlockTypes: function (neoBlockTypes, config) {
       var filteredConfigs = {};

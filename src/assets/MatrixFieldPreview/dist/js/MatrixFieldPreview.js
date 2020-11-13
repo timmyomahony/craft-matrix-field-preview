@@ -80,12 +80,16 @@ var MFP = MFP || {};
         blockConfig
       );
 
-      if (updateButton) {
-        this.updateModalButton(input);
-      }
+      // Update the modal button
+      this.updateModalButton(input.modalButton, function () {
+        return input.canAddMoreBlocks();
+      });
     },
     blockDeleted: function (input, $block, config) {
-      this.updateModalButton(input);
+      // Update the modal button
+      this.updateModalButton(input.modalButton, function () {
+        return input.canAddMoreBlocks();
+      });
     },
     getInputClass: function () {
       return Craft.MatrixInput;
