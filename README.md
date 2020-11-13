@@ -100,6 +100,11 @@ Craft Matrix Field now support [Craft Neo Fields too](https://github.com/spicywe
 
 **Bear in mind that you need to be using Neo >= 2.8.14 for Matrix Field Preview to work with Neo.**
 
+### Caveats
+
+- Currently enabling/disabling the preview button when "max blocks" is reached isn't supported
+- You can't currently "takeover" the Neo buttons like you can with Matrix fields
+
 ## Support
 
 <img src="resources/img/feral-logo.svg" width="250px">
