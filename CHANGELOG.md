@@ -74,3 +74,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Release fixes. Paths were incorrect after making changes for composer 2
+
+## 1.2.0 - 2020-11-16
+
+### Added
+
+- Beta Neo support (Issue #17)
+
+### Changed
+
+- Updated interface look and feel
+- Added custom icon to preview button
+- Overhauled asset bundles
+- Fixed issue with Garnish events (Issue #41)
