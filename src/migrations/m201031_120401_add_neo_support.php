@@ -23,19 +23,17 @@ class m201031_120401_add_neo_support extends Migration
             if ($this->createNeoFieldTables()) {
                 $this->addNeoFieldForeignKeys();
                 Craft::$app->db->schema->refresh();
-                return true;
             }
         }
-        return false;
+        return true;
     }
 
     public function safeDown()
     {
         if ($this->_neoInstalled()) {
             $this->removeNeoFieldTables();
-            return true;
         }
-        return false;
+        return true;
     }
 
     protected function createNeoFieldTables()
