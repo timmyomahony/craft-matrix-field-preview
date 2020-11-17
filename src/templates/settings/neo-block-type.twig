@@ -1,0 +1,20 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% do view.registerAssetBundle("craft\\web\\assets\\fileupload\\FileUploadAsset") %}
+
+{% set title = "'" ~ blockTypeConfig.blockType.name ~ "' Preview" %}
+
+{% set crumbs = [
+    { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
+    { label: "Neo Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/neo-block-types') }
+] %}
+
+{% block content %}
+    {% if not craft.matrixFieldPreview.neoIsCompatibleVersion() %}
+        <p class="warning with-icon">{{ "Neo version >= 2.8.14 is required for this integration to work properly. You'll still be able to configure the plugin in the meantime, but previews will not appear in the CP for user." | t("matrix-field-preview") }}</p>
+        <hr>        
+    {% endif %}
+    {% include "matrix-field-preview/_includes/settings/block-type.twig" with {
+        type: "neo",
+    } %}
+{% endblock %}

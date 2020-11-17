@@ -11,20 +11,29 @@
 
 namespace weareferal\matrixfieldpreview;
 
-use weareferal\matrixfieldpreview\services\BlockTypeConfigService;
-use weareferal\matrixfieldpreview\services\FieldConfigService;
+use weareferal\matrixfieldpreview\services\MatrixBlockTypeConfigService;
+use weareferal\matrixfieldpreview\services\MatrixFieldConfigService;
+use weareferal\matrixfieldpreview\services\NeoFieldConfigService;
+use weareferal\matrixfieldpreview\services\NeoBlockTypeConfigService;
+use weareferal\matrixfieldpreview\services\UtilsService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
-use weareferal\matrixfieldpreview\assets\PreviewField\PreviewFieldAsset;
+use weareferal\matrixfieldpreview\assets\MatrixFieldPreview\MatrixFieldPreviewAsset;
+use weareferal\matrixfieldpreview\assets\NeoFieldPreview\NeoFieldPreviewAsset;
+use weareferal\matrixfieldpreview\migrations;
 
 use Craft;
 use craft\base\Plugin;
+use craft\services\Plugins;
 use craft\web\View;
 use craft\helpers\UrlHelper;
 use craft\events\TemplateEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 
+use yii\db\MigrationInterface;
+use yii\di\Instance;
 use yii\base\Event;
 
 /**
@@ -49,7 +58,7 @@ class MatrixFieldPreview extends Plugin
 {
     public static $plugin;
 
-    public $schemaVersion = '1.1.0';
+    public $schemaVersion = '1.2.1';
     public $hasCpSettings = true;
     public $hasCpSection = false;
 
@@ -61,7 +70,9 @@ class MatrixFieldPreview extends Plugin
 
         $this->_setPluginComponents();
         $this->_registerCpRoutes();
-        $this->_registerMatrixFieldPreviews();
+        $this->_registerAssetBundles();
+        $this->_setTemplateVariables();
+        $this->_runManualMigrations();
     }
 
     protected function createSettingsModel()
@@ -78,45 +89,69 @@ class MatrixFieldPreview extends Plugin
 
     private function _setPluginComponents()
     {
-        $this->setComponents([
+        $components = [
             'previewImageService' => PreviewImageService::class,
-            'fieldConfigService' => FieldConfigService::class,
-            'blockTypeConfigService' => BlockTypeConfigService::class
-        ]);
+            'matrixFieldConfigService' => MatrixFieldConfigService::class,
+            'matrixBlockTypeConfigService' => MatrixBlockTypeConfigService::class,
+            'utilsService' => UtilsService::class
+        ];
+        // Neo support
+        if (Craft::$app->plugins->isPluginEnabled("neo")) {
+            $components = array_merge($components, [
+                'neoFieldConfigService' => NeoFieldConfigService::class,
+                'neoBlockTypeConfigService' => NeoBlockTypeConfigService::class,
+            ]);
+        }
+
+        $this->setComponents($components);
     }
 
-    private function _registerMatrixFieldPreviews()
+    private function _setTemplateVariables()
     {
-        // Inject custom matrix field input JavaScript
+        // Add our helper service as a template variable {{ craft.mfpNeoHelper... }}
+        // so that we can easily
+        if (Craft::$app->plugins->isPluginEnabled("neo")) {
+            Event::on(
+                CraftVariable::class,
+                CraftVariable::EVENT_INIT,
+                function (Event $event) {
+                    $variable = $event->sender;
+                    $variable->set('matrixFieldPreview', UtilsService::class);
+                }
+            );
+        }
+    }
+
+    private function _registerAssetBundles()
+    {
+        // Insert our asset bundles into the control panel
         //
-        // @fixme find better way to insert JavaScript, taking into account its
-        // dependency on the MatrixInput's JavaScript
-        // 
-        // Craft does not support any way (that I am aware of) to 
+        // FIXME: At the time this plugin was created, there was no easy way
+        // to detect when a matrix field input was being rendered so we just
+        // added a catch-all page-render event. Since then there is a more
+        // accurate way to track when a matrix field is being rendered:
         //
-        // a) track the rendering/asset bundle insertion of a particular input
-        //    so that we could conditionally insert our JavaScript only when
-        //    a MatrixInput is rendered
-        // b) control the initialisation order of JavaScript so that we could
-        //    guarantee our JavaScript is only inserted/loaded *after* the
-        //    MatrixInput is rendered
-        //
-        // Therefore, the only way to do this is to use EVENT_AFTER_RENDER_TEMPLATE 
-        // event to insert and run our asset bundles after a control panel
-        // view has been rendered
-        //
-        // More info here: https://github.com/craftcms/cms/issues/5867, and 
-        // in particular this https://github.com/craftcms/cms/issues/5867#issuecomment-639912817
+        // https://github.com/craftcms/cms/issues/5867
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
             function (TemplateEvent $event) {
                 if (Craft::$app->request->isCpRequest) {
-                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/no-dummy-image.svg', true);
                     $view = Craft::$app->getView();
-                    $view->registerAssetBundle(PreviewFieldAsset::class);
+
+                    $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/no-dummy-image.png', true);
+                    $iconImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/preview-icon.svg', true);
+
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
-                    $view->registerJs('new Craft.MatrixFieldPreview(".matrix-field");', View::POS_READY, 'matrix-field-preview');
+                    $view->registerJsVar('matrixFieldPreviewIcon', $iconImage);
+
+                    $view->registerAssetBundle(MatrixFieldPreviewAsset::class);
+                    $view->registerJs('new MFP.MatrixFieldPreview();', View::POS_READY, 'matrix-field-preview');
+
+                    if (Craft::$app->plugins->isPluginEnabled("neo")) {
+                        $view->registerAssetBundle(NeoFieldPreviewAsset::class);
+                        $view->registerJs('new MFP.NeoFieldPreview();', View::POS_READY, 'neo-field-preview');
+                    }
                 }
             }
         );
@@ -128,12 +163,61 @@ class MatrixFieldPreview extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules = array_merge($event->rules, [
+                $urls = [
                     'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
-                    'matrix-field-preview/settings/fields' => 'matrix-field-preview/settings/fields',
-                    'matrix-field-preview/settings/block-types' => 'matrix-field-preview/settings/block-types',
-                    'matrix-field-preview/settings/block-type' => 'matrix-field-preview/settings/block-type'
-                ]);
+                    'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/settings/matrix-fields',
+                    'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/settings/matrix-block-types',
+                    'matrix-field-preview/settings/matrix-block-type' => 'matrix-field-preview/settings/matrix-block-type'
+                ];
+
+                // Neo support
+                if (Craft::$app->plugins->isPluginEnabled("neo")) {
+                    $urls = array_merge($urls, [
+                        'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/settings/neo-fields',
+                        'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/settings/neo-block-types',
+                        'matrix-field-preview/settings/neo-block-type' => 'matrix-field-preview/settings/neo-block-type',
+                    ]);
+                }
+
+                $event->rules = array_merge($event->rules, $urls);
+            }
+        );
+    }
+
+    private function _runManualMigrations()
+    {
+        // If Neo is installed _after_ Matrix Field Preview, the migrations
+        // required to create our custom tables will never be run (although they
+        // will be recorded in the migrations table as having been run) so we
+        // re-run the relevent Neo migration manually in this situation.
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function (Event $event) {
+                if ($event->plugin->handle == "neo") {
+                    // NOTE: You can't use the plugin->getMigrator()->migrateUp(...)
+                    // approach as it requires inserting the migration into the migration
+                    // table, which already exist, so we just run it manually
+                    //
+                    // See https://craftcms.stackexchange.com/q/36657/9612
+                    $neoMigration = new migrations\m201031_120401_add_neo_support();
+                    $neoMigration->db->schema->refresh();
+                    $neoMigration->safeUp();
+                    $neoMigration->db->schema->refresh();
+                }
+            }
+        );
+
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_BEFORE_UNINSTALL_PLUGIN,
+            function (Event $event) {
+                if ($event->plugin->handle == "neo") {
+                    $neoMigration = new migrations\m201031_120401_add_neo_support();
+                    $neoMigration->db->schema->refresh();
+                    $neoMigration->safeDown();
+                    $neoMigration->db->schema->refresh();
+                }
             }
         );
     }
