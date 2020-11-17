@@ -4,6 +4,8 @@
 
 Configure a screenshot preview for all your matrix field blocks, giving your clients a better publishing experience.
 
+![](https://files.weareferal.com/Screen-Recording-2020-11-17-13-30-19-wFINHn.gif)
+
 ## Overview
 
 For content-heavy websites, it sometimes makes sense to create a ["content builder"](https://nystudio107.com/blog/creating-a-content-builder-in-craft-cms) in Craft by using matrix fields to define a number of blocks that your client can use to publish content. This is really powerful but also leads to a confusing publishing experience. 
