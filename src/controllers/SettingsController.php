@@ -26,6 +26,8 @@ class SettingsController extends Controller
      */
     public function actionGeneral()
     {
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
+
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
@@ -69,6 +71,7 @@ class SettingsController extends Controller
      */
     private function _actionFields($fieldService, $template, $templateVars = [])
     {
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
         $request = Craft::$app->request;
@@ -132,6 +135,7 @@ class SettingsController extends Controller
 
     private function _actionBlockTypes($blockTypeConfigService, $fieldConfigService, $template, $templateVars = [])
     {
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
@@ -242,7 +246,7 @@ class SettingsController extends Controller
     public function actionMatrixUploadPreviewImage()
     {
         $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionDeletePreviewImage(
+        return $this->_actionUploadPreviewImage(
             $plugin->matrixBlockTypeConfigService
         );
     }
@@ -263,6 +267,7 @@ class SettingsController extends Controller
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $previewImageService = MatrixFieldPreview::getInstance()->previewImageService;
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
@@ -331,6 +336,7 @@ class SettingsController extends Controller
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
         $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
