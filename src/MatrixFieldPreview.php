@@ -201,7 +201,22 @@ class MatrixFieldPreview extends Plugin
                     //
                     // See https://craftcms.stackexchange.com/q/36657/9612
                     $neoMigration = new migrations\m201031_120401_add_neo_support();
+                    $neoMigration->db->schema->refresh();
                     $neoMigration->safeUp();
+                    $neoMigration->db->schema->refresh();
+                }
+            }
+        );
+
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_BEFORE_UNINSTALL_PLUGIN,
+            function (Event $event) {
+                if ($event->plugin->handle == "neo") {
+                    $neoMigration = new migrations\m201031_120401_add_neo_support();
+                    $neoMigration->db->schema->refresh();
+                    $neoMigration->safeDown();
+                    $neoMigration->db->schema->refresh();
                 }
             }
         );
