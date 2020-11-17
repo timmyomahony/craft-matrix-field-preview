@@ -4,7 +4,7 @@
 
 Configure a screenshot preview for all your matrix field blocks, giving your clients a better publishing experience.
 
-![](https://files.weareferal.com/Screen-Recording-2020-11-17-13-30-19-wFINHn.gif)
+![](https://files.weareferal.com/Matrix-Field-Preview-Example-wxsUsO.gif)
 
 ## Overview
 
