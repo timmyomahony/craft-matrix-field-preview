@@ -41,9 +41,8 @@ class Install extends Migration
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
         $this->removeMatrixFieldTables();
-        if ($this->neoInstalled()) {
-            $this->removeNeoFieldTables();
-        }
+        // Always remove, even if Neo not currently installed
+        $this->removeNeoFieldTables();
         return true;
     }
 

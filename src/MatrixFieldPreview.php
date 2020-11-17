@@ -20,9 +20,11 @@ use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreview\MatrixFieldPreviewAsset;
 use weareferal\matrixfieldpreview\assets\NeoFieldPreview\NeoFieldPreviewAsset;
+use weareferal\matrixfieldpreview\migrations;
 
 use Craft;
 use craft\base\Plugin;
+use craft\services\Plugins;
 use craft\web\View;
 use craft\helpers\UrlHelper;
 use craft\events\TemplateEvent;
@@ -30,6 +32,8 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 
+use yii\db\MigrationInterface;
+use yii\di\Instance;
 use yii\base\Event;
 
 /**
@@ -66,8 +70,9 @@ class MatrixFieldPreview extends Plugin
 
         $this->_setPluginComponents();
         $this->_registerCpRoutes();
-        $this->_registerMatrixFieldPreviews();
+        $this->_registerAssetBundles();
         $this->_setTemplateVariables();
+        $this->_runManualMigrations();
     }
 
     protected function createSettingsModel()
@@ -117,28 +122,16 @@ class MatrixFieldPreview extends Plugin
         }
     }
 
-    private function _registerMatrixFieldPreviews()
+    private function _registerAssetBundles()
     {
-        // Inject custom matrix field input JavaScript
+        // Insert our asset bundles into the control panel
         //
-        // @fixme find better way to insert JavaScript, taking into account its
-        // dependency on the MatrixInput's JavaScript
-        // 
-        // Craft does not support any way (that I am aware of) to 
+        // FIXME: At the time this plugin was created, there was no easy way
+        // to detect when a matrix field input was being rendered so we just
+        // added a catch-all page-render event. Since then there is a more
+        // accurate way to track when a matrix field is being rendered:
         //
-        // a) track the rendering/asset bundle insertion of a particular input
-        //    so that we could conditionally insert our JavaScript only when
-        //    a MatrixInput is rendered
-        // b) control the initialisation order of JavaScript so that we could
-        //    guarantee our JavaScript is only inserted/loaded *after* the
-        //    MatrixInput is rendered
-        //
-        // Therefore, the only way to do this is to use EVENT_AFTER_RENDER_TEMPLATE 
-        // event to insert and run our asset bundles after a control panel
-        // view has been rendered
-        //
-        // More info here: https://github.com/craftcms/cms/issues/5867, and 
-        // in particular this https://github.com/craftcms/cms/issues/5867#issuecomment-639912817
+        // https://github.com/craftcms/cms/issues/5867
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
@@ -187,6 +180,29 @@ class MatrixFieldPreview extends Plugin
                 }
 
                 $event->rules = array_merge($event->rules, $urls);
+            }
+        );
+    }
+
+    private function _runManualMigrations()
+    {
+        // If Neo is installed _after_ Matrix Field Preview, the migrations
+        // required to create our custom tables will never be run (although they
+        // will be recorded in the migrations table as having been run) so we
+        // re-run the relevent Neo migration manually in this situation.
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function (Event $event) {
+                if ($event->plugin->handle == "neo") {
+                    // NOTE: You can't use the plugin->getMigrator()->migrateUp(...)
+                    // approach as it requires inserting the migration into the migration
+                    // table, which already exist, so we just run it manually
+                    //
+                    // See https://craftcms.stackexchange.com/q/36657/9612
+                    $neoMigration = new migrations\m201031_120401_add_neo_support();
+                    $neoMigration->safeUp();
+                }
             }
         );
     }
