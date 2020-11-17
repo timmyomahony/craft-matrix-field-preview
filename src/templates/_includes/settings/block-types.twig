@@ -14,7 +14,7 @@
             <div class="instructions"><p>{{ "Use this page to configure the images and descriptions that appear for your " ~ type | capitalize ~ " field block types." | t('matrix-field-preview') }}</p></div>
         </div>
         {% if fields | length <= 0 %}
-            <p class="error">{{ "No " ~ type | lower ~" blocks exists yet"|t('matrix-field-preview') }}</p>
+            <p class="warning with-icon">{{ "No " ~ type | lower ~" blocks exists yet"|t('matrix-field-preview') }}</p>
         {% else %}
             {% for group in fields %}
                 <h4><em>{{ group.field.name }}</em> {{ type | capitalize ~ " Field" | t("matrix-field-preview") }}</h4>

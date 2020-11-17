@@ -37,7 +37,7 @@
             {{ forms.field({
                 first: true,
                 label: "Preview Image Location"|t('matrix-field-preview'),
-            }, '<p class="error">' ~ "No volumes exist yet."|t('matrix-field-preview') ~ '</p>') }}
+            }, '<p class="warning with-icon">' ~ "No volumes exist yet."|t('matrix-field-preview') ~ '</p>') }}
         {% endif %}
     {% endnamespace %}
 {% endblock %}
