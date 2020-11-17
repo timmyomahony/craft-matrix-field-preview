@@ -14,7 +14,7 @@
         <div class="instructions"><p>{{ "Use this page to select the " ~ type | lower ~ " fields you want preview images and descriptions to appear on." | t('matrix-field-preview') }}</p></div>
     </div>
     {% if fields | length <= 0 %}
-        <p class="warning with-icon">{{ "No " ~ type | lower ~ " blocks exists yet"|t('matrix-field-preview') }}</p>
+        <p class="warning with-icon">{{ "No " ~ type | lower ~ " blocks exist yet"|t('matrix-field-preview') }}</p>
     {% else %}
         <table id="fields" class="data fullwidth">
             <thead>
