@@ -22,7 +22,7 @@ class m201026_153926_migrate_block_type_handle_data extends Migration
         // fieldId. We only need the latter. Before deleting the matrixFieldHandle
         // though we need to make sure the fieldId has been saved
         $plugin = MatrixFieldPreview::getInstance();
-        foreach ($plugin->blockTypeConfigService->getAll() as $blockTypeConfig) {
+        foreach ($plugin->matrixBlockTypeConfigService->getAll() as $blockTypeConfig) {
             $matrixField = Craft::$app->getFields()->getFieldByHandle($blockTypeConfig->matrixFieldHandle);
             $blockTypeConfig->fieldId = $matrixField->id;
             $blockTypeConfig->save();
