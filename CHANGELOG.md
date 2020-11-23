@@ -87,3 +87,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Added custom icon to preview button
 - Overhauled asset bundles
 - Fixed issue with Garnish events (Issue #41)
+
+## 1.2.3 - 2020-11-23
+
+### Changed
+
+- Fixed migration issues with latest release
