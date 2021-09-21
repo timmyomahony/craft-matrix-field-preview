@@ -5,8 +5,8 @@
 }
 
 /* Takeover */
-.mfp-matrix-field.mfp-field--takeover .buttons .btngroup,
-.mfp-matrix-field.mfp-field--takeover .buttons .menubtn {
+.mfp-matrix-field.mfp-field--takeover > .buttons .btngroup,
+.mfp-matrix-field.mfp-field--takeover > .buttons .menubtn {
   display: none !important;
 }
 
