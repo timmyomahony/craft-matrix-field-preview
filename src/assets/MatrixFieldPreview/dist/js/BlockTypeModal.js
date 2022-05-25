@@ -13,9 +13,11 @@ var MFP = MFP || {};
 
       this.config = config;
       this.defaultImageUrl = defaultImageUrl;
+      this.searching = false;
 
-      this.buildModal();
-      this.buildGridItems();
+      this.buildModal.call(this);
+      this.buildGridItems.call(this);
+      this.buildSearchBar.call(this);
     },
 
     buildModal: function () {
@@ -35,6 +37,27 @@ var MFP = MFP || {};
       );
     },
 
+    buildSearchBar: function () {
+      // Create elements
+      this.$header = $('<header class="header"/>').prependTo(this.$container);
+      this.$searchInputContainer = $(
+        '<div class="flex-grow texticon search icon clearable" />'
+      );
+      this.$searchInput = $(
+        '<input class="text" type="text" placeholder="Search" dir="ltr" aria-label="Search" />'
+      ).appendTo(this.$searchInputContainer);
+      this.$searchInputContainer.appendTo(this.$header);
+
+      // Place elements
+      this.$searchInput.appendTo(this.$searchInputContainer);
+      this.$searchInputContainer.appendTo(this.$header);
+
+      // When the user types
+      this.$searchInput.on("keyup", function (ev) {
+        this.search(ev.target.value);
+      }.bind(this));
+    },
+
     buildGridItems: function () {
       this.$grid = $("<div>", {
         class: "mfp-grid",
@@ -45,7 +68,13 @@ var MFP = MFP || {};
         function (i, blockTypeConfig) {
           var $item = $("<div>", {
             class: "mfp-grid-item",
-          }).attr("data-block-type", blockTypeConfig.handle);
+          })
+            .attr("data-block-type", blockTypeConfig.handle.toLowerCase())
+            .attr("data-name", blockTypeConfig.name.toLowerCase())
+            .attr(
+              "data-description",
+              blockTypeConfig.description.toLowerCase()
+            );
 
           var $img = $("<div>", {
             class: "mfp-grid-item__image mfp-grid-item__image--default",
@@ -73,6 +102,7 @@ var MFP = MFP || {};
 
           $item.prepend($img, $name, $description);
 
+          // When an item is clicked, insert it
           $item.on(
             "click",
             function () {
@@ -87,6 +117,45 @@ var MFP = MFP || {};
       );
 
       this.$body.append(this.$grid);
+    },
+
+    getGridItems: function() {
+      return this.$grid.find(".mfp-grid-item");
+    },
+
+    showAll: function() {
+      console.debug("Showing all grid items");
+      this.getGridItems().show();
+    },
+
+    resetSearch: function () {
+      this.$searchInput.value = "";
+      this.showAll();
+    },
+
+    search: function (query) {
+      console.debug(`Searching grid items for '${query}'`);
+
+      if (query.length <= 0) {
+        this.resetSearch();
+        return;
+      }
+
+      var lowerQuery = query.toLowerCase();
+      $.each(this.getGridItems(), function (i, gridItem) {
+        var blockType = $(gridItem).data("block-type");
+        var name = $(gridItem).data("name");
+        var description = $(gridItem).data("description");
+        var found =
+          blockType.includes(lowerQuery) ||
+          name.includes(lowerQuery) ||
+          description.includes(lowerQuery);
+        if (found) {
+          $(gridItem).show();
+        } else {
+          $(gridItem).hide();
+        }
+      }.bind(this));
     },
   });
 })(jQuery);

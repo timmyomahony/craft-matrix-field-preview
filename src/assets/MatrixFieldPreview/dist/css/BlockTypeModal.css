@@ -5,6 +5,14 @@
   height: 80vh;
 }
 
+/* Header */
+.modal.mfp-modal .header {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+
+/* Body */
 .modal.mfp-modal .body {
   overflow-y: auto;
   height: 100%;
@@ -12,6 +20,7 @@
   padding-bottom: 60px;
 }
 
+/* Footer */
 .modal.mfp-modal .footer {
   position: absolute;
   bottom: 0;
@@ -19,8 +28,7 @@
   width: 100%;
 }
 
-.mfp-grid {
-}
+/* Grid of items */
 .mfp-grid {
   width: 100%;
   display: grid;
