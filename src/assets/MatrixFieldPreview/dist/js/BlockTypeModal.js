@@ -8,6 +8,16 @@ var MFP = MFP || {};
    * custom block types
    */
   MFP.BlockTypeModal = Garnish.Modal.extend({
+    $container: undefined,
+    $body: undefined,
+    $footer: undefined,
+    $toolbar: undefined,
+    $buttons: undefined,
+    $cancelBtn: undefined,
+    $searchInputContainer: undefined,
+    $searchInput: undefined,
+    $grid: undefined,
+
     init: function (container, settings, config, defaultImageUrl) {
       Garnish.Modal.prototype.init.call(this, container, settings);
 
@@ -22,16 +32,42 @@ var MFP = MFP || {};
       // Hack to resize
       this.desiredWidth = 400;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
+
+      this.on(
+        "show",
+        function () {
+          this.$searchInput.focus();
+        }.bind(this)
+      );
+
+      this.on(
+        "hide",
+        function () {
+          this.resetSearch();
+        }.bind(this)
+      );
     },
 
     buildModal: function () {
       this.$container.addClass("modal mfp-modal");
-      this.$body = $('<div class="body"/>').appendTo(this.$container);
-      this.$footer = $('<footer class="footer"/>').appendTo(this.$container);
-      this.$buttons = $('<div class="buttons right"/>').appendTo(this.$footer);
+
+      this.$body = $('<div class="body"/>');
+      this.$footer = $('<footer class="mfp-modal__footer footer"/>');
+      this.$toolbar = $(
+        '<div class="mfp-modal__footer__toolbar toolbar flex flex-nowrap">'
+      );
+      this.$buttons = $(
+        '<div class="mfp-modal__footer__toolbar__buttons buttons right"/>'
+      );
       this.$cancelBtn = $(
         '<div class="btn">' + Craft.t("app", "Close") + "</div>"
-      ).appendTo(this.$buttons);
+      );
+
+      this.$body.appendTo(this.$container);
+      this.$footer.appendTo(this.$container);
+      this.$toolbar.appendTo(this.$footer);
+      this.$buttons.appendTo(this.$toolbar);
+      this.$cancelBtn.appendTo(this.$buttons);
 
       this.$cancelBtn.on(
         "click",
@@ -43,20 +79,16 @@ var MFP = MFP || {};
 
     buildSearchBar: function () {
       // Create elements
-      this.$header = $('<header class="header"/>').prependTo(this.$container);
       this.$searchInputContainer = $(
-        '<div class="flex-grow texticon search icon clearable" />'
+        '<div class="mfp-modal__footer__toolbar__search flex-grow texticon search icon clearable" />'
       );
       this.$searchInput = $(
         '<input class="text" type="text" placeholder="Search" dir="ltr" aria-label="Search" />'
-      ).appendTo(this.$searchInputContainer);
-      this.$searchInputContainer.appendTo(this.$header);
+      );
 
-      // Place elements
       this.$searchInput.appendTo(this.$searchInputContainer);
-      this.$searchInputContainer.appendTo(this.$header);
+      this.$searchInputContainer.prependTo(this.$toolbar);
 
-      // When the user types
       this.$searchInput.on(
         "keyup",
         function (ev) {
@@ -83,9 +115,11 @@ var MFP = MFP || {};
               blockTypeConfig.description.toLowerCase()
             );
 
-          var $img = $("<div>", {
+          var $imgContainer = $("<div>", {
             class: "mfp-grid-item__image mfp-grid-item__image--default",
-          }).append($("<img>").attr("src", this.defaultImageUrl));
+          });
+
+          var $img = $("<img>").attr("src", this.defaultImageUrl);
 
           var $content = $("<div>", {
             class: "mfp-grid-item__content",
@@ -94,11 +128,11 @@ var MFP = MFP || {};
           var $name = $("<h2>", {
             class: "mfp-grid-item__content__name",
             text: blockTypeConfig.name,
-          }).appendTo($content);
+          });
 
           var $description = $("<div>", {
             class: "mfp-grid-item__content__description",
-          }).appendTo($content);
+          });
 
           if (blockTypeConfig["image"]) {
             $img.removeClass("mfp-grid-item__image--default");
@@ -111,7 +145,10 @@ var MFP = MFP || {};
             $description.html(blockTypeConfig["descriptionHTML"]);
           }
 
-          $item.prepend($img, $content);
+          $img.appendTo($imgContainer);
+          $name.appendTo($content);
+          $description.appendTo($content);
+          $item.prepend($imgContainer, $content);
 
           var onClickHandler = function () {
             this.trigger("gridItemClicked", {
@@ -140,7 +177,7 @@ var MFP = MFP || {};
     },
 
     resetSearch: function () {
-      this.$searchInput.value = "";
+      this.$searchInput.val("");
       this.showAll();
     },
 
