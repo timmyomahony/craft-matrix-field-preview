@@ -21,7 +21,7 @@ var MFP = MFP || {};
 
       // Hack to resize
       this.desiredWidth = 400;
-      Garnish.Modal.prototype.updateSizeAndPosition.call(this)
+      Garnish.Modal.prototype.updateSizeAndPosition.call(this);
     },
 
     buildModal: function () {
@@ -57,9 +57,12 @@ var MFP = MFP || {};
       this.$searchInputContainer.appendTo(this.$header);
 
       // When the user types
-      this.$searchInput.on("keyup", function (ev) {
-        this.search(ev.target.value);
-      }.bind(this));
+      this.$searchInput.on(
+        "keyup",
+        function (ev) {
+          this.search(ev.target.value);
+        }.bind(this)
+      );
     },
 
     buildGridItems: function () {
@@ -86,14 +89,14 @@ var MFP = MFP || {};
 
           var $content = $("<div>", {
             class: "mfp-grid-item__content",
-          })
+          });
 
           var $name = $("<h2>", {
             class: "mfp-grid-item__content__name",
             text: blockTypeConfig.name,
           }).appendTo($content);
 
-          var $description = $("<p>", {
+          var $description = $("<div>", {
             class: "mfp-grid-item__content__description",
           }).appendTo($content);
 
@@ -105,20 +108,20 @@ var MFP = MFP || {};
             $name.text(blockTypeConfig["name"]);
           }
           if (blockTypeConfig["description"]) {
-            $description.text(blockTypeConfig["description"]);
+            $description.html(blockTypeConfig["descriptionHTML"]);
           }
 
           $item.prepend($img, $content);
 
+          var onClickHandler = function () {
+            this.trigger("gridItemClicked", {
+              config: blockTypeConfig,
+            });
+          };
+
           // When an item is clicked, insert it
-          $item.on(
-            "click",
-            function () {
-              this.trigger("gridItemClicked", {
-                config: blockTypeConfig,
-              });
-            }.bind(this)
-          );
+          $img.on("click", onClickHandler.bind(this));
+          $name.on("click", onClickHandler.bind(this));
 
           this.$grid.append($item);
         }.bind(this)
@@ -127,11 +130,11 @@ var MFP = MFP || {};
       this.$body.append(this.$grid);
     },
 
-    getGridItems: function() {
+    getGridItems: function () {
       return this.$grid.find(".mfp-grid-item");
     },
 
-    showAll: function() {
+    showAll: function () {
       console.debug("Showing all grid items");
       this.getGridItems().show();
     },
@@ -150,20 +153,23 @@ var MFP = MFP || {};
       }
 
       var lowerQuery = query.toLowerCase();
-      $.each(this.getGridItems(), function (i, gridItem) {
-        var blockType = $(gridItem).data("block-type");
-        var name = $(gridItem).data("name");
-        var description = $(gridItem).data("description");
-        var found =
-          blockType.includes(lowerQuery) ||
-          name.includes(lowerQuery) ||
-          description.includes(lowerQuery);
-        if (found) {
-          $(gridItem).show();
-        } else {
-          $(gridItem).hide();
-        }
-      }.bind(this));
+      $.each(
+        this.getGridItems(),
+        function (i, gridItem) {
+          var blockType = $(gridItem).data("block-type");
+          var name = $(gridItem).data("name");
+          var description = $(gridItem).data("description");
+          var found =
+            blockType.includes(lowerQuery) ||
+            name.includes(lowerQuery) ||
+            description.includes(lowerQuery);
+          if (found) {
+            $(gridItem).show();
+          } else {
+            $(gridItem).hide();
+          }
+        }.bind(this)
+      );
     },
   });
 })(jQuery);

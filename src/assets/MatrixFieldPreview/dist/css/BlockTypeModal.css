@@ -35,7 +35,6 @@
 }
 
 .mfp-grid-item {
-  cursor: pointer;
 }
 
 .mfp-grid-item:hover .mfp-grid-item__image {
@@ -51,6 +50,7 @@
   align-items: center;
   justify-content: center;
   transition: all 200ms linear;
+  cursor: pointer;
 }
 
 .mfp-grid-item__image img {
@@ -74,6 +74,7 @@
 
 .mfp-grid-item__content__name {
   margin: 0;
+  cursor: pointer;
 }
 
 .mfp-grid-item__content__description {

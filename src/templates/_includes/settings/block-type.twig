@@ -11,7 +11,7 @@
         {{ forms.textareaField({
             first: true,
             label: "Description"|t('matrix-field-preview'),
-            instructions: "A short description of this " ~ type | lower ~ " block"|t('matrix-field-preview'),
+            instructions: "A short description of this " ~ type | lower ~ " block. Can include markdown."|t('matrix-field-preview'),
             id: "description",
             name: "description",
             value: blockTypeConfig.description,
