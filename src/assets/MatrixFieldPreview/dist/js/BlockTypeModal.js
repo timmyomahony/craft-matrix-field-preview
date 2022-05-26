@@ -36,7 +36,12 @@ var MFP = MFP || {};
       this.on(
         "show",
         function () {
-          this.$searchInput.focus();
+          // For some reason, this is the only way to get autofocus on open
+          // working. It might have something to do with the way the modal
+          // fades in - possibly the input isn't visible/ready at this time.
+          setTimeout(function() {
+            this.$searchInput.focus();
+          }.bind(this), 500);
         }.bind(this)
       );
 
