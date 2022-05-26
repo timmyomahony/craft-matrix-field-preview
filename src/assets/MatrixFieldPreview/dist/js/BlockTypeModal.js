@@ -51,7 +51,7 @@ var MFP = MFP || {};
     buildModal: function () {
       this.$container.addClass("modal mfp-modal");
 
-      this.$body = $('<div class="body"/>');
+      this.$body = $('<div class="mfp-modal__body body"/>');
       this.$footer = $('<footer class="mfp-modal__footer footer"/>');
       this.$toolbar = $(
         '<div class="mfp-modal__footer__toolbar toolbar flex flex-nowrap">'
@@ -85,9 +85,13 @@ var MFP = MFP || {};
       this.$searchInput = $(
         '<input class="text" type="text" placeholder="Search" dir="ltr" aria-label="Search" />'
       );
+      this.$searchEmpty = $(
+        '<div class="mfp-modal__empty"><span>No results</span></div>'
+      );
 
       this.$searchInput.appendTo(this.$searchInputContainer);
       this.$searchInputContainer.prependTo(this.$toolbar);
+      this.$searchEmpty.appendTo(this.$body);
 
       this.$searchInput.on(
         "keyup",
@@ -176,9 +180,18 @@ var MFP = MFP || {};
       this.getGridItems().show();
     },
 
+    showEmpty: function () {
+      this.$searchEmpty.show().css("display", "flex");
+    },
+
+    hideEmpty: function () {
+      this.$searchEmpty.hide();
+    },
+
     resetSearch: function () {
       this.$searchInput.val("");
       this.showAll();
+      this.hideEmpty();
     },
 
     search: function (query) {
@@ -189,6 +202,7 @@ var MFP = MFP || {};
         return;
       }
 
+      var count = 0;
       var lowerQuery = query.toLowerCase();
       $.each(
         this.getGridItems(),
@@ -201,12 +215,19 @@ var MFP = MFP || {};
             name.includes(lowerQuery) ||
             description.includes(lowerQuery);
           if (found) {
+            count++;
             $(gridItem).show();
           } else {
             $(gridItem).hide();
           }
         }.bind(this)
       );
+
+      if (count == 0) {
+        this.showEmpty();
+      } else {
+        this.hideEmpty();
+      }
     },
   });
 })(jQuery);
