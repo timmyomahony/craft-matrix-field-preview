@@ -32,10 +32,10 @@
 .mfp-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   grid-column-gap: 25px;
-  grid-row-gap: 20px;
-  padding-bottom: 60px;
+  grid-row-gap: 30px;
+  padding-bottom: 100px;
 }
 
 .mfp-grid-item {
@@ -43,11 +43,11 @@
 }
 
 .mfp-grid-item__image {
+  display: flex;
   box-sizing: border-box;
   width: 100%;
   border-radius: 5px;
   padding: 10px;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -66,10 +66,15 @@
   max-width: 100px;
 }
 
-.mfp-grid-item__name {
-  margin: 15px 0 0 0;
+/* Content */
+.mfp-grid-item__content {
+  margin-top: 15px;
 }
 
-.mfp-grid-item__description {
+.mfp-grid-item__content__name {
+  margin: 0;
+}
+
+.mfp-grid-item__content__description {
   margin: 5px 0 0 0;
 }

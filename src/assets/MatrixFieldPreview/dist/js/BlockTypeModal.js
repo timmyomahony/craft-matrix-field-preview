@@ -80,14 +80,18 @@ var MFP = MFP || {};
             class: "mfp-grid-item__image mfp-grid-item__image--default",
           }).append($("<img>").attr("src", this.defaultImageUrl));
 
+          var $content = $("<div>", {
+            class: "mfp-grid-item__content",
+          })
+
           var $name = $("<h2>", {
-            class: "mfp-grid-item__name",
+            class: "mfp-grid-item__content__name h1",
             text: blockTypeConfig.name,
-          });
+          }).appendTo($content);
 
           var $description = $("<p>", {
-            class: "mfp-grid-item__description",
-          });
+            class: "mfp-grid-item__content__description",
+          }).appendTo($content);
 
           if (blockTypeConfig["image"]) {
             $img.removeClass("mfp-grid-item__image--default");
@@ -100,7 +104,7 @@ var MFP = MFP || {};
             $description.text(blockTypeConfig["description"]);
           }
 
-          $item.prepend($img, $name, $description);
+          $item.prepend($img, $content);
 
           // When an item is clicked, insert it
           $item.on(
