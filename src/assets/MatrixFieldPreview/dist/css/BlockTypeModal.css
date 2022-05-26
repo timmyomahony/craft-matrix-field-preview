@@ -1,8 +1,5 @@
 .modal.mfp-modal {
   display: none;
-  width: 1000px;
-  max-width: 80%;
-  height: 80vh;
 }
 
 /* Header */
@@ -42,6 +39,10 @@
   cursor: pointer;
 }
 
+.mfp-grid-item:hover .mfp-grid-item__image {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
 .mfp-grid-item__image {
   display: flex;
   box-sizing: border-box;
@@ -50,6 +51,7 @@
   padding: 10px;
   align-items: center;
   justify-content: center;
+  transition: all 200ms linear;
 }
 
 .mfp-grid-item__image img {
