@@ -30,8 +30,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  grid-column-gap: 25px;
-  grid-row-gap: 30px;
+  grid-row-gap: 40px;
   padding-bottom: 100px;
 }
 

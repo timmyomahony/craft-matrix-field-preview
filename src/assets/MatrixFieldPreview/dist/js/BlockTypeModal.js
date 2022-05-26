@@ -18,6 +18,10 @@ var MFP = MFP || {};
       this.buildModal.call(this);
       this.buildGridItems.call(this);
       this.buildSearchBar.call(this);
+
+      // Hack to resize
+      this.desiredWidth = 400;
+      Garnish.Modal.prototype.updateSizeAndPosition.call(this)
     },
 
     buildModal: function () {
@@ -85,7 +89,7 @@ var MFP = MFP || {};
           })
 
           var $name = $("<h2>", {
-            class: "mfp-grid-item__content__name h1",
+            class: "mfp-grid-item__content__name",
             text: blockTypeConfig.name,
           }).appendTo($content);
 
