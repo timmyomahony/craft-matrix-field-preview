@@ -161,7 +161,7 @@ var MFP = MFP || {};
           };
 
           // When an item is clicked, insert it
-          $img.on("click", onClickHandler.bind(this));
+          $imgContainer.on("click", onClickHandler.bind(this));
           $name.on("click", onClickHandler.bind(this));
 
           this.$grid.append($item);
