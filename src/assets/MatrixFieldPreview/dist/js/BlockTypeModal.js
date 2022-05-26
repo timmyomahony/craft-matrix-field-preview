@@ -29,15 +29,15 @@ var MFP = MFP || {};
       this.buildGridItems.call(this);
       this.buildSearchBar.call(this);
 
-      // Hack to resize
+      // HACK: This seems like the only way to resize.
       this.desiredWidth = 400;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
 
       this.on(
         "show",
         function () {
-          // For some reason, this is the only way to get autofocus on open
-          // working. It might have something to do with the way the modal
+          // HACK: For some reason, this is the only way to get autofocus on 
+          // open working. It might have something to do with the way the modal
           // fades in - possibly the input isn't visible/ready at this time.
           setTimeout(function() {
             this.$searchInput.focus();
