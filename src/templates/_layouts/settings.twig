@@ -20,6 +20,11 @@
                     {{ "General"|t("matrix-field-preview")}}
                 </a>
             </li>
+            <li>
+                <a href="{{ url('matrix-field-preview/settings/categories') }}"{% if selectedItem == "categories" %} class="sel"{% endif %}>
+                    {{ "Categories"|t("matrix-field-preview")}}
+                </a>
+            </li>
             <li class="heading"><span>{{ "Craft" | t }}</span></li>
             <li>
                 <a href="{{ url('matrix-field-preview/settings/matrix-fields') }}"{% if selectedItem == "matrix-fields" %} class="sel"{% endif %}>
