@@ -1,0 +1,18 @@
+{% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
+
+{% extends "matrix-field-preview/_layouts/categories" %}
+
+{% import '_includes/forms' as forms %}
+
+{% set fullPageForm = true %}
+
+{% set title = "Categories" | t("matrix-field-preview") %}
+
+{% block content %}
+    <input type="hidden" name="pluginHandle" value="matrix-field-preview">
+    <input type="hidden" name="action" value="plugins/save-plugin-settings">
+
+    {% namespace 'settings' %}
+        
+    {% endnamespace %}
+{% endblock %}
