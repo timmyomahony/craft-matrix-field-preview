@@ -6,9 +6,6 @@ use Craft;
 use craft\base\Component;
 
 
-/**
- *
- */
 abstract class BaseBlockTypeConfigService extends Component
 {
     protected $BlockTypeRecordConfigClass;

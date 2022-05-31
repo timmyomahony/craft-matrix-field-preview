@@ -3,10 +3,14 @@
 namespace weareferal\matrixfieldpreview\services;
 
 use Craft;
+use craft\base\Component;
+
+use benf\neo\Plugin as Neo;
+
 use weareferal\matrixfieldpreview\services\BaseBlockTypeConfigService;
 use weareferal\matrixfieldpreview\records\NeoBlockTypeConfigRecord;
 
-use benf\neo\Plugin as Neo;
+
 
 class NeoBlockTypeConfigService extends BaseBlockTypeConfigService
 {

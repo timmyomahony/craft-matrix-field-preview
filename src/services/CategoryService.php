@@ -1,10 +1,11 @@
 <?php
 
 namespace weareferal\matrixfieldpreview\services;
-use weareferal\matrixfieldpreview\records\CategoryRecord;
 
 use Craft;
 use craft\base\Component;
+
+use weareferal\matrixfieldpreview\records\CategoryRecord;
 
 
 class CategoryService extends Component

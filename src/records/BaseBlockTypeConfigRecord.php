@@ -4,26 +4,23 @@ namespace weareferal\matrixfieldpreview\records;
 
 use yii\db\ActiveQueryInterface;
 
+
 use Craft;
 use craft\db\ActiveRecord;
 use craft\records\Asset;
+
+use craft\records\MatrixBlockType;
 
 
 abstract class BaseBlockTypeConfigRecord extends ActiveRecord
 {
     protected $BlockTypeClass;
 
-    /**
-     * 
-     */
     public function getField(): ActiveQueryInterface
     {
         return $this->hasOne(Field::class, ['id' => 'fieldId']);
     }
 
-    /**
-     * 
-     */
     public function setField($field)
     {
         $this->fieldId = $field->id ?? null;

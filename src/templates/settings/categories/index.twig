@@ -1,0 +1,47 @@
+{#
+    See `src/templates/settings/categories/index.twig for more:
+    https://github.com/craftcms/cms/blob/2eac9249964ccc553bf841c79b9ee44d58f16b61/src/templates/settings/categories/index.twig
+#}
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% set title = "Categories" | t("matrix-field-preview") %}
+
+{% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
+
+{% block actionButton %}
+    <a href="{{ url('matrix-field-preview/settings/categories/create') }}" class="btn submit add icon">{{ "New category"|t('matrix-field-preview') }}</a>
+{% endblock %}
+
+{% block content %}
+    {% namespace 'settings' %}
+        <div id="matrix-field-preview-categories-vue-admin-table"></div>
+    {% endnamespace %}
+{% endblock %}
+
+{% set tableData = [] %}
+{% for category in categories %}
+    {% set tableData = tableData|merge([{
+        id: category.id,
+        title: category.name|t('matrix-field-preview'),
+        description: category.description|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings/categories/edit/' ~ category.id),
+        handle: category.handle,
+    }]) %}
+{% endfor %}
+
+{% js %}
+    var columns = [
+        {
+            name: '__slot:title',
+            title: Craft.t('matrix-field-preview', 'Name'),
+        },
+    ];
+
+    new Craft.VueAdminTable({
+        columns: columns,
+        container: '#matrix-field-preview-categories-vue-admin-table',
+        deleteAction: 'matrix-field-preview/settings/categories/delete',
+        emptyMessage: Craft.t('matrix-field-preview', 'No categories exist yet.'),
+        tableData: {{ tableData|json_encode|raw }}
+    });
+{% endjs %}

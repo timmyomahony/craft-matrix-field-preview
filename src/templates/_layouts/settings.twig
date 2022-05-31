@@ -16,7 +16,7 @@
         <ul>
             <li class="heading"><span>{{ "Settings" | t }}</span></li>
             <li>
-                <a href="{{ url('matrix-field-preview/settings/general') }}"{% if selectedItem == "general" %} class="sel"{% endif %}>
+                <a href="{{ url('matrix-field-preview/settings') }}"{% if craft.app.request.pathInfo == "matrix-field-preview/settings" %} class="sel"{% endif %}>
                     {{ "General"|t("matrix-field-preview")}}
                 </a>
             </li>

@@ -10,6 +10,7 @@ abstract class BaseFieldConfigService extends Component
 {
     protected $FieldRecordConfigClass;
     protected $fieldType;
+
     /**
      * Get All
      * 

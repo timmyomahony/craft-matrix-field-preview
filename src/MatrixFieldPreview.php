@@ -84,7 +84,7 @@ class MatrixFieldPreview extends Plugin
     public function getSettingsResponse()
     {
         Craft::$app->controller->redirect(
-            UrlHelper::cpUrl('matrix-field-preview/settings/general')
+            UrlHelper::cpUrl('matrix-field-preview/settings')
         );
     }
 
@@ -166,19 +166,18 @@ class MatrixFieldPreview extends Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $urls = [
-                    'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
-                    'matrix-field-preview/settings/categories' => 'matrix-field-preview/settings/categories',
-                    'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/settings/matrix-fields',
-                    'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/settings/matrix-block-types',
-                    'matrix-field-preview/settings/matrix-block-type' => 'matrix-field-preview/settings/matrix-block-type'
+                    'matrix-field-preview/settings' => 'matrix-field-preview/settings',
+                    'matrix-field-preview/settings/categories' => 'matrix-field-preview/categories',
+                    'matrix-field-preview/settings/categories/create' => 'matrix-field-preview/categories/create',
+                    'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/matrix-fields',
+                    'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/matrix-block-types',
                 ];
 
                 // Neo support
                 if (Craft::$app->plugins->isPluginEnabled("neo")) {
                     $urls = array_merge($urls, [
-                        'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/settings/neo-fields',
-                        'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/settings/neo-block-types',
-                        'matrix-field-preview/settings/neo-block-type' => 'matrix-field-preview/settings/neo-block-type',
+                        'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/neo-fields',
+                        'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/neo-block-types',
                     ]);
                 }
 
