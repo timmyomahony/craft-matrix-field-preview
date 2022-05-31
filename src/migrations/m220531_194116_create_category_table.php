@@ -6,9 +6,9 @@ use Craft;
 use craft\db\Migration;
 
 /**
- * m220531_194116_create_categories_table migration.
+ * m220531_194116_create_category_table migration.
  */
-class m220531_194116_create_categories_table extends Migration
+class m220531_194116_create_category_table extends Migration
 {
     /**
      * @inheritdoc
@@ -33,11 +33,11 @@ class m220531_194116_create_categories_table extends Migration
     protected function createTables()
     {
         $tablesCreated = false;
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_categories}}');
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%matrixfieldpreview_category}}');
         if ($tableSchema === null) {
             $tablesCreated = true;
             $this->createTable(
-                '{{%matrixfieldpreview_categories}}',
+                '{{%matrixfieldpreview_category}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
@@ -58,6 +58,6 @@ class m220531_194116_create_categories_table extends Migration
     protected function removeTables()
     {
         // matrixfieldpreview_previewrecord table
-        $this->dropTableIfExists('{{%matrixfieldpreview_categories}}');
+        $this->dropTableIfExists('{{%matrixfieldpreview_category}}');
     }
 }

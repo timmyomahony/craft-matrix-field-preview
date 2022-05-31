@@ -22,7 +22,7 @@ class SettingsController extends Controller
     protected $allowAnonymous = [];
 
     /**
-     * General Plugin Settings
+     * General Plugin Settings Controller
      */
     public function actionGeneral()
     {
@@ -38,7 +38,9 @@ class SettingsController extends Controller
     }
 
     /**
-     * Categories Settings
+     * Categories Settings Controller
+     * 
+     * Page to list all categories that have been created by the user.
      */
     public function actionCategories()
     {
@@ -46,15 +48,17 @@ class SettingsController extends Controller
 
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
+        $categories = $plugin->categoryService->getAll();
 
         return $this->renderTemplate('matrix-field-preview/settings/categories', [
             'settings' => $settings,
-            'plugin' => $plugin
+            'plugin' => $plugin,
+            'categories' => $categories
         ]);
     }
 
     /**
-     * Matrix Fields Settings
+     * Matrix Fields Settings Controller
      * 
      */
     public function actionMatrixFields()
@@ -67,7 +71,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Neo Fields Settings
+     * Neo Fields Settings Controller
      */
     public function actionNeoFields()
     {
@@ -83,7 +87,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Base Field Settings
+     * Shared Field Settings Controller
      */
     private function _actionFields($fieldService, $template, $templateVars = [])
     {
@@ -122,8 +126,9 @@ class SettingsController extends Controller
     }
 
     /**
-     * Matrix Block Types Settings
+     * Matrix Block Types Settings Controller
      * 
+     * Listing page for all Neo block types
      */
     public function actionMatrixBlockTypes()
     {
@@ -135,6 +140,11 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Neo Block Types Settings Controller
+     * 
+     * Listing page for all Neo block types
+     */
     public function actionNeoBlockTypes()
     {
         if (!Craft::$app->plugins->isPluginEnabled("neo")) {
@@ -149,6 +159,12 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Shared Block Types List Controller
+     * 
+     * A shared controller for rendering the configuration page for both
+     * Neo and Matrix field blocks.
+     */
     private function _actionBlockTypes($blockTypeConfigService, $fieldConfigService, $template, $templateVars = [])
     {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
@@ -178,8 +194,9 @@ class SettingsController extends Controller
     }
 
     /**
-     * Matrix Block Type Settings
+     * Matrix Block Type Settings Controller
      * 
+     * Detail page for a particular Matrix Block Type
      */
     public function actionMatrixBlockType($blockTypeId)
     {
@@ -194,6 +211,11 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Neo Block Type Settings Controller
+     * 
+     * Detail page for a particular Neo Block Type
+     */
     public function actionNeoBlockType($blockTypeId)
     {
         if (!Craft::$app->plugins->isPluginEnabled("neo")) {
@@ -211,6 +233,12 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Shared Block Type Detail Controller
+     * 
+     * A shared controller for rendering the configuration page for both
+     * Neo and Matrix detail page for block types.
+     */
     private function _actionBlockType(
         $blockTypeId,
         $blockTypeConfigService,
@@ -259,6 +287,11 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Matrix Upload Preview Image Controller
+     * 
+     * Settings page for uploading an image for a Matrix Block Type
+     */
     public function actionMatrixUploadPreviewImage()
     {
         $plugin = MatrixFieldPreview::getInstance();
@@ -267,6 +300,11 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Neo Upload Preview Image Controller
+     * 
+     * Settings page for uploading an image for a Neo Block Type
+     */
     public function actionNeoUploadPreviewImage()
     {
         if (!Craft::$app->plugins->isPluginEnabled("neo")) {
@@ -279,6 +317,11 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Shared Upload Preview Image Controller
+     * 
+     * Settings page for uploading an image for a Matrix Block Type
+     */
     public function _actionUploadPreviewImage($blockTypeConfigService)
     {
         $this->requireAcceptsJson();
@@ -328,6 +371,11 @@ class SettingsController extends Controller
         }
     }
 
+    /**
+     * Matrix Delete Preview Image Controller
+     * 
+     * Setting page to allow user to delete a preview image for matrix fields.
+     */
     public function actionMatrixDeletePreviewImage()
     {
         $plugin = MatrixFieldPreview::getInstance();
@@ -336,6 +384,11 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Neo Delete Preview Image Controller
+     * 
+     * Setting page to allow user to delete a preview image for Neo fields.
+     */
     public function actionNeoDeletePreviewImage()
     {
         if (!Craft::$app->plugins->isPluginEnabled("neo")) {
@@ -348,6 +401,11 @@ class SettingsController extends Controller
         );
     }
 
+    /**
+     * Shared Delete Preview Image Controller
+     * 
+     * Setting page to allow user to delete a preview image for Neo fields.
+     */
     private function _actionDeletePreviewImage($blockTypeConfigService)
     {
         $this->requireAcceptsJson();

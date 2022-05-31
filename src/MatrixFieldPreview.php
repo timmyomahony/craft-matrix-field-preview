@@ -17,6 +17,7 @@ use weareferal\matrixfieldpreview\services\NeoFieldConfigService;
 use weareferal\matrixfieldpreview\services\NeoBlockTypeConfigService;
 use weareferal\matrixfieldpreview\services\UtilsService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
+use weareferal\matrixfieldpreview\services\CategoryService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreview\MatrixFieldPreviewAsset;
 use weareferal\matrixfieldpreview\assets\NeoFieldPreview\NeoFieldPreviewAsset;
@@ -93,7 +94,8 @@ class MatrixFieldPreview extends Plugin
             'previewImageService' => PreviewImageService::class,
             'matrixFieldConfigService' => MatrixFieldConfigService::class,
             'matrixBlockTypeConfigService' => MatrixBlockTypeConfigService::class,
-            'utilsService' => UtilsService::class
+            'utilsService' => UtilsService::class,
+            'categoryService' => CategoryService::class
         ];
         // Neo support
         if (Craft::$app->plugins->isPluginEnabled("neo")) {
