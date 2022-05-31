@@ -64,6 +64,11 @@
 .mfp-grid-item {
 }
 
+.mfp-grid-item__image.focus-visible {
+  border: 3px solid #d5d5d5;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
 .mfp-grid-item:hover .mfp-grid-item__image {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
@@ -76,7 +81,7 @@
   padding: 10px;
   align-items: center;
   justify-content: center;
-  transition: all 200ms linear;
+  transition: box-shadow 200ms linear;
   cursor: pointer;
 }
 

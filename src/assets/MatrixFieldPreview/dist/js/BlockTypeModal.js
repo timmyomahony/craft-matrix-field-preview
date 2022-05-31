@@ -36,12 +36,15 @@ var MFP = MFP || {};
       this.on(
         "show",
         function () {
-          // HACK: For some reason, this is the only way to get autofocus on 
+          // HACK: For some reason, this is the only way to get autofocus on
           // open working. It might have something to do with the way the modal
           // fades in - possibly the input isn't visible/ready at this time.
-          setTimeout(function() {
-            this.$searchInput.focus();
-          }.bind(this), 500);
+          setTimeout(
+            function () {
+              this.$searchInput.focus();
+            }.bind(this),
+            500
+          );
         }.bind(this)
       );
 
@@ -107,14 +110,14 @@ var MFP = MFP || {};
     },
 
     buildGridItems: function () {
-      this.$grid = $("<div>", {
+      this.$grid = $("<ul>", {
         class: "mfp-grid",
       });
 
       $.each(
         this.config,
         function (i, blockTypeConfig) {
-          var $item = $("<div>", {
+          var $gridItem = $("<li>", {
             class: "mfp-grid-item",
           })
             .attr("data-block-type", blockTypeConfig.handle.toLowerCase())
@@ -124,9 +127,11 @@ var MFP = MFP || {};
               blockTypeConfig.description.toLowerCase()
             );
 
-          var $imgContainer = $("<div>", {
+          var $imgContainer = $("<button>", {
             class: "mfp-grid-item__image mfp-grid-item__image--default",
-          });
+          })
+            .attr("tabindex", 0)
+            .attr("role", "button");
 
           var $img = $("<img>").attr("src", this.defaultImageUrl);
 
@@ -157,7 +162,7 @@ var MFP = MFP || {};
           $img.appendTo($imgContainer);
           $name.appendTo($content);
           $description.appendTo($content);
-          $item.prepend($imgContainer, $content);
+          $gridItem.prepend($imgContainer, $content);
 
           var onClickHandler = function () {
             this.trigger("gridItemClicked", {
@@ -169,7 +174,7 @@ var MFP = MFP || {};
           $imgContainer.on("click", onClickHandler.bind(this));
           $name.on("click", onClickHandler.bind(this));
 
-          this.$grid.append($item);
+          this.$grid.append($gridItem);
         }.bind(this)
       );
 
@@ -209,8 +214,9 @@ var MFP = MFP || {};
 
       var count = 0;
       var lowerQuery = query.toLowerCase();
+      var $gridItems = this.getGridItems();
       $.each(
-        this.getGridItems(),
+        $gridItems,
         function (i, gridItem) {
           var blockType = $(gridItem).data("block-type");
           var name = $(gridItem).data("name");
@@ -232,6 +238,8 @@ var MFP = MFP || {};
         this.showEmpty();
       } else {
         this.hideEmpty();
+        // Focus the first result
+        // $gridItems.filter(":visible").find(".mfp-grid-item__image").get(0).focus();
       }
     },
   });
