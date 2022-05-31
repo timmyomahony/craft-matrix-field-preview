@@ -38,6 +38,22 @@ class SettingsController extends Controller
     }
 
     /**
+     * Categories Settings
+     */
+    public function actionCategories()
+    {
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
+
+        $plugin = MatrixFieldPreview::getInstance();
+        $settings = $plugin->getSettings();
+
+        return $this->renderTemplate('matrix-field-preview/settings/categories', [
+            'settings' => $settings,
+            'plugin' => $plugin
+        ]);
+    }
+
+    /**
      * Matrix Fields Settings
      * 
      */

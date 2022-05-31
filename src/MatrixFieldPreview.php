@@ -165,6 +165,7 @@ class MatrixFieldPreview extends Plugin
             function (RegisterUrlRulesEvent $event) {
                 $urls = [
                     'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
+                    'matrix-field-preview/settings/categories' => 'matrix-field-preview/settings/categories',
                     'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/settings/matrix-fields',
                     'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/settings/matrix-block-types',
                     'matrix-field-preview/settings/matrix-block-type' => 'matrix-field-preview/settings/matrix-block-type'
