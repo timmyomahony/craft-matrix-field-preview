@@ -67,6 +67,7 @@
 .mfp-grid-item__image.focus-visible {
   border: 3px solid #d5d5d5;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  transform: scale(1.005);
 }
 
 .mfp-grid-item:hover .mfp-grid-item__image {
@@ -80,7 +81,7 @@
   border-radius: 5px;
   align-items: center;
   justify-content: center;
-  transition: box-shadow 200ms linear;
+  transition: transform 100ms linear, box-shadow 200ms linear, border 10ms linear;
   cursor: pointer;
   border: 1px solid #d5d5d5;
   overflow: hidden;
