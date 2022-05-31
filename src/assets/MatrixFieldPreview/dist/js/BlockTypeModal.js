@@ -103,9 +103,9 @@ var MFP = MFP || {};
 
       this.$searchInput.on(
         "keyup",
-        function (ev) {
+        this.debounce(function (ev) {
           this.search(ev.target.value);
-        }.bind(this)
+        }.bind(this), 400)
       );
     },
 
@@ -204,6 +204,21 @@ var MFP = MFP || {};
       this.hideEmpty();
     },
 
+    debounce: function (func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    },
+
     search: function (query) {
       console.debug(`Searching grid items for '${query}'`);
 
@@ -239,7 +254,7 @@ var MFP = MFP || {};
       } else {
         this.hideEmpty();
         // Focus the first result
-        // $gridItems.filter(":visible").find(".mfp-grid-item__image").get(0).focus();
+        //$gridItems.filter(":visible").find(".mfp-grid-item__image").get(0).focus();
       }
     },
   });
