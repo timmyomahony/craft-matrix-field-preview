@@ -147,10 +147,9 @@ var MFP = MFP || {};
           var $description = $("<div>", {
             class: "mfp-grid-item__content__description",
           });
-
           if (blockTypeConfig["image"]) {
-            $img.removeClass("mfp-grid-item__image--default");
-            $img.children("img").attr("src", blockTypeConfig["image"]);
+            $imgContainer.removeClass("mfp-grid-item__image--default");
+            $img.attr("src", blockTypeConfig["image"]);
           }
           if (blockTypeConfig["name"]) {
             $name.text(blockTypeConfig["name"]);

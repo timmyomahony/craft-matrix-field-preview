@@ -78,11 +78,12 @@
   box-sizing: border-box;
   width: 100%;
   border-radius: 5px;
-  padding: 10px;
   align-items: center;
   justify-content: center;
   transition: box-shadow 200ms linear;
   cursor: pointer;
+  border: 1px solid #d5d5d5;
+  overflow: hidden;
 }
 
 .mfp-grid-item__image img {
