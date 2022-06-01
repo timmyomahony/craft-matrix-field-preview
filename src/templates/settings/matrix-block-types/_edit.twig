@@ -18,6 +18,11 @@
 ] %}
 
 {% block content %}
+    {{ actionInput('matrix-field-preview/matrix-block-types/save') }}
+    {{ redirectInput('matrix-field-preview/settings/matrix-block-types') }}
+
+    {% if blockType.id %}{{ hiddenInput('blockTypeId', blockType.id) }}{% endif %}
+
     {% include "matrix-field-preview/_includes/settings/block-type.twig" with {
         type: "matrix",
     } %}

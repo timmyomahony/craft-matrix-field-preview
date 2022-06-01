@@ -22,6 +22,10 @@ class CategoriesController extends Controller
         return parent::beforeAction($action);
     }
 
+    /**
+     * List all categories
+     * 
+     */
     public function actionIndex()
     {
         $plugin = MatrixFieldPreview::getInstance();
@@ -33,11 +37,26 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Create or edit a category
+     * Create a category
      * 
-     * This is based on the Craft tag model
+     */
+    public function actionCreate(?CategoryRecord $category = null)
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        $settings = $plugin->getSettings();
+
+        if (! $category) {
+            $category = new CategoryRecord();
+        }
+
+        return $this->renderTemplate('matrix-field-preview/settings/categories/_edit', [
+            'category' => $category
+        ]);
+    }
+
+    /**
+     * Edit a category
      * 
-     * https://github.com/craftcms/cms/blob/develop/src/controllers/TagsController.php#L56
      */
     public function actionEdit(int $categoryId, ?CategoryRecord $category = null)
     {
@@ -53,20 +72,10 @@ class CategoriesController extends Controller
         ]);
     }
 
-    public function actionCreate(?CategoryRecord $category = null)
-    {
-        $plugin = MatrixFieldPreview::getInstance();
-        $settings = $plugin->getSettings();
-
-        if (! $category) {
-            $category = new CategoryRecord();
-        }
-
-        return $this->renderTemplate('matrix-field-preview/settings/categories/_edit', [
-            'category' => $category
-        ]);
-    }
-
+    /**
+     * Save a category
+     * 
+     */
     public function actionSave()
     {
         $this->requirePostRequest();
@@ -104,6 +113,10 @@ class CategoriesController extends Controller
         return $this->redirectToPostedUrl($category);
     }
 
+    /**
+     * Delete a category
+     * 
+     */
     public function actionDelete():Response
     {
         $this->requirePostRequest();
@@ -115,6 +128,10 @@ class CategoriesController extends Controller
         return $this->asJson(['success' => true]);
     }
 
+    /**
+     * Reorder categories
+     * 
+     */
     public function actionReorder():Response
     {
         $this->requirePostRequest();

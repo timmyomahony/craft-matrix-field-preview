@@ -38,6 +38,17 @@ abstract class BaseBlockTypeConfigService extends Component
         return $record;
     }
 
+    public function save($blockTypeConfig): bool {
+        if (! $blockTypeConfig->validate()) {
+            Craft::info("Category not saved due to validation error", "matrix-field-preview");
+            return false;
+        }
+
+        $blockTypeConfig->save();
+
+        return true;
+    }
+
     /**
      * Get By Block Type ID
      * 

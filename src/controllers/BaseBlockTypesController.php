@@ -6,6 +6,7 @@ use yii\web\BadRequestHttpException;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
+use weareferal\matrixfieldpreview\records\BlockTypeConfig;
 
 use Craft;
 use craft\web\Controller;
@@ -28,6 +29,10 @@ abstract class BaseBlockTypesController extends Controller {
         return parent::beforeAction($action);
     }
 
+    /**
+     * List all block type configurations
+     * 
+     */
     public function actionIndex($templateVars = [])
     {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
@@ -59,50 +64,14 @@ abstract class BaseBlockTypesController extends Controller {
         ]);
     }
 
-    // public function actionEdit() {
-    //     $request = Craft::$app->request;
-    //     $plugin = MatrixFieldPreview::getInstance();
-    //     $settings = $plugin->getSettings();
-        
-    //     $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
-    //     $fieldsConfigService = $this->getFieldsConfigService($plugin);
-        
-    //     $this->view->registerJsVar('uploadImageUrl', $this->getRoutePrefix + "/upload");
-    //     $this->view->registerJsVar('deleteImageUrl', $this->getRoutePrefix + "/delete");
-    //     $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-
-    //     // First check that block type is valid
-    //     $blockType = $blockTypeConfigService->getBlockTypeById($blockTypeId);
-    //     if (!$blockType) {
-    //         throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
-    //     }
-
-    //     $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
-
-    //     if ($request->isPost) {
-    //         $post = $request->post();
-    //         $blockTypeConfig->description = $post['settings']['description'];
-    //         if ($blockTypeConfig->validate()) {
-    //             $blockTypeConfig->save();
-    //             Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
-    //             return $this->redirect($this->getRoutePrefix + "/index");
-    //         } else {
-    //             Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
-    //         }
-    //     }
-
-    //     return $this->renderTemplate(
-    //         $this->getRoutePrefix + "/index",
-    //         array_merge($templateVars, [
-    //             'blockTypeConfig' => $blockTypeConfig,
-    //             'plugin' => $plugin,
-    //             'fullPageForm' => true,
-    //             'settings' => $settings
-    //         ])
-    //     );
-    // }
-
-    public function actionEdit(int $blockTypeId)
+    /**
+     * Edit a block type configuration
+     * 
+     * Note that we receive the "blockTypeId" not the "blockTypeConfigId". This
+     * is because at the time of loading this action we don't know if the
+     * block type configuration actually exists yet.
+     */
+    public function actionEdit(int $blockTypeId, $blockTypeConfig = null)
     {
         $plugin = MatrixFieldPreview::getInstance();
         $settings = MatrixFieldPreview::getInstance()->getSettings();
@@ -116,19 +85,57 @@ abstract class BaseBlockTypesController extends Controller {
         $this->view->registerJsVar('deleteImageUrl', $deleteAction);
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
-        $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
+        if (! $blockTypeConfig) {
+            $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
+        }
 
         return $this->renderTemplate($this->getEditTemplate(), [
+            'blockType' => $blockTypeConfig->blockType,
             'blockTypeConfig' => $blockTypeConfig,
             'settings' => $settings
         ]);
     }
 
     /**
-     * Upload
+     * Save a block type configuration
      * 
      */
-    protected function actionUpload()
+    public function actionSave() {
+        $this->requirePostRequest();
+        
+        $plugin = MatrixFieldPreview::getInstance();
+        $settings = $plugin->getSettings();
+        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
+
+        $blockTypeId = $this->request->getBodyParam('blockTypeId');
+
+        $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
+        if (!$blockTypeConfig) {
+            throw new BadRequestHttpException("Invalid block type ID: $blockTypeId");
+        }
+
+        $blockTypeConfig->description = $this->request->getBodyParam('description');
+
+        if (! $blockTypeConfigService->save($blockTypeConfig)) {
+            $this->setFailFlash(Craft::t('matrix-field-preview', 'Couldn\'t save the preview.'));
+
+            // Send user back to the template
+            Craft::$app->getUrlManager()->setRouteParams([
+                'blockTypeConfig' => $blockTypeConfig,
+            ]);
+
+            return null;
+        }
+
+        $this->setSuccessFlash(Craft::t('matrix-field-preview', 'Preview saved.'));
+        return $this->redirectToPostedUrl($blockTypeConfig);
+    }
+
+    /**
+     * Upload a preview to a block type configuration
+     * 
+     */
+    protected function actionUploadPreview()
     {
         $this->requireAcceptsJson();
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
@@ -180,10 +187,10 @@ abstract class BaseBlockTypesController extends Controller {
     }
 
     /**
-     *
+     * Delete a preview belonging to a block type configuration
      * 
      */
-    public function actionDelete($blockTypeConfigService)
+    public function actionDeletePreview($blockTypeConfigService)
     {
         $this->requireAcceptsJson();
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
@@ -223,31 +230,31 @@ abstract class BaseBlockTypesController extends Controller {
 
     protected function getFieldsConfigService($plugin)
     {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented')); 
     }
 
     protected function getBlockTypeConfigService($plugin)
     {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented')); 
     }
 
     protected function getIndexTemplate()
     {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     protected function getEditTemplate()
     {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     protected function getUploadAction()
     {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     protected function getDeleteAction()
     {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 }

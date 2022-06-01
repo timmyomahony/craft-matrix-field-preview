@@ -83,4 +83,11 @@ abstract class BaseBlockTypeConfigRecord extends ActiveRecord
 
         return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/dummy-image.png', true);
     }
+
+    public function rules()
+    {
+        return [
+            ['description', 'string', 'max' => 1024],
+        ];
+    }
 }

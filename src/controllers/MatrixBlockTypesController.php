@@ -32,11 +32,11 @@ class MatrixBlockTypesController extends BaseBlockTypesController
 
     protected function getUploadAction()
     {
-        return 'matrix-field-preview/matrix-block-types/upload';
+        return 'matrix-field-preview/matrix-block-types/upload-preview';
     }
 
     protected function getDeleteAction()
     {
-        return 'matrix-field-preview/matrix-block-types/delete';
+        return 'matrix-field-preview/matrix-block-types/delete-preview';
     }
 }
