@@ -9,7 +9,7 @@
 <div class="field mfp-settings-table">
     <div class="heading">
         <label>{{ "Configure " ~ type | capitalize ~ " Fields"|t('matrix-field-preview') }}</label>
-        <div class="instructions"><p>{{ "Use this page to configure the " ~ type | lower ~ " fields you want previews to appear on." | t('matrix-field-preview') }}</p></div>
+        <div class="instructions"><p>{{ "Use this page to configure the fields you want previews to appear on. Once you have choosen which fields to enable, head to the 'Configure Previews' page to edit the previews themselves." | t('matrix-field-preview') }}</p></div>
     </div>
     {% if fields | length <= 0 %}
         <p class="warning with-icon"> {{ "No " ~ type | lower ~ " blocks exist yet"|t('matrix-field-preview') }}</p>
@@ -17,7 +17,7 @@
         <table id="fields" class="data fullwidth">
             <thead>
                 <th scope="col">{{ type | capitalize ~ " Field"|t('matrix-field-preview') }}</th>
-                <th scope="col">{{ "Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field." | t('matrix-field-preview') }}</p></span></th>
+                <th scope="col">{{ "Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field in the control panel." | t('matrix-field-preview') }}</p></span></th>
                 {% if showTakeover %}
                     <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default " ~ type | lower ~" field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
                 {% endif %}
