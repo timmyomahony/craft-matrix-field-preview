@@ -177,8 +177,8 @@ class MatrixFieldPreview extends Plugin
                 // Neo support
                 if (Craft::$app->plugins->isPluginEnabled("neo")) {
                     $urls = array_merge($urls, [
-                        // 'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/neo-fields',
-                        // 'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/neo-block-types',
+                        'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/neo-fields',
+                        'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/neo-block-types/index',
                     ]);
                 }
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace weareferal\matrixfieldpreview\controllers;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
@@ -8,42 +7,100 @@ use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldP
 use Craft;
 use craft\web\Controller;
 
-abstract class BaseFieldsController extends Controller {
-    protected $allowAnonymous = [];
 
-    protected function _actionFields($fieldService, $template, $templateVars = [])
+/**
+ * A shared controller for configuring fields for preview
+ * 
+ * A field in this context can either be a matrix field or a neo field. Having
+ * a shared controller like this allows us to reduce rewritten code between
+ * the two systems.
+ */
+abstract class BaseFieldsController extends Controller {
+
+    /**
+     * Enfore admin privileges
+     * 
+     */
+    public function beforeAction($action): bool
+    {
+        $this->requireAdmin();
+        return parent::beforeAction($action);
+    }
+
+    /**
+     * List all fields for configuration
+     * 
+     */
+    public function actionIndex()
     {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-        $plugin = MatrixFieldPreview::getInstance();
-        $settings = $plugin->getSettings();
-        $request = Craft::$app->request;
+        $plugin = MatrixFieldPreview::getInstance();       
+        $service = $this->getService($plugin);
+        $template = $this->getTemplate();
 
-        if ($request->isPost) {
-            $post = $request->post();
-            foreach ($post['settings'] as $handle => $values) {
-                $fieldConfig = $fieldService->getOrCreateByFieldHandle($handle);
-                if ($fieldConfig) {
-                    $fieldConfig->enablePreviews = $values['enablePreviews'];
-                    $fieldConfig->enableTakeover = $values['enableTakeover'];
-                    if ($fieldConfig->validate()) {
-                        $fieldConfig->save();
-                    }
+        $fields = $service->getAllFields();
+        $fieldConfigs = $service->getAll($sort = true);
+
+        return $this->renderTemplate($template, [
+            'fields' => $fields,
+            'fieldConfigs' => $fieldConfigs
+        ]);
+    }
+
+    /**
+     * Save the configuration of fields
+     * 
+     */
+    public function actionSave()
+    {
+        $this->requirePostRequest();
+        $plugin = MatrixFieldPreview::getInstance();
+        $service = $this->getService($plugin);
+
+        $post = $this->request->post();
+
+        if (! $post['settings']) {
+            return null;
+        }
+
+        foreach ($post['settings'] as $handle => $values) {
+            $fieldConfig = $service->getOrCreateByFieldHandle($handle);
+            if ($fieldConfig) {
+                $fieldConfig->enablePreviews = $values['enablePreviews'];
+                $fieldConfig->enableTakeover = $values['enableTakeover'];
+                if ($fieldConfig->validate()) {
+                    $fieldConfig->save();
                 }
             }
         }
 
-        $fields = $fieldService->getAllFields();
-        $fieldConfigs = $fieldService->getAll();
+        $fields = $service->getAllFields();
+        $fieldConfigs = $service->getAll($sort = true);
 
-        usort($fieldConfigs, function ($a, $b) {
-            return strcmp($a->field->name, $b->field->name);
-        });
+        $this->setSuccessFlash($this->getSuccessMessage());
+        return $this->redirectToPostedUrl();
+    }
 
-        return $this->renderTemplate($template, array_merge($templateVars, [
-            'settings' => $settings,
-            'plugin' => $plugin,
-            'fields' => $fields,
-            'fieldConfigs' => $fieldConfigs
-        ]));
+    /**
+     * Get the underlying service for the field type
+     * 
+     */
+    protected function getService($plugin) {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+    }
+
+    /**
+     * Get the underlying template to render
+     * 
+     */
+    protected function getTemplate() {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+    }
+
+    /**
+     * Get the underlying message for successful saves
+     */
+    protected function getSuccessMessage() {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
     }
 }

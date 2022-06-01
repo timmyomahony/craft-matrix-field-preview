@@ -2,60 +2,22 @@
 
 namespace weareferal\matrixfieldpreview\controllers;
 
-use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
+use weareferal\matrixfieldpreview\controllers\BaseFieldsController;
 
 use Craft;
-use craft\web\Controller;
 
 
-class MatrixFieldsController extends Controller
+class MatrixFieldsController extends BaseFieldsController
 {
-    public $defaultAction = 'index';
-
-    public function beforeAction($action): bool
-    {
-        $this->requireAdmin();
-        return parent::beforeAction($action);
+    protected function getTemplate() {
+        return 'matrix-field-preview/settings/matrix-fields/index';
     }
 
-    public function actionIndex()
-    {
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-        $plugin = MatrixFieldPreview::getInstance();       
-        $fieldService = $plugin->matrixFieldConfigService;
-
-        $fields = $fieldService->getAllFields();
-        $fieldConfigs = $fieldService->getAll($sort = true);
-
-        return $this->renderTemplate('matrix-field-preview/settings/matrix-fields/index', [
-            'fields' => $fields,
-            'fieldConfigs' => $fieldConfigs
-        ]);
+    protected function getService($plugin) {
+        return $plugin->matrixFieldConfigService;
     }
 
-    public function actionSave()
-    {
-        $this->requirePostRequest();
-        $plugin = MatrixFieldPreview::getInstance();
-        $fieldService = $plugin->matrixFieldConfigService;
-
-        $post = $this->request->post();
-        foreach ($post['settings'] as $handle => $values) {
-            $fieldConfig = $fieldService->getOrCreateByFieldHandle($handle);
-            if ($fieldConfig) {
-                $fieldConfig->enablePreviews = $values['enablePreviews'];
-                $fieldConfig->enableTakeover = $values['enableTakeover'];
-                if ($fieldConfig->validate()) {
-                    $fieldConfig->save();
-                }
-            }
-        }
-
-        $fields = $fieldService->getAllFields();
-        $fieldConfigs = $fieldService->getAll($sort = true);
-
-        $this->setSuccessFlash(Craft::t('matrix-field-preview', 'Matrix field configurations saved.'));
-        return $this->redirectToPostedUrl();
+    protected function getSuccessMessage() {
+        return Craft::t('matrix-field-preview', 'Matrix field configurations saved.');
     }
 }

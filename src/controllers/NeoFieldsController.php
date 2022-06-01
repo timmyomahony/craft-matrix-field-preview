@@ -2,23 +2,22 @@
 
 namespace weareferal\matrixfieldpreview\controllers;
 
-use weareferal\matrixfieldpreview\MatrixFieldPreview;
-use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
-
 use weareferal\matrixfieldpreview\controllers\BaseFieldsController;
+
+use Craft;
 
 
 class NeoFieldsController extends BaseFieldsController
 {
-    public $defaultAction = 'index';
+    protected function getTemplate() {
+        return 'matrix-field-preview/settings/neo-fields/index';
+    }
 
-    public function actionIndex()
-    {
-        $this->requireAdmin();
-        $plugin = MatrixFieldPreview::getInstance();        
-        return $this->_actionFields(
-            $plugin->neoFieldConfigService,
-            'matrix-field-preview/settings/neo-fields/index'
-        );
+    protected function getService($plugin) {
+        return $plugin->neoFieldConfigService;
+    }
+
+    protected function getSuccessMessage() {
+        return Craft::t('matrix-field-preview', 'Neo field configurations saved.');
     }
 }

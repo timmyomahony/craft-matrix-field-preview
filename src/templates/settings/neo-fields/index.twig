@@ -1,12 +1,24 @@
 {% extends "matrix-field-preview/_layouts/settings" %}
 
-{% set title = "Neo Fields Configuration" | t("matrix-field-preview") %}
+{% set title = "Neo Fields" | t("matrix-field-preview") %}
 
-{% set fullPageForm = true %}
+{% if craft.matrixFieldPreview.neoIsCompatibleVersion() and fields | length > 0 %}
+    {% set fullPageForm = true %}
+{% endif %}
+
+{% set crumbs = [
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    }
+] %}
 
 {% block content %}
+    {{ actionInput("matrix-field-preview/neo-fields/save") }}
+    {{ redirectInput("matrix-field-preview/settings/neo-fields") }}
+
     {% if not craft.matrixFieldPreview.neoIsCompatibleVersion() %}
-        <p class="warning with-icon">{{ "Neo version >= 2.8.14 is required for this integration to work properly. You'll still be able to configure the plugin in the meantime, but previews will not appear in the CP for user." | t("matrix-field-preview") }}</p>
+        <p class="warning with-icon"> {{ "Neo version >= 2.8.14 is required for this integration to work properly. You'll still be able to configure the plugin in the meantime, but previews will not appear in the CP for user." | t("matrix-field-preview") }}</p>
         <hr>        
     {% endif %}
     {% include "matrix-field-preview/_includes/settings/fields.twig" with {

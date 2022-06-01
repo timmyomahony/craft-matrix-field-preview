@@ -2,7 +2,9 @@
 
 {% set title = "Matrix Fields" | t("matrix-field-preview") %}
 
-{% set fullPageForm = true %}
+{% if fields | length > 0 %}
+    {% set fullPageForm = true %}
+{% endif %}
 
 {% set crumbs = [
     {
