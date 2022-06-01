@@ -39,15 +39,15 @@ class m220531_194116_create_category_table extends Migration
             $this->createTable(
                 '{{%matrixfieldpreview_category}}',
                 [
+                    // Active record defaults
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                    'siteId' => $this->integer()->notNull(),
                     // Custom columns in the table
                     'name' => $this->string(100)->notNull()->defaultValue(''),
                     'description' => $this->string(1024)->notNull()->defaultValue(''),
-                    'ordering' => $this->integer()->notNull(),
+                    'sortOrder' => $this->integer()->notNull()->defaultValue(0),
                 ]
             );
         }

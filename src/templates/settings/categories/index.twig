@@ -13,9 +13,7 @@
 {% endblock %}
 
 {% block content %}
-    {% namespace 'settings' %}
-        <div id="matrix-field-preview-categories-vue-admin-table"></div>
-    {% endnamespace %}
+    <div id="matrix-field-preview-categories-vue-admin-table"></div>
 {% endblock %}
 
 {% set tableData = [] %}
@@ -24,8 +22,7 @@
         id: category.id,
         title: category.name|t('matrix-field-preview'),
         description: category.description|t('matrix-field-preview'),
-        url: url('matrix-field-preview/settings/categories/edit/' ~ category.id),
-        handle: category.handle,
+        url: url('matrix-field-preview/settings/categories/' ~ category.id),
     }]) %}
 {% endfor %}
 
@@ -37,11 +34,13 @@
         },
     ];
 
+    // https://github.com/craftcms/cms/blob/2eac9249964ccc553bf841c79b9ee44d58f16b61/src/web/assets/admintable/README.md
     new Craft.VueAdminTable({
         columns: columns,
         container: '#matrix-field-preview-categories-vue-admin-table',
-        deleteAction: 'matrix-field-preview/settings/categories/delete',
+        deleteAction: 'matrix-field-preview/categories/delete',
         emptyMessage: Craft.t('matrix-field-preview', 'No categories exist yet.'),
-        tableData: {{ tableData|json_encode|raw }}
+        tableData: {{ tableData|json_encode|raw }},
+        reorderAction: "matrix-field-preview/categories/reorder"
     });
 {% endjs %}

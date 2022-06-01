@@ -14,8 +14,12 @@ class CategoryRecord extends ActiveRecord
         return '{{%matrixfieldpreview_category}}';
     }
 
-    public function getField(): ActiveQueryInterface
+    public function rules()
     {
-        return $this->hasOne(Field::class, ['id' => 'fieldId']);
+        return [
+            ['name', 'required'],
+            ['name', 'string', 'max' => 100],
+            ['description', 'string', 'max' => 1000],
+        ];
     }
 }
