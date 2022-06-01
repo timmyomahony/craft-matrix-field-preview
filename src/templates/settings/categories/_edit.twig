@@ -6,6 +6,17 @@
 
 {% import "_includes/forms" as forms %}
 
+{% set crumbs = [
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    },
+    {
+        label: "Categories"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings/categories')
+    }
+] %}
+
 {% block content %}
     {#
         FIXME: on the action, we have to use the default routing syntax to

@@ -12,6 +12,13 @@
     <a href="{{ url('matrix-field-preview/settings/categories/create') }}" class="btn submit add icon">{{ "New category"|t('matrix-field-preview') }}</a>
 {% endblock %}
 
+{% set crumbs = [
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    }
+] %}
+
 {% block content %}
     <div id="matrix-field-preview-categories-vue-admin-table"></div>
 {% endblock %}
