@@ -1,8 +1,14 @@
 {% extends "matrix-field-preview/_layouts/settings" %}
 
-{% set title = "Matrix Block Types" | t("matrix-field-preview") %}
+{% set title = "Matrix Field Previews" | t("matrix-field-preview") %}
 
-{% block submitButton %}{% endblock %}
+{% set crumbs = [
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    }
+] %}
+
 {% block content %}
     {% include "matrix-field-preview/_includes/settings/block-types.twig" with {
         type: "matrix",

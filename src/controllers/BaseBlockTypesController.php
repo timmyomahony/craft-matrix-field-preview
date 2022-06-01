@@ -17,21 +17,35 @@ use craft\elements\Asset;
 
 
 abstract class BaseBlockTypesController extends Controller {
-    protected $allowAnonymous = [];
 
-    protected function _actionIndex($blockTypeConfigService, $fieldConfigService, $template, $templateVars = [])
+    /**
+     * Enfore admin privileges
+     * 
+     */
+    public function beforeAction($action): bool
+    {
+        $this->requireAdmin();
+        return parent::beforeAction($action);
+    }
+
+    public function actionIndex($templateVars = [])
     {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
+
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
+        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
+        $fieldsConfigService = $this->getFieldsConfigService($plugin);
+    
         $assets = [
             'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
         ];
 
+        // Assemble the fields and field configs
         $fields = [];
-        foreach ($fieldConfigService->getAllFields() as $field) {
-            $fieldConfig = $fieldConfigService->getOrCreateByFieldHandle($field->handle);
+        foreach ($fieldsConfigService->getAllFields() as $field) {
+            $fieldConfig = $fieldsConfigService->getOrCreateByFieldHandle($field->handle);
             array_push($fields, [
                 'field' => $field,
                 'fieldConfig' => $fieldConfig,
@@ -39,30 +53,25 @@ abstract class BaseBlockTypesController extends Controller {
             ]);
         }
 
-        return $this->renderTemplate($template, array_merge($templateVars, [
-            'settings' => $settings,
-            'plugin' => $plugin,
+        return $this->renderTemplate($this->getIndexTemplate(), [
             'assets' => $assets,
             'fields' => $fields
-        ]));
+        ]);
     }
 
-    protected function _actionEdit(
-        $blockTypeId,
-        $blockTypeConfigService,
-        $uploadImageUrl,
-        $deleteImageUrl,
-        $redirect,
-        $template,
+    public function actionEdit(
         $templateVars = []
     ) {
-        $this->view->registerJsVar('uploadImageUrl', $uploadImageUrl);
-        $this->view->registerJsVar('deleteImageUrl', $deleteImageUrl);
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
-
         $request = Craft::$app->request;
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
+        
+        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
+        $fieldsConfigService = $this->getFieldsConfigService($plugin);
+        
+        $this->view->registerJsVar('uploadImageUrl', $this->getRoutePrefix + "/upload");
+        $this->view->registerJsVar('deleteImageUrl', $this->getRoutePrefix + "/delete");
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         // First check that block type is valid
         $blockType = $blockTypeConfigService->getBlockTypeById($blockTypeId);
@@ -78,14 +87,14 @@ abstract class BaseBlockTypesController extends Controller {
             if ($blockTypeConfig->validate()) {
                 $blockTypeConfig->save();
                 Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
-                return $this->redirect($redirect);
+                return $this->redirect($this->getRoutePrefix + "/index");
             } else {
                 Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
             }
         }
 
         return $this->renderTemplate(
-            $template,
+            $this->getRoutePrefix + "/index",
             array_merge($templateVars, [
                 'blockTypeConfig' => $blockTypeConfig,
                 'plugin' => $plugin,
@@ -95,11 +104,17 @@ abstract class BaseBlockTypesController extends Controller {
         );
     }
 
-    protected function _actionUpload($blockTypeConfigService)
+    /**
+     * Upload
+     * 
+     */
+    protected function actionUpload()
     {
         $this->requireAcceptsJson();
-        $this->requireLogin();
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
+
+        $plugin = MatrixFieldPreview::getInstance();
+        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
 
         $previewImageService = MatrixFieldPreview::getInstance()->previewImageService;
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
@@ -144,11 +159,17 @@ abstract class BaseBlockTypesController extends Controller {
         }
     }
 
-    protected function _actionDelete($blockTypeConfigService)
+    /**
+     *
+     * 
+     */
+    public function actionDelete($blockTypeConfigService)
     {
         $this->requireAcceptsJson();
-        $this->requireLogin();
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
+
+        $plugin = MatrixFieldPreview::getInstance();
+        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
 
         $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
         $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
@@ -169,7 +190,7 @@ abstract class BaseBlockTypesController extends Controller {
         ]);
     }
 
-    protected function _renderPreviewImageTemplate($blockTypeConfig): string
+    private function _renderPreviewImageTemplate($blockTypeConfig): string
     {
         $settings = MatrixFieldPreview::getInstance()->getSettings();
         $view = $this->getView();
@@ -178,5 +199,30 @@ abstract class BaseBlockTypesController extends Controller {
             'settings' => $settings,
             'blockTypeConfig' => $blockTypeConfig
         ], $templateMode);
+    }
+
+    protected function getFieldsConfigService($plugin)
+    {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+    }
+
+    protected function getBlockTypeConfigService($plugin)
+    {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+    }
+
+    protected function getRoutePrefix()
+    {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+    }
+
+    protected function getIndexTemplate()
+    {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
+    }
+
+    protected function getUploadAction()
+    {
+
     }
 }

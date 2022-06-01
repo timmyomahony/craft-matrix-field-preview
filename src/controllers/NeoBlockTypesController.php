@@ -9,56 +9,27 @@ use Craft;
 
 
 class NeoBlockTypesController extends BaseBlockTypesController
-{  
-    public $defaultAction = 'index';
-
-    public function actionIndex()
+{
+    public function beforeAction($action): bool
     {
-        $this->requireAdmin();
         if (!Craft::$app->plugins->isPluginEnabled("neo")) {
             throw new BadRequestHttpException('Plugin is not enabled');
         }
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionIndex(
-            $plugin->neoBlockTypeConfigService,
-            $plugin->neoFieldConfigService,
-            'matrix-field-preview/settings/neo-block-types/index'
-        );
+        return parent::beforeAction($action);
     }
-
-    public function actionEdit($blockTypeId)
+    
+    protected function getFieldsConfigService($plugin)
     {
-        $this->requireAdmin();
-        if (!Craft::$app->plugins->isPluginEnabled("neo")) {
-            throw new BadRequestHttpException('Plugin is not enabled');
-        }
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionEdit(
-            $blockTypeId,
-            $plugin->neoBlockTypeConfigService,
-            'matrix-field-preview/settings/neo-block-types/upload',
-            'matrix-field-preview/settings/neo-block-types/preview',
-            'matrix-field-preview/settings/neo-block-types/index',
-            'matrix-field-preview/settings/neo-block-types/edit'
-        );
+        return $plugin->neoFieldConfigService;
     }
 
-    public function actionUpload()
+    protected function getBlockTypeConfigService($plugin)
     {
-        $this->requireAdmin();
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionUpload(
-            $plugin->neoBlockTypeConfigService
-        );
+        return $plugin->neoBlockTypeConfigService;
     }
 
-    public function actionDelete()
+    protected function getIndexTemplate()
     {
-        $this->requireAdmin();
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionDelete(
-            $plugin->neoBlockTypeConfigService
-        );
+        return 'matrix-field-preview/settings/neo-block-types/index';
     }
-
 }

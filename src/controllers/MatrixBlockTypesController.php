@@ -10,46 +10,18 @@ class MatrixBlockTypesController extends BaseBlockTypesController
 {
     public $defaultAction = 'index';
 
-    public function actionIndex()
+    protected function getFieldsConfigService($plugin)
     {
-        $this->requireAdmin();
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionIndex(
-            $plugin->matrixBlockTypeConfigService,
-            $plugin->matrixFieldConfigService,
-            'matrix-field-preview/settings/matrix-block-types/index'
-        );
+        return $plugin->matrixFieldConfigService;
     }
 
-    public function actionEdit($blockTypeId)
+    protected function getBlockTypeConfigService($plugin)
     {
-        $this->requireAdmin();
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionEdit(
-            $blockTypeId,
-            $plugin->matrixBlockTypeConfigService,
-            'matrix-field-preview/settings/matrix-block-types/upload',
-            'matrix-field-preview/settings/matrix-block-types/preview',
-            'matrix-field-preview/settings/matrix-block-types/index',
-            'matrix-field-preview/settings/matrix-block-type/edit'
-        );
+        return $plugin->matrixBlockTypeConfigService;
     }
 
-    public function actionUpload()
+    protected function getIndexTemplate()
     {
-        $this->requireAdmin();
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionUpload(
-            $plugin->matrixBlockTypeConfigService
-        );
-    }
-
-    public function actionDelete()
-    {
-        $this->requireAdmin();
-        $plugin = MatrixFieldPreview::getInstance();
-        return $this->_actionDelete(
-            $plugin->matrixBlockTypeConfigService
-        );
+        return 'matrix-field-preview/settings/matrix-block-types/index';
     }
 }
