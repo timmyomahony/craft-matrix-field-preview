@@ -22,9 +22,7 @@
                             {% for blockTypeConfig in group.blockTypeConfigs %}
                                 <tr data-id="{{ loop.index }}" data-name="{{ blockTypeConfig.blockType.name }}">
                                     <td scope="row" data-title="Name">
-                                        <a href="{{ url('matrix-field-preview/settings/' ~ type | lower ~ '-block-type', {
-                                            blockTypeId: blockTypeConfig.blockType.id
-                                        }) }}">
+                                        <a href="{{ url('matrix-field-preview/settings/' ~ type | lower ~ '-block-types/' ~ blockTypeConfig.blockType.id) }}">
                                         <strong>{{ blockTypeConfig.blockType.name }}</strong></a>
                                     </td>
                                     <td scope="row" data-title="Description" {% if blockTypeConfig and blockTypeConfig.description %}title="{{ blockTypeConfig.description }}"{% endif %}>

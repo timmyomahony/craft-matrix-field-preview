@@ -24,4 +24,19 @@ class MatrixBlockTypesController extends BaseBlockTypesController
     {
         return 'matrix-field-preview/settings/matrix-block-types/index';
     }
+
+    protected function getEditTemplate()
+    {
+        return 'matrix-field-preview/settings/matrix-block-types/_edit';
+    }
+
+    protected function getUploadAction()
+    {
+        return 'matrix-field-preview/matrix-block-types/upload';
+    }
+
+    protected function getDeleteAction()
+    {
+        return 'matrix-field-preview/matrix-block-types/delete';
+    }
 }

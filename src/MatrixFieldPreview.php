@@ -172,6 +172,7 @@ class MatrixFieldPreview extends Plugin
                     'matrix-field-preview/settings/categories/<categoryId:\d+>' => 'matrix-field-preview/categories/edit',
                     'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/matrix-fields/index',
                     'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/matrix-block-types/index',
+                    'matrix-field-preview/settings/matrix-block-types/<blockTypeId:\d+>' => 'matrix-field-preview/matrix-block-types/edit',
                 ];
 
                 // Neo support
@@ -179,6 +180,7 @@ class MatrixFieldPreview extends Plugin
                     $urls = array_merge($urls, [
                         'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/neo-fields',
                         'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/neo-block-types/index',
+                        'matrix-field-preview/settings/neo-block-types/<blockTypeId:\d+>' => 'matrix-field-preview/neo-block-types/edit',
                     ]);
                 }
 

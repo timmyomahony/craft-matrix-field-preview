@@ -59,49 +59,69 @@ abstract class BaseBlockTypesController extends Controller {
         ]);
     }
 
-    public function actionEdit(
-        $templateVars = []
-    ) {
-        $request = Craft::$app->request;
-        $plugin = MatrixFieldPreview::getInstance();
-        $settings = $plugin->getSettings();
+    // public function actionEdit() {
+    //     $request = Craft::$app->request;
+    //     $plugin = MatrixFieldPreview::getInstance();
+    //     $settings = $plugin->getSettings();
         
-        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
-        $fieldsConfigService = $this->getFieldsConfigService($plugin);
+    //     $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
+    //     $fieldsConfigService = $this->getFieldsConfigService($plugin);
         
-        $this->view->registerJsVar('uploadImageUrl', $this->getRoutePrefix + "/upload");
-        $this->view->registerJsVar('deleteImageUrl', $this->getRoutePrefix + "/delete");
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
+    //     $this->view->registerJsVar('uploadImageUrl', $this->getRoutePrefix + "/upload");
+    //     $this->view->registerJsVar('deleteImageUrl', $this->getRoutePrefix + "/delete");
+    //     $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
-        // First check that block type is valid
-        $blockType = $blockTypeConfigService->getBlockTypeById($blockTypeId);
-        if (!$blockType) {
-            throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
-        }
+    //     // First check that block type is valid
+    //     $blockType = $blockTypeConfigService->getBlockTypeById($blockTypeId);
+    //     if (!$blockType) {
+    //         throw new NotFoundHttpException('Invalid matrix block type ID: ' . $blockTypeId);
+    //     }
+
+    //     $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
+
+    //     if ($request->isPost) {
+    //         $post = $request->post();
+    //         $blockTypeConfig->description = $post['settings']['description'];
+    //         if ($blockTypeConfig->validate()) {
+    //             $blockTypeConfig->save();
+    //             Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
+    //             return $this->redirect($this->getRoutePrefix + "/index");
+    //         } else {
+    //             Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
+    //         }
+    //     }
+
+    //     return $this->renderTemplate(
+    //         $this->getRoutePrefix + "/index",
+    //         array_merge($templateVars, [
+    //             'blockTypeConfig' => $blockTypeConfig,
+    //             'plugin' => $plugin,
+    //             'fullPageForm' => true,
+    //             'settings' => $settings
+    //         ])
+    //     );
+    // }
+
+    public function actionEdit(int $blockTypeId)
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        $settings = MatrixFieldPreview::getInstance()->getSettings();
+        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
+
+        $uploadAction = $this->getUploadAction();
+        $deleteAction = $this->getDeleteAction();
+    
+        // Set some frontend variables to help with JavaScript
+        $this->view->registerJsVar('uploadImageUrl', $uploadAction);
+        $this->view->registerJsVar('deleteImageUrl', $deleteAction);
+        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
 
-        if ($request->isPost) {
-            $post = $request->post();
-            $blockTypeConfig->description = $post['settings']['description'];
-            if ($blockTypeConfig->validate()) {
-                $blockTypeConfig->save();
-                Craft::$app->getSession()->setNotice(Craft::t('app', 'Preview saved.'));
-                return $this->redirect($this->getRoutePrefix + "/index");
-            } else {
-                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save preview.'));
-            }
-        }
-
-        return $this->renderTemplate(
-            $this->getRoutePrefix + "/index",
-            array_merge($templateVars, [
-                'blockTypeConfig' => $blockTypeConfig,
-                'plugin' => $plugin,
-                'fullPageForm' => true,
-                'settings' => $settings
-            ])
-        );
+        return $this->renderTemplate($this->getEditTemplate(), [
+            'blockTypeConfig' => $blockTypeConfig,
+            'settings' => $settings
+        ]);
     }
 
     /**
@@ -211,18 +231,23 @@ abstract class BaseBlockTypesController extends Controller {
         throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
     }
 
-    protected function getRoutePrefix()
+    protected function getIndexTemplate()
     {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
-    protected function getIndexTemplate()
+    protected function getEditTemplate()
     {
         throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     protected function getUploadAction()
     {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
+    }
 
+    protected function getDeleteAction()
+    {
+        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 }

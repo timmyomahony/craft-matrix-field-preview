@@ -4,9 +4,17 @@
 
 {% set title = "'" ~ blockTypeConfig.blockType.name ~ "' Preview" %}
 
+{% set fullPageForm = true %}
+
 {% set crumbs = [
-    { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
-    { label: "Matrix Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/neo-block-types') }
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    },
+    {
+        label: "Configure Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings/matrix-block-types')
+    }
 ] %}
 
 {% block content %}
