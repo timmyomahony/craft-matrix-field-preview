@@ -6,8 +6,6 @@
     {% set showTakeover = true %}
 {% endif %}
 
-{{ actionInput("matrix-field-preview/" ~ type | lower ~ "-fields") }}
-
 <div class="field mfp-settings-table">
     <div class="heading">
         <label>{{ "Configure " ~ type | capitalize ~ " Fields"|t('matrix-field-preview') }}</label>

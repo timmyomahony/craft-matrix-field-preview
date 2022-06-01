@@ -12,6 +12,9 @@
 ] %}
 
 {% block content %}
+    {{ actionInput("matrix-field-preview/matrix-fields/save") }}
+    {{ redirectInput("matrix-field-preview/settings/matrix-fields") }}
+
     {% include "matrix-field-preview/_includes/settings/fields.twig" with {
         type: "matrix",
     } %}

@@ -25,12 +25,9 @@ class CategoriesController extends Controller
     public function actionIndex()
     {
         $plugin = MatrixFieldPreview::getInstance();
-        $settings = $plugin->getSettings();
         $categories = $plugin->categoryService->getAll();
 
         return $this->renderTemplate('matrix-field-preview/settings/categories/index', [
-            'settings' => $settings,
-            'plugin' => $plugin,
             'categories' => $categories
         ]);
     }
@@ -44,8 +41,6 @@ class CategoriesController extends Controller
      */
     public function actionEdit(int $categoryId, ?CategoryRecord $category = null)
     {
-        
-
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
         
@@ -54,16 +49,12 @@ class CategoriesController extends Controller
         }
 
         return $this->renderTemplate('matrix-field-preview/settings/categories/_edit', [
-            'settings' => $settings,
-            'plugin' => $plugin,
             'category' => $category
         ]);
     }
 
     public function actionCreate(?CategoryRecord $category = null)
     {
-        
-
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
 
@@ -72,8 +63,6 @@ class CategoriesController extends Controller
         }
 
         return $this->renderTemplate('matrix-field-preview/settings/categories/_edit', [
-            'settings' => $settings,
-            'plugin' => $plugin,
             'category' => $category
         ]);
     }
@@ -82,7 +71,6 @@ class CategoriesController extends Controller
     {
         $this->requirePostRequest();
         
-
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
         $categoryService = $plugin->categoryService;
