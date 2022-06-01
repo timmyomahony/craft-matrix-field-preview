@@ -170,8 +170,8 @@ class MatrixFieldPreview extends Plugin
                     'matrix-field-preview/settings/categories' => 'matrix-field-preview/categories/index',
                     'matrix-field-preview/settings/categories/create' => 'matrix-field-preview/categories/create',
                     'matrix-field-preview/settings/categories/<categoryId:\d+>' => 'matrix-field-preview/categories/edit',
-                    // 'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/matrix-fields',
-                    // 'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/matrix-block-types',
+                    'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/matrix-fields/index',
+                    'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/matrix-block-types/index',
                 ];
 
                 // Neo support

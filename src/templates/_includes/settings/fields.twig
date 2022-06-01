@@ -6,8 +6,8 @@
     {% set showTakeover = true %}
 {% endif %}
 
-<input type="hidden" name="pluginHandle" value="matrix-field-preview">
-{{ actionInput("matrix-field-preview/settings/" ~ type | lower ~ "-fields") }}
+{{ actionInput("matrix-field-preview/" ~ type | lower ~ "-fields") }}
+
 <div class="field mfp-settings-table">
     <div class="heading">
         <label>{{ "Configure " ~ type | capitalize ~ " Fields"|t('matrix-field-preview') }}</label>
