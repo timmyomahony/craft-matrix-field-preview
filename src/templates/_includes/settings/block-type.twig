@@ -25,8 +25,8 @@
     {{ forms.selectField({
         label: 'Category'|t('matrix-field-preview'),
         instructions: 'Select a category for this preview to appear within.'|t('matrix-field-preview'),
-        id: 'category',
-        name: 'category',
+        id: 'categoryId',
+        name: 'categoryId',
         options: categoryOptions,
         value: blockTypeConfig.categoryId,
         errors: blockTypeConfig.getErrors("description"),

@@ -118,6 +118,7 @@ abstract class BaseBlockTypesController extends Controller {
         }
 
         $blockTypeConfig->description = $this->request->getBodyParam('description');
+        $blockTypeConfig->categoryId = $this->request->getBodyParam('categoryId');
 
         if (! $blockTypeConfigService->save($blockTypeConfig)) {
             $this->setFailFlash(Craft::t('matrix-field-preview', 'Couldn\'t save the preview.'));
