@@ -14,14 +14,8 @@ var MFP = MFP || {};
    */
   MFP.BlockTypeModal = Garnish.Modal.extend({
     $container: undefined,
-    $body: undefined,
-    $footer: undefined,
-    $toolbar: undefined,
-    $buttons: undefined,
-    $cancelBtn: undefined,
-    $searchInputContainer: undefined,
-    $searchInput: undefined,
-    $grid: undefined,
+
+    query: "",
 
     init: function (container, settings, config, defaultImageUrl) {
       this.config = config;
@@ -33,33 +27,11 @@ var MFP = MFP || {};
       Garnish.Modal.prototype.init.call(this, container, settings);
 
       this.buildModalHtml.call(this);
-      
-      
-
-      
-      // this.buildSidebarHtml.call(this);
-      // this.buildGridItems.call(this);
-      // this.buildSearchBar.call(this);
 
       // HACK: This seems like the only way to resize.
       this.desiredHeight = 1000;
       this.desiredWidth = 1200;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
-
-      // this.on(
-      //   "show",
-      //   function () {
-      //     // HACK: For some reason, this is the only way to get autofocus on
-      //     // open working. It might have something to do with the way the modal
-      //     // fades in - possibly the input isn't visible/ready at this time.
-      //     setTimeout(
-      //       function () {
-      //         this.$searchInput.focus();
-      //       }.bind(this),
-      //       500
-      //     );
-      //   }.bind(this)
-      // );
 
       // this.on(
       //   "hide",
@@ -119,16 +91,51 @@ var MFP = MFP || {};
       return footer;
     },
 
+    /**
+     * Build toolbar HTML 
+     *
+     */
     buildToolbarHtml: function () {
-      var toolbar = $("<div class='mfp-modal__toolbar toolbar flex flex-nowrap' />").append(
-        $("<div class='mfp-modal__toolbar__search flex-grow texticon search icon clearable' />").append(
-          $('<input class="mfp-modal__toolbar__search__input text fullwidth" type="text" placeholder="Search" dir="ltr" aria-label="Search" />')
-        )
+      var seachInput = $('<input />', {
+        class: "mfp-modal__toolbar__search__input text fullwidth",
+        type: "text",
+        placeholder: "Search",
+        dir: "ltr",
+        "aria-lable": "Search"
+      });
+      var searchContainer = $("<div />", {
+        class: "mfp-modal__toolbar__search flex-grow texticon search icon clearable"
+      });
+      var toolbar = $("<div />", {
+        class: "mfp-modal__toolbar toolbar flex flex-nowrap"
+      })
+      
+      toolbar.append(searchContainer.append(seachInput));
+
+      seachInput.on(
+        "keyup",
+        this.debounce(function (ev) {
+          this.query = ev.target.value;
+          this.filter();
+        }.bind(this), 400)
       );
+
       return toolbar;
     },
 
-    buildGridItemsHtml: function () {
+    /**
+     * Build empty message Html 
+     * 
+     */
+    buildEmptyMessageHtml: function () {
+      return $('<div class="mfp-modal__empty"><span>No block types found for "' + this.query + '"</span></div>');
+    },
+
+    /**
+     * Build grid items Html
+     * 
+     */
+     buildGridItemsHtml: function () {
       var gridContainer = $("<div />", {
         class: "mfp-modal__grid"
       })
@@ -200,6 +207,10 @@ var MFP = MFP || {};
       return gridContainer;
     },
 
+    /**
+     * Build model HTML
+     * 
+     */
     buildModalHtml: function () {
       this.$container.addClass("mfp-modal modal elementselectormodal");
 
@@ -208,87 +219,30 @@ var MFP = MFP || {};
       var main = $('<main class="mfp-modal__main main"/>');
       var toolbar = this.buildToolbarHtml();
       var grid = this.buildGridItemsHtml();
+      var emptyMessage = this.buildEmptyMessageHtml();
       var sidebar = this.buildSidebarHtml();
       var footer = this.buildFooterHtml();
       
       body.append(content);
-      main.append(toolbar).append(grid);
+      main.append(toolbar).append(emptyMessage).append(grid);
       content.append(sidebar).append(main)
       this.$container.append(body).append(footer);
     },
 
-    // buildSearchBar: function () {
-    //   // Create elements
-    //   this.$searchInputContainer = $(
-    //     '<div class="mfp-modal__footer__toolbar__search flex-grow texticon search icon clearable" />'
-    //   );
-    //   this.$searchInput = $(
-    //     '<input class="text" type="text" placeholder="Search" dir="ltr" aria-label="Search" />'
-    //   );
-    //   this.$searchEmpty = $(
-    //     '<div class="mfp-modal__empty"><span>No results</span></div>'
-    //   );
+    /**
+     * Filter 
+     *
+     */
+    filter: function () {
+      console.debug(`Filtering grid items for '${this.query}'`);
 
-    //   this.$searchInput.appendTo(this.$searchInputContainer);
-    //   this.$searchInputContainer.prependTo(this.$toolbar);
-    //   this.$searchEmpty.appendTo(this.$body);
-
-    //   this.$searchInput.on(
-    //     "keyup",
-    //     this.debounce(function (ev) {
-    //       this.search(ev.target.value);
-    //     }.bind(this), 400)
-    //   );
-    // },
-
-    getGridItems: function () {
-      return this.$grid.find(".mfp-grid-item");
-    },
-
-    showAll: function () {
-      console.debug("Showing all grid items");
-      this.getGridItems().show();
-    },
-
-    showEmpty: function () {
-      this.$searchEmpty.show().css("display", "flex");
-    },
-
-    hideEmpty: function () {
-      this.$searchEmpty.hide();
-    },
-
-    resetSearch: function () {
-      this.$searchInput.val("");
-      this.showAll();
-      this.hideEmpty();
-    },
-
-    debounce: function (func, wait, immediate) {
-      var timeout;
-      return function() {
-        var context = this, args = arguments;
-        var later = function() {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
-    },
-
-    search: function (query) {
-      console.debug(`Searching grid items for '${query}'`);
-
-      if (query.length <= 0) {
+      if (this.query.length <= 0) {
         this.resetSearch();
         return;
       }
 
       var count = 0;
-      var lowerQuery = query.toLowerCase();
+      var lowerQuery = this.query.toLowerCase();
       var $gridItems = this.getGridItems();
       $.each(
         $gridItems,
@@ -313,9 +267,45 @@ var MFP = MFP || {};
         this.showEmpty();
       } else {
         this.hideEmpty();
-        // Focus the first result
-        //$gridItems.filter(":visible").find(".mfp-grid-item__button").get(0).focus();
       }
+    },
+
+    getGridItems: function () {
+      return this.$container.find(".mfp-grid-item");
+    },
+
+    showAll: function () {
+      this.getGridItems().show();
+    },
+
+    showEmpty: function () {
+      this.$container.find(".mfp-modal__empty").show().css("display", "flex");
+    },
+
+    hideEmpty: function () {
+      this.$container.find(".mfp-modal__empty").hide();
+    },
+
+    resetSearch: function () {
+      this.$container.find(".mfp-modal__empty").val("");
+      this.query = "";
+      this.showAll();
+      this.hideEmpty();
+    },
+
+    debounce: function (func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
     },
   });
 })(jQuery);
