@@ -6,7 +6,7 @@
     {{ forms.textareaField({
         first: true,
         label: "Description"|t('matrix-field-preview'),
-        instructions: "A short description of this " ~ type | lower ~ " block. Can include markdown."|t('matrix-field-preview'),
+        instructions: "A short description of this " ~ type | lower ~ " preview. Can include markdown."|t('matrix-field-preview'),
         id: "description",
         name: "description",
         value: blockTypeConfig.description,
@@ -35,7 +35,7 @@
 
     {{ forms.field(
         {
-            instructions: "Upload a screenshot of your " ~ type | lower ~ " field block here. This will be visible when publishing content via the " ~ type | lower ~ " field",
+            instructions: "Upload a screenshot of your " ~ type | lower ~ " field block here. This will be visible when publishing content via the " ~ type | lower ~ " field.",
             label: "Preview Image"|t('matrix-field-preview'),
             id: 'preview'
         },

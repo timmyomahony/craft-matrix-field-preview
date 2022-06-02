@@ -30,7 +30,7 @@ var MFP = MFP || {};
       this.buildSearchBar.call(this);
 
       // HACK: This seems like the only way to resize.
-      this.desiredWidth = 400;
+      this.desiredHeight = 1000;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
 
       this.on(
@@ -128,7 +128,7 @@ var MFP = MFP || {};
             );
 
           var $imgContainer = $("<button>", {
-            class: "mfp-grid-item__image mfp-grid-item__image--default",
+            class: "mfp-grid-item__button mfp-grid-item__button--default",
           })
             .attr("tabindex", 0)
             .attr("role", "button");
@@ -148,7 +148,7 @@ var MFP = MFP || {};
             class: "mfp-grid-item__content__description",
           });
           if (blockTypeConfig["image"]) {
-            $imgContainer.removeClass("mfp-grid-item__image--default");
+            $imgContainer.removeClass("mfp-grid-item__button--default");
             $img.attr("src", blockTypeConfig["image"]);
           }
           if (blockTypeConfig["name"]) {
@@ -253,7 +253,7 @@ var MFP = MFP || {};
       } else {
         this.hideEmpty();
         // Focus the first result
-        //$gridItems.filter(":visible").find(".mfp-grid-item__image").get(0).focus();
+        //$gridItems.filter(":visible").find(".mfp-grid-item__button").get(0).focus();
       }
     },
   });
