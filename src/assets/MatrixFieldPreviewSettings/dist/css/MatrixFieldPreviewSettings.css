@@ -35,6 +35,10 @@
   height: 15px;
 }
 
+.mfp-settings-table__icon--help {
+  cursor: help;
+}
+
 /**
  * Preview image field
  */

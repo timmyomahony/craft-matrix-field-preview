@@ -2,8 +2,9 @@
 
 namespace weareferal\matrixfieldpreview\records;
 
-use weareferal\matrixfieldpreview\records\BaseBlockTypeConfigRecord;
 use benf\neo\records\BlockType;
+
+use weareferal\matrixfieldpreview\records\BaseBlockTypeConfigRecord;
 
 
 class NeoBlockTypeConfigRecord extends BaseBlockTypeConfigRecord

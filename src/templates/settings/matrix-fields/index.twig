@@ -1,0 +1,23 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% set title = "Matrix Fields" | t("matrix-field-preview") %}
+
+{% if fields | length > 0 %}
+    {% set fullPageForm = true %}
+{% endif %}
+
+{% set crumbs = [
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    }
+] %}
+
+{% block content %}
+    {{ actionInput("matrix-field-preview/matrix-fields/save") }}
+    {{ redirectInput("matrix-field-preview/settings/matrix-fields") }}
+
+    {% include "matrix-field-preview/_includes/settings/fields.twig" with {
+        type: "matrix",
+    } %}
+{% endblock %}

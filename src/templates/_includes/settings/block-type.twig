@@ -2,29 +2,43 @@
 
 {% import '_includes/forms' as forms %}
 
-{% set fullPageForm = true %}
-
 {% block content %}
-    <input type="hidden" name="pluginHandle" value="matrix-field-preview">
-    {{ actionInput('matrix-field-preview/settings/' ~ type | lower ~ '-block-type', {blockTypeId: blockTypeConfig.blockType.id}) }}
-    {% namespace 'settings' %}
-        {{ forms.textareaField({
-            first: true,
-            label: "Description"|t('matrix-field-preview'),
-            instructions: "A short description of this " ~ type | lower ~ " block. Can include markdown."|t('matrix-field-preview'),
-            id: "description",
-            name: "description",
-            value: blockTypeConfig.description,
-            errors: blockTypeConfig.getErrors("description")
-        }) }}
+    {{ forms.textareaField({
+        first: true,
+        label: "Description"|t('matrix-field-preview'),
+        instructions: "A short description of this " ~ type | lower ~ " block. Can include markdown."|t('matrix-field-preview'),
+        id: "description",
+        name: "description",
+        value: blockTypeConfig.description,
+        errors: blockTypeConfig.getErrors("description")
+    }) }}
 
-        {{ forms.field(
-            {
-                instructions: "Upload a screenshot of your " ~ type | lower ~ " field block here. This will be visible when publishing content via the " ~ type | lower ~ " field",
-                label: "Preview Image"|t('matrix-field-preview'),
-                id: 'preview'
-            },
-            include('matrix-field-preview/_includes/settings/preview-image-field', with_context = true)
-        )}}
-    {% endnamespace %}
+    {% set categoryOptions = [{
+        label: "No category" | t("matrix-field-preview"),
+        value: ""
+    }] %}
+
+    {% for category in categories %}
+        {% set categoryOptions = categoryOptions|merge([{ label: category.name, value: category.id }]) %}
+    {% endfor %}
+
+    {{ forms.selectField({
+        label: 'Category'|t('matrix-field-preview'),
+        instructions: 'Select a category for this preview to appear within.'|t('matrix-field-preview'),
+        id: 'categoryId',
+        name: 'categoryId',
+        options: categoryOptions,
+        value: blockTypeConfig.categoryId,
+        errors: blockTypeConfig.getErrors("description"),
+        disabled: (categories | length <= 0)
+    }) }}
+
+    {{ forms.field(
+        {
+            instructions: "Upload a screenshot of your " ~ type | lower ~ " field block here. This will be visible when publishing content via the " ~ type | lower ~ " field",
+            label: "Preview Image"|t('matrix-field-preview'),
+            id: 'preview'
+        },
+        include('matrix-field-preview/_includes/settings/preview-image-field', with_context = true)
+    )}}
 {% endblock %}

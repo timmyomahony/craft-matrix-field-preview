@@ -10,13 +10,14 @@ abstract class BaseFieldConfigService extends Component
 {
     protected $FieldRecordConfigClass;
     protected $fieldType;
+
     /**
      * Get All
      * 
      * Get or create new field configs for every matrix field currently
      * saved in the system
      */
-    public function getAll()
+    public function getAll($sort = false)
     {
         // TODO: performance can be improved here
         foreach ($this->getAllFields() as $field) {
@@ -33,7 +34,15 @@ abstract class BaseFieldConfigService extends Component
             }
         }
 
-        return $this->FieldRecordConfigClass::find()->all();
+        $fieldConfigs = $this->FieldRecordConfigClass::find()->all();
+        
+        if ($sort) {
+            usort($fieldConfigs, function ($a, $b) {
+                return strcmp($a->field->name, $b->field->name);
+            });
+        }
+
+        return $fieldConfigs;
     }
 
     /**
