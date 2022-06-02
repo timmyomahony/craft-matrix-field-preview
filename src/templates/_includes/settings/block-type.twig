@@ -13,6 +13,26 @@
         errors: blockTypeConfig.getErrors("description")
     }) }}
 
+    {% set categoryOptions = [{
+        label: "No category" | t("matrix-field-preview"),
+        value: ""
+    }] %}
+
+    {% for category in categories %}
+        {% set categoryOptions = categoryOptions|merge([{ label: category.name, value: category.id }]) %}
+    {% endfor %}
+
+    {{ forms.selectField({
+        label: 'Category'|t('matrix-field-preview'),
+        instructions: 'Select a category for this preview to appear within.'|t('matrix-field-preview'),
+        id: 'category',
+        name: 'category',
+        options: categoryOptions,
+        value: blockTypeConfig.categoryId,
+        errors: blockTypeConfig.getErrors("description"),
+        disabled: (categories | length <= 0)
+    }) }}
+
     {{ forms.field(
         {
             instructions: "Upload a screenshot of your " ~ type | lower ~ " field block here. This will be visible when publishing content via the " ~ type | lower ~ " field",

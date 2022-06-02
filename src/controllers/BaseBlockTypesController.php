@@ -89,10 +89,13 @@ abstract class BaseBlockTypesController extends Controller {
             $blockTypeConfig = $blockTypeConfigService->getOrCreateByBlockTypeId($blockTypeId);
         }
 
+        $categories = $plugin->categoryService->getAll();
+    
         return $this->renderTemplate($this->getEditTemplate(), [
             'blockType' => $blockTypeConfig->blockType,
             'blockTypeConfig' => $blockTypeConfig,
-            'settings' => $settings
+            'settings' => $settings,
+            'categories' => $categories
         ]);
     }
 
