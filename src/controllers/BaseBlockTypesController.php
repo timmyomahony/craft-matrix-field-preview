@@ -134,6 +134,10 @@ abstract class BaseBlockTypesController extends Controller {
     /**
      * Upload a preview to a block type configuration
      * 
+     * This image will be uploaded and stored as an asset, viewable just like
+     * any other asset.
+     * 
+     * NOTE: We are sending the block type config ID, not the block type ID.
      */
     public function actionUploadPreview()
     {
@@ -144,10 +148,10 @@ abstract class BaseBlockTypesController extends Controller {
         $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
 
         $previewImageService = MatrixFieldPreview::getInstance()->previewImageService;
-        $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
-        $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
+        $blockTypeConfigId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeConfigId');
+        $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeConfigId);
         if (!$blockTypeConfig) {
-            throw new NotFoundHttpException('Invalid preview ID: ' . $blockTypeId);
+            throw new NotFoundHttpException('Invalid preview ID for block type config: ' . $blockTypeConfigId);
         }
 
         if (($file = UploadedFile::getInstanceByName('previewImage')) === null) {
@@ -189,6 +193,7 @@ abstract class BaseBlockTypesController extends Controller {
     /**
      * Delete a preview belonging to a block type configuration
      * 
+     * NOTE: We are sending the block type config ID, not the block type ID.
      */
     public function actionDeletePreview()
     {
@@ -197,15 +202,16 @@ abstract class BaseBlockTypesController extends Controller {
         $plugin = MatrixFieldPreview::getInstance();
         $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
 
-        $blockTypeId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeId');
-        $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeId);
+        $blockTypeConfigId = Craft::$app->getRequest()->getRequiredBodyParam('blockTypeConfigId');
+        $blockTypeConfig = $blockTypeConfigService->getById((int) $blockTypeConfigId);
 
         if (!$blockTypeConfig) {
-            throw new NotFoundHttpException('Invalid preview ID: ' . $blockTypeId);
+            throw new NotFoundHttpException('Invalid preview ID for block type config: ' . $blockTypeConfigId);
         }
 
         if ($blockTypeConfig->previewImageId) {
-            Craft::$app->getElements()->deleteElementById($blockTypeConfig->previewImageId, Asset::class);
+            // https://github.com/craftcms/cms/blob/5bc54a47bc2160124e9fe13843a7808e258e4b70/src/services/Elements.php#L1620
+            $deleted = Craft::$app->getElements()->deleteElementById($blockTypeConfig->previewImageId, Asset::class, null, true);
         }
 
         $blockTypeConfig->previewImageId = null;

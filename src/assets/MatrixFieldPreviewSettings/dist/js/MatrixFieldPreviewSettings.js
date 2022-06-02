@@ -7,7 +7,7 @@
   if ($(".mfp-settings-preview-image").length > 0) {
     new Craft.ImageUpload({
       postParameters: {
-        blockTypeId: $(".mfp-settings-preview-image").attr("data-blocktype"),
+        blockTypeConfigId: $(".mfp-settings-preview-image").attr("data-blocktypeconfig"),
       },
       containerSelector: ".mfp-settings-preview-image",
       uploadAction: uploadImageUrl,

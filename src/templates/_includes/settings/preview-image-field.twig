@@ -8,7 +8,7 @@
 #}
 {% set volumeUid = settings.previewVolumeUid %}
 {% if volumeUid %}
-    <div class="mfp-settings-preview-image" data-blocktype="{{ blockTypeConfig.id }}">
+    <div class="mfp-settings-preview-image" data-blocktypeconfig="{{ blockTypeConfig.id }}">
         <div class="mfp-settings-preview-image__thumb">
             <img src="{{ blockTypeConfig.getThumbUrl(800) }}" alt="">
         </div>
