@@ -9,7 +9,7 @@ use craft\db\ActiveRecord;
 use craft\records\Asset;
 use craft\records\MatrixBlockType;
 
-use weareferal\matrixfieldpreview\records\Category;
+use weareferal\matrixfieldpreview\records\CategoryRecord;
 
 
 abstract class BaseBlockTypeConfigRecord extends ActiveRecord
@@ -52,7 +52,7 @@ abstract class BaseBlockTypeConfigRecord extends ActiveRecord
      */
     public function getCategory(): ActiveQueryInterface
     {
-        return $this->hasOne(Category, ['id' => 'categoryId']);
+        return $this->hasOne(CategoryRecord::class, ['id' => 'categoryId']);
     }
 
     public function setCategory($category)
