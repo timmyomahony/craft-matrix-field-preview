@@ -43,6 +43,7 @@ var MFP = MFP || {};
 
       // HACK: This seems like the only way to resize.
       this.desiredHeight = 1000;
+      this.desiredWidth = 1200;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
 
       // this.on(
