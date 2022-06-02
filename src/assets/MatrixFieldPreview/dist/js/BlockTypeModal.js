@@ -20,7 +20,7 @@ var MFP = MFP || {};
 
     init: function (container, settings, config, defaultImageUrl) {
       Garnish.Modal.prototype.init.call(this, container, settings);
-
+      
       this.config = config;
       this.defaultImageUrl = defaultImageUrl;
       this.searching = false;
