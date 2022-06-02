@@ -166,7 +166,7 @@ abstract class BaseBlockTypesController extends Controller {
             $previewImageService->savePreviewImage($fileLocation, $blockTypeConfig, $file->name);
 
             return $this->asJson([
-                'html' => $this->_renderPreviewImageTemplate($blockTypeConfig),
+                'html' => $this->_renderPreviewPartialTemplate($blockTypeConfig),
             ]);
         } catch (\Throwable $exception) {
             /** @noinspection UnSafeIsSetOverArrayInspection - FP */
@@ -190,10 +190,9 @@ abstract class BaseBlockTypesController extends Controller {
      * Delete a preview belonging to a block type configuration
      * 
      */
-    public function actionDeletePreview($blockTypeConfigService)
+    public function actionDeletePreview()
     {
         $this->requireAcceptsJson();
-        $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $plugin = MatrixFieldPreview::getInstance();
         $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
@@ -213,11 +212,11 @@ abstract class BaseBlockTypesController extends Controller {
         $blockTypeConfig->save();
 
         return $this->asJson([
-            'html' => $this->_renderPreviewImageTemplate($blockTypeConfig),
+            'html' => $this->_renderPreviewPartialTemplate($blockTypeConfig),
         ]);
     }
 
-    private function _renderPreviewImageTemplate($blockTypeConfig): string
+    private function _renderPreviewPartialTemplate($blockTypeConfig): string
     {
         $settings = MatrixFieldPreview::getInstance()->getSettings();
         $view = $this->getView();
