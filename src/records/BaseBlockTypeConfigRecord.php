@@ -7,23 +7,20 @@ use yii\db\ActiveQueryInterface;
 use Craft;
 use craft\db\ActiveRecord;
 use craft\records\Asset;
+use craft\records\MatrixBlockType;
+
+use weareferal\matrixfieldpreview\records\CategoryRecord;
 
 
 abstract class BaseBlockTypeConfigRecord extends ActiveRecord
 {
     protected $BlockTypeClass;
 
-    /**
-     * 
-     */
     public function getField(): ActiveQueryInterface
     {
         return $this->hasOne(Field::class, ['id' => 'fieldId']);
     }
 
-    /**
-     * 
-     */
     public function setField($field)
     {
         $this->fieldId = $field->id ?? null;
@@ -47,20 +44,34 @@ abstract class BaseBlockTypeConfigRecord extends ActiveRecord
     }
 
     /**
+     * Get category
+     * 
+     * An active record foreign key accessor
+     * 
+     * @fixme: why does Craft not use setters in any of its Records?
+     */
+    public function getCategory(): ActiveQueryInterface
+    {
+        return $this->hasOne(CategoryRecord::class, ['id' => 'categoryId']);
+    }
+
+    public function setCategory($category)
+    {
+        $this->categoryId = $category->id ?? null;
+    }
+
+    /**
      * Get preview image (asset)
      * 
      * An active record foreign key acessor
      * 
-     * FIXME: should this return an Element instead of an Record?
+     * @fixme: should this return an Element instead of an Record?
      */
     public function getPreviewImage()
     {
         return $this->hasOne(Asset::className(), ['id' => 'previewImageId']);
     }
 
-    /**
-     * Set the preview image (asset)
-     */
     public function setPreviewImage($previewImage)
     {
         $this->previewImageId = $previewImage->id ?? null;
@@ -69,7 +80,7 @@ abstract class BaseBlockTypeConfigRecord extends ActiveRecord
     /**
      * Get a thumbnail of the preview image
      * 
-     * FIXME: this is just proxying the request to the Asset Element which
+     * @fixme: this is just proxying the request to the Asset Element which
      * has its own getThumbUrl. Why not just return an Element from the above
      * getPreviewImage so we could use that {{ preview.previewImage.getThumbUrl() }}
      */
@@ -85,5 +96,12 @@ abstract class BaseBlockTypeConfigRecord extends ActiveRecord
         }
 
         return Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/dummy-image.png', true);
+    }
+
+    public function rules()
+    {
+        return [
+            ['description', 'string', 'max' => 1024],
+        ];
     }
 }

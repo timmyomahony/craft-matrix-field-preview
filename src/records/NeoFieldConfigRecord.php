@@ -14,6 +14,13 @@ class NeoFieldConfigRecord extends ActiveRecord
         return '{{%matrixfieldpreview_neo_fields_config}}';
     }
 
+    /**
+     * Get block type
+     * 
+     * An active record foreign key accessor
+     * 
+     * @fixme: why does Craft not use setters in any of its Records?
+     */
     public function getField(): ActiveQueryInterface
     {
         return $this->hasOne(Field::class, ['id' => 'fieldId']);

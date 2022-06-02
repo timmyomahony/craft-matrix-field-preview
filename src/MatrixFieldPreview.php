@@ -17,6 +17,7 @@ use weareferal\matrixfieldpreview\services\NeoFieldConfigService;
 use weareferal\matrixfieldpreview\services\NeoBlockTypeConfigService;
 use weareferal\matrixfieldpreview\services\UtilsService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
+use weareferal\matrixfieldpreview\services\CategoryService;
 use weareferal\matrixfieldpreview\models\Settings;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreview\MatrixFieldPreviewAsset;
 use weareferal\matrixfieldpreview\assets\NeoFieldPreview\NeoFieldPreviewAsset;
@@ -83,7 +84,7 @@ class MatrixFieldPreview extends Plugin
     public function getSettingsResponse()
     {
         Craft::$app->controller->redirect(
-            UrlHelper::cpUrl('matrix-field-preview/settings/general')
+            UrlHelper::cpUrl('matrix-field-preview/settings')
         );
     }
 
@@ -93,7 +94,8 @@ class MatrixFieldPreview extends Plugin
             'previewImageService' => PreviewImageService::class,
             'matrixFieldConfigService' => MatrixFieldConfigService::class,
             'matrixBlockTypeConfigService' => MatrixBlockTypeConfigService::class,
-            'utilsService' => UtilsService::class
+            'utilsService' => UtilsService::class,
+            'categoryService' => CategoryService::class
         ];
         // Neo support
         if (Craft::$app->plugins->isPluginEnabled("neo")) {
@@ -164,18 +166,21 @@ class MatrixFieldPreview extends Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $urls = [
-                    'matrix-field-preview/settings/general' => 'matrix-field-preview/settings/general',
-                    'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/settings/matrix-fields',
-                    'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/settings/matrix-block-types',
-                    'matrix-field-preview/settings/matrix-block-type' => 'matrix-field-preview/settings/matrix-block-type'
+                    'matrix-field-preview/settings' => 'matrix-field-preview/settings/index',
+                    'matrix-field-preview/settings/categories' => 'matrix-field-preview/categories/index',
+                    'matrix-field-preview/settings/categories/create' => 'matrix-field-preview/categories/create',
+                    'matrix-field-preview/settings/categories/<categoryId:\d+>' => 'matrix-field-preview/categories/edit',
+                    'matrix-field-preview/settings/matrix-fields' => 'matrix-field-preview/matrix-fields/index',
+                    'matrix-field-preview/settings/matrix-block-types' => 'matrix-field-preview/matrix-block-types/index',
+                    'matrix-field-preview/settings/matrix-block-types/<blockTypeId:\d+>' => 'matrix-field-preview/matrix-block-types/edit',
                 ];
 
                 // Neo support
                 if (Craft::$app->plugins->isPluginEnabled("neo")) {
                     $urls = array_merge($urls, [
-                        'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/settings/neo-fields',
-                        'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/settings/neo-block-types',
-                        'matrix-field-preview/settings/neo-block-type' => 'matrix-field-preview/settings/neo-block-type',
+                        'matrix-field-preview/settings/neo-fields' => 'matrix-field-preview/neo-fields',
+                        'matrix-field-preview/settings/neo-block-types' => 'matrix-field-preview/neo-block-types/index',
+                        'matrix-field-preview/settings/neo-block-types/<blockTypeId:\d+>' => 'matrix-field-preview/neo-block-types/edit',
                     ]);
                 }
 
