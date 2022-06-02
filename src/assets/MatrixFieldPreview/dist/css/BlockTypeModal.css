@@ -1,47 +1,90 @@
 .modal.mfp-modal {
   display: none;
-  width: 1000px;
-  max-width: 80%;
-  height: 80vh;
 }
 
+/* Header */
+.modal.mfp-modal .header {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* Body */
 .modal.mfp-modal .body {
   overflow-y: auto;
   height: 100%;
   width: 100%;
   padding-bottom: 60px;
+  position: relative;
 }
 
+/* Empty */
+.mfp-modal__empty {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  color: #8f98a3;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Footer */
 .modal.mfp-modal .footer {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
+  padding: 14px 24px;
 }
 
-.mfp-grid {
+.modal.mfp-modal .footer .buttons {
+  /* .mfp-modal__footer__toolbar__buttons */
+  margin: 0 0 0 10px;
 }
+
+.modal.mfp-modal .footer .search input {
+  /* .mfp-modal__footer__toolbar__search */
+  width: 100%;
+  margin: 0;
+}
+
+/* Grid of items */
 .mfp-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 25px;
-  grid-row-gap: 20px;
-  padding-bottom: 60px;
+  grid-template-columns: repeat(1, 1fr);
+  grid-row-gap: 30px;
+  padding-bottom: 100px;
 }
 
 .mfp-grid-item {
-  cursor: pointer;
+}
+
+.mfp-grid-item__image.focus-visible {
+  border: 3px solid #d5d5d5;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  transform: scale(1.005);
+}
+
+.mfp-grid-item:hover .mfp-grid-item__image {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .mfp-grid-item__image {
+  display: flex;
   box-sizing: border-box;
   width: 100%;
   border-radius: 5px;
-  padding: 10px;
-  display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 100ms linear, box-shadow 200ms linear, border 10ms linear;
+  cursor: pointer;
+  border: 1px solid #d5d5d5;
+  overflow: hidden;
 }
 
 .mfp-grid-item__image img {
@@ -58,10 +101,16 @@
   max-width: 100px;
 }
 
-.mfp-grid-item__name {
-  margin: 15px 0 0 0;
+/* Content */
+.mfp-grid-item__content {
+  margin-top: 10px;
 }
 
-.mfp-grid-item__description {
-  margin: 5px 0 0 0;
+.mfp-grid-item__content__name {
+  margin: 0;
+  cursor: pointer;
+}
+
+.mfp-grid-item__content__description {
+  margin: 2px 0 0 0;
 }

@@ -51,9 +51,9 @@ var MFP = MFP || {};
         text: this.config["name"],
       });
 
-      var $description = $("<p>", {
+      var $description = $("<div>", {
         class: "mfp-block-type-preview__description",
-        text: this.config["description"],
+        html: this.config["descriptionHTML"],
       });
 
       var $text = $("<div>").append($name, $description);

@@ -9,6 +9,7 @@ use Craft;
 use craft\web\Controller;
 
 use yii\web\NotFoundHttpException;
+use yii\helpers\Markdown;
 
 /**
  * Preview controller
@@ -78,6 +79,7 @@ class PreviewController extends Controller
                 "name" => $blockType->name,
                 "handle" => $blockType->handle,
                 "description" => $blockTypeConfig->description,
+                "descriptionHTML" => Markdown::process($blockTypeConfig->description),
                 "image" => null,
                 "thumb" => null
             ];

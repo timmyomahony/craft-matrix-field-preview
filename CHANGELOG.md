@@ -93,3 +93,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Fixed migration issues with latest release
+
+## 1.3.0 - 2022-06-01
+
+### Changed
+
+- Updated the modal layout
+
+### Added
+
+- Added a search function to the modal
+- Added ability to add markdown to descriptions
