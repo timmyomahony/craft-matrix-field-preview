@@ -135,7 +135,7 @@ abstract class BaseBlockTypesController extends Controller {
      * Upload a preview to a block type configuration
      * 
      */
-    protected function actionUploadPreview()
+    public function actionUploadPreview()
     {
         $this->requireAcceptsJson();
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);

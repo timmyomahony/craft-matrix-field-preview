@@ -14,7 +14,7 @@
       deleteAction: deleteImageUrl,
       uploadButtonSelector: ".btn.mfp-settings-preview-image__upload",
       deleteButtonSelector: ".btn.mfp-settings-preview-image__delete",
-      fileInputSelector: "input[name='settings[preview-image]']",
+      fileInputSelector: "input[name='preview-image']",
       uploadParamName: "previewImage",
     });
   }
