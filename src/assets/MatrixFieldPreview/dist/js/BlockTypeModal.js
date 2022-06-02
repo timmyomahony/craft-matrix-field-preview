@@ -69,6 +69,7 @@ var MFP = MFP || {};
       // );
     },
 
+
     buildSidebarHtml: function() {
       var sidebar = $('<aside class="mfp-modal__sidebar sidebar"/>');
 
@@ -96,19 +97,25 @@ var MFP = MFP || {};
     },
 
     buildFooterHtml: function() {
-      var footer = $('<footer class="mfp-modal__footer footer"/>');
-      // var footerToolbar = $('<div class="mfp-modal__footer__toolbar toolbar flex flex-nowrap">');
-      var footerButtons = $('<div class="mfp-modal__footer__toolbar__buttons buttons right"/>').append(
-          $('<div class="btn">' + Craft.t("matrix-field-preview", "Close") + "</div>")
-      );
-      // var footerSearch = $('<div class="mfp-modal__footer__toolbar__buttons buttons left"/>').append(
-      //   $(
-      //     '<input class="text" type="text" placeholder="Search" dir="ltr" aria-label="Search" />'
-      //   )
-      // ); 
-      
-      footer.append(footerButtons); //.append(footerSearch);
+      var footer = $('<footer />', {
+        class: "mfp-modal__footer footer"
+      });
+      var footerClose = $('<button />', {
+        class: "btn",
+        type: "button",
+        tabindex: 0
+      }).text(Craft.t("matrix-field-preview", "Close"));
+      var footerButtons = $('<div class="mfp-modal__footer__toolbar__buttons buttons right"/>');
 
+      footerClose.on(
+        "click",
+        function () {
+          this.hide();
+        }.bind(this)
+      );
+      
+      footerButtons.append(footerClose);
+      footer.append(footerButtons);
       return footer;
     },
 
@@ -176,15 +183,14 @@ var MFP = MFP || {};
           description.appendTo(content);
           gridItem.prepend(imgContainer, content);
 
-          // var onClickHandler = function () {
-          //   this.trigger("gridItemClicked", {
-          //     config: blockTypeConfig,
-          //   });
-          // };
-
-          // When an item is clicked, insert it
-          // imgContainer.on("click", onClickHandler.bind(this));
-          // name.on("click", onClickHandler.bind(this));
+          // Add click handlers
+          var onClickHandler = function () {
+            this.trigger("gridItemClicked", {
+              config: blockTypeConfig,
+            });
+          };
+          imgContainer.on("click", onClickHandler.bind(this));
+          name.on("click", onClickHandler.bind(this));
 
           grid.append(gridItem);
         }.bind(this)
@@ -194,11 +200,6 @@ var MFP = MFP || {};
       return gridContainer;
     },
 
-    /**
-     * Build the modal interface
-     * 
-     * This is based on the asset overlay modal.
-     */
     buildModalHtml: function () {
       this.$container.addClass("mfp-modal modal elementselectormodal");
 
@@ -214,13 +215,6 @@ var MFP = MFP || {};
       main.append(toolbar).append(grid);
       content.append(sidebar).append(main)
       this.$container.append(body).append(footer);
-
-      // footerCancel.on(
-      //   "click",
-      //   function () {
-      //     this.hide();
-      //   }.bind(this)
-      // );
     },
 
     // buildSearchBar: function () {
@@ -246,77 +240,6 @@ var MFP = MFP || {};
     //     }.bind(this), 400)
     //   );
     // },
-
-    buildGridItems: function () {
-      this.$grid = $("<ul>", {
-        class: "mfp-grid",
-      });
-
-      $.each(
-        this.config["blockTypes"],
-        function (i, blockTypeConfig) {
-          var $gridItem = $("<li>", {
-            class: "mfp-grid-item",
-          })
-            .attr("data-block-type", blockTypeConfig.handle.toLowerCase())
-            .attr("data-name", blockTypeConfig.name.toLowerCase())
-            .attr(
-              "data-description",
-              blockTypeConfig.description.toLowerCase()
-            );
-
-          var $imgContainer = $("<button>", {
-            class: "mfp-grid-item__button mfp-grid-item__button--default",
-          })
-            .attr("tabindex", 0)
-            .attr("role", "button");
-
-          var $img = $("<img>").attr("src", this.defaultImageUrl);
-
-          var $content = $("<div>", {
-            class: "mfp-grid-item__content",
-          });
-
-          var $name = $("<h2>", {
-            class: "mfp-grid-item__content__name",
-            text: blockTypeConfig.name,
-          });
-
-          var $description = $("<div>", {
-            class: "mfp-grid-item__content__description",
-          });
-          if (blockTypeConfig["image"]) {
-            $imgContainer.removeClass("mfp-grid-item__button--default");
-            $img.attr("src", blockTypeConfig["image"]);
-          }
-          if (blockTypeConfig["name"]) {
-            $name.text(blockTypeConfig["name"]);
-          }
-          if (blockTypeConfig["description"]) {
-            $description.html(blockTypeConfig["descriptionHTML"]);
-          }
-
-          $img.appendTo($imgContainer);
-          $name.appendTo($content);
-          $description.appendTo($content);
-          $gridItem.prepend($imgContainer, $content);
-
-          var onClickHandler = function () {
-            this.trigger("gridItemClicked", {
-              config: blockTypeConfig,
-            });
-          };
-
-          // When an item is clicked, insert it
-          $imgContainer.on("click", onClickHandler.bind(this));
-          $name.on("click", onClickHandler.bind(this));
-
-          this.$grid.append($gridItem);
-        }.bind(this)
-      );
-
-      this.$body.append(this.$grid);
-    },
 
     getGridItems: function () {
       return this.$grid.find(".mfp-grid-item");
