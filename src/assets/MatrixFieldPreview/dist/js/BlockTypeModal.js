@@ -3,26 +3,27 @@ var MFP = MFP || {};
 (function ($) {
   /**
    * Matrix Field Preview block type modal
-   * 
-   * A modal dialog based on the default Garnish modal code. This is also 
+   *
+   * A modal dialog based on the default Garnish modal code. This is also
    * built and styled with similar functionality to the default asset overlay
    * used on elements with a sidebar and search toolbar.
    *
    * Useful links:
-   * 
+   *
    * - https://github.com/craftcms/cms/blob/2d53a30c99b356ba79705f2a9181706e7c39b388/src/web/assets/garnish/src/Modal.js
    */
   MFP.BlockTypeModal = Garnish.Modal.extend({
     $container: undefined,
 
     query: "",
+    category: undefined,
 
     init: function (container, settings, config, defaultImageUrl) {
       this.config = config;
       this.defaultImageUrl = defaultImageUrl;
       this.searching = false;
 
-      settings['resizable'] = true;
+      settings["resizable"] = true;
 
       Garnish.Modal.prototype.init.call(this, container, settings);
 
@@ -32,52 +33,66 @@ var MFP = MFP || {};
       this.desiredHeight = 1000;
       this.desiredWidth = 1200;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
-
-      // this.on(
-      //   "hide",
-      //   function () {
-      //     this.resetSearch();
-      //   }.bind(this)
-      // );
     },
 
+    selectCategory: function (ev) {
+      var $href = $(ev.target);
+      this.category = $href.data("category");
+      this.$container.find(".mfp-modal__sidebar__a").removeClass("sel");
+      $href.addClass("sel");
+      this.filter();
+      ev.preventDefault;
+      return false;
+    },
 
-    buildSidebarHtml: function() {
+    buildSidebarHtml: function () {
       var sidebar = $('<aside class="mfp-modal__sidebar sidebar"/>');
-
       var sidebarNav = $('<nav class="mfp-modal__sidebar__nav" />');
       var sidebarUl = $('<ul class="mfp-modal__sidebar__ul" />');
 
       // Add link for each category
-      $.each(this.config["categories"], function(i, category) {
-        var sidebarLi = $("<li class='mfp-modal__sidebar__li'></li>").append(
-          $("<a class='mfp-modal__sidebar__a' />").text(category.name).attr("data-category", category.id)
-        );
-        sidebarUl.prepend(sidebarLi);
-      });
+      $.each(
+        this.config["categories"],
+        function (i, category) {
+          var sidebarLi = $("<li class='mfp-modal__sidebar__li'></li>").append(
+            $("<a class='mfp-modal__sidebar__a' />")
+              .text(category.name)
+              .attr("data-category", category.id)
+          );
+          sidebarUl.prepend(sidebarLi);
+
+          sidebarLi.on("click", this.selectCategory.bind(this));
+        }.bind(this)
+      );
       sidebar.append(sidebarNav.append(sidebarUl));
 
       // Add default 'All' option
-      var sidebarDefaultLi = $("<li class='mfp-modal__sidebar__li'></li>").append(
+      var sidebarDefaultLi = $(
+        "<li class='mfp-modal__sidebar__li'></li>"
+      ).append(
         $("<a class='mfp-modal__sidebar__a sel' />")
           .text(Craft.t("matrix-field-preview", "All Categories"))
           .attr("data-category", undefined)
       );
       sidebarUl.prepend(sidebarDefaultLi);
 
+      sidebarDefaultLi.on("click", this.selectCategory.bind(this));
+
       return sidebar;
     },
 
-    buildFooterHtml: function() {
-      var footer = $('<footer />', {
-        class: "mfp-modal__footer footer"
+    buildFooterHtml: function () {
+      var footer = $("<footer />", {
+        class: "mfp-modal__footer footer",
       });
-      var footerClose = $('<button />', {
+      var footerClose = $("<button />", {
         class: "btn",
         type: "button",
-        tabindex: 0
+        tabindex: 0,
       }).text(Craft.t("matrix-field-preview", "Close"));
-      var footerButtons = $('<div class="mfp-modal__footer__toolbar__buttons buttons right"/>');
+      var footerButtons = $(
+        '<div class="mfp-modal__footer__toolbar__buttons buttons right"/>'
+      );
 
       footerClose.on(
         "click",
@@ -85,61 +100,67 @@ var MFP = MFP || {};
           this.hide();
         }.bind(this)
       );
-      
+
       footerButtons.append(footerClose);
       footer.append(footerButtons);
       return footer;
     },
 
     /**
-     * Build toolbar HTML 
+     * Build toolbar HTML
      *
      */
     buildToolbarHtml: function () {
-      var seachInput = $('<input />', {
+      var seachInput = $("<input />", {
         class: "mfp-modal__toolbar__search__input text fullwidth",
         type: "text",
         placeholder: "Search",
         dir: "ltr",
-        "aria-lable": "Search"
+        "aria-lable": "Search",
       });
       var searchContainer = $("<div />", {
-        class: "mfp-modal__toolbar__search flex-grow texticon search icon clearable"
+        class:
+          "mfp-modal__toolbar__search flex-grow texticon search icon clearable",
       });
       var toolbar = $("<div />", {
-        class: "mfp-modal__toolbar toolbar flex flex-nowrap"
-      })
-      
+        class: "mfp-modal__toolbar toolbar flex flex-nowrap",
+      });
+
       toolbar.append(searchContainer.append(seachInput));
 
       seachInput.on(
         "keyup",
-        this.debounce(function (ev) {
-          this.query = ev.target.value;
-          this.filter();
-        }.bind(this), 400)
+        this.debounce(
+          function (ev) {
+            this.query = ev.target.value;
+            this.filter();
+          }.bind(this),
+          400
+        )
       );
 
       return toolbar;
     },
 
     /**
-     * Build empty message Html 
-     * 
+     * Build empty message Html
+     *
      */
     buildEmptyMessageHtml: function () {
-      return $('<div class="mfp-modal__empty"><span>No block types found</span></div>');
+      return $(
+        '<div class="mfp-modal__empty"><span>No block types found</span></div>'
+      );
     },
 
     /**
      * Build grid items Html
-     * 
+     *
      */
     buildGridItemsHtml: function () {
       var gridContainer = $("<div />", {
-        class: "mfp-modal__grid"
-      })
-      var grid = $("<ul />", { class: "mfp-grid"});
+        class: "mfp-modal__grid",
+      });
+      var grid = $("<ul />", { class: "mfp-grid" });
 
       $.each(
         this.config["blockTypes"],
@@ -149,10 +170,8 @@ var MFP = MFP || {};
           })
             .attr("data-block-type", blockTypeConfig.handle.toLowerCase())
             .attr("data-name", blockTypeConfig.name.toLowerCase())
-            .attr(
-              "data-description",
-              blockTypeConfig.description.toLowerCase()
-            );
+            .attr("data-description", blockTypeConfig.description.toLowerCase())
+            .attr("data-category", blockTypeConfig.categoryId);
 
           var imgContainer = $("<button>", {
             class: "mfp-grid-item__button mfp-grid-item__button--default",
@@ -202,14 +221,14 @@ var MFP = MFP || {};
           grid.append(gridItem);
         }.bind(this)
       );
-      
+
       gridContainer.append(grid);
       return gridContainer;
     },
 
     /**
      * Build model HTML
-     * 
+     *
      */
     buildModalHtml: function () {
       this.$container.addClass("mfp-modal modal elementselectormodal");
@@ -222,51 +241,58 @@ var MFP = MFP || {};
       var emptyMessage = this.buildEmptyMessageHtml();
       var sidebar = this.buildSidebarHtml();
       var footer = this.buildFooterHtml();
-      
+
       body.append(content);
       main.append(toolbar).append(emptyMessage).append(grid);
-      content.append(sidebar).append(main)
+      content.append(sidebar).append(main);
       this.$container.append(body).append(footer);
     },
 
     /**
-     * Filter 
+     * Filter
      *
      */
     filter: function () {
-      console.debug(`Filtering grid items for '${this.query}'`);
+      var query = this.query.toLowerCase();
+      var category = this.category;
 
-      if (this.query.length <= 0) {
-        this.resetSearch();
-        return;
-      }
+      var hasCategory = this.category !== undefined;
+      var hasQuery = query.length > 0;
 
-      var count = 0;
-      var lowerQuery = this.query.toLowerCase();
-      var $gridItems = this.getGridItems();
-      $.each(
-        $gridItems,
-        function (i, gridItem) {
-          var blockType = $(gridItem).data("block-type");
-          var name = $(gridItem).data("name");
-          var description = $(gridItem).data("description");
-          var found =
-            blockType.includes(lowerQuery) ||
-            name.includes(lowerQuery) ||
-            description.includes(lowerQuery);
-          if (found) {
-            count++;
-            $(gridItem).show();
-          } else {
-            $(gridItem).hide();
+      var $allGridItems = this.getGridItems();
+      var $activeGridItems = $allGridItems
+        .hide()
+        .filter(function() {
+          // First filter by category
+          if (hasCategory) {
+            return $(this).data("category") === category;
           }
-        }.bind(this)
-      );
-
-      if (count == 0) {
+          return true;
+        })
+        .filter(function () {
+          if (! hasQuery) {
+            return true;
+          } else {
+            var blockType = $(this).data("block-type");
+            var name = $(this).data("name");
+            var description = $(this).data("description");
+            return (
+              hasQuery &&
+              (
+                blockType.includes(query) ||
+                name.includes(query) ||
+                description.includes(query)
+              )
+            );
+          }
+        });
+  
+      $allGridItems.hide();
+      if ($activeGridItems.length === 0) {
         this.showEmpty();
       } else {
         this.hideEmpty();
+        $activeGridItems.show();
       }
     },
 
@@ -295,9 +321,10 @@ var MFP = MFP || {};
 
     debounce: function (func, wait, immediate) {
       var timeout;
-      return function() {
-        var context = this, args = arguments;
-        var later = function() {
+      return function () {
+        var context = this,
+          args = arguments;
+        var later = function () {
           timeout = null;
           if (!immediate) func.apply(context, args);
         };
