@@ -128,14 +128,14 @@ var MFP = MFP || {};
      * 
      */
     buildEmptyMessageHtml: function () {
-      return $('<div class="mfp-modal__empty"><span>No block types found for "' + this.query + '"</span></div>');
+      return $('<div class="mfp-modal__empty"><span>No block types found</span></div>');
     },
 
     /**
      * Build grid items Html
      * 
      */
-     buildGridItemsHtml: function () {
+    buildGridItemsHtml: function () {
       var gridContainer = $("<div />", {
         class: "mfp-modal__grid"
       })
