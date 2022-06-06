@@ -108,4 +108,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Categories. Blocks can be assigned to categories for easier filtering.
 - Search. You can now search via the modal preview.
 - Sorting. You can now set the order of previews.
+- Full-screen preview. You can now view a full-screen preview of the ... preview.
 - Markdown descriptions. Added ability to add markdown to descriptions.
