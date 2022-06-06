@@ -59,7 +59,7 @@ var MFP = MFP || {};
               .text(category.name)
               .attr("data-category", category.id)
           );
-          sidebarUl.prepend(sidebarLi);
+          sidebarUl.append(sidebarLi);
 
           sidebarLi.on("click", this.selectCategory.bind(this));
         }.bind(this)
@@ -233,18 +233,32 @@ var MFP = MFP || {};
     buildModalHtml: function () {
       this.$container.addClass("mfp-modal modal elementselectormodal");
 
-      var body = $('<div class="mfp-modal__body body has-sidebar"/>');
-      var content = $('<div class="mfp-modal__content content has-sidebar"/>');
-      var main = $('<main class="mfp-modal__main main"/>');
+      var includeCategories = this.config.categories.length > 0;
+
+      var body = $('<div />', {
+        class: "mfp-modal__body body"
+      });
+      var content = $('<div />', {
+        class: "mfp-modal__content content"
+      });
+      var main = $('<main />', {
+        class: "mfp-modal__main main"
+      });
       var toolbar = this.buildToolbarHtml();
       var grid = this.buildGridItemsHtml();
       var emptyMessage = this.buildEmptyMessageHtml();
-      var sidebar = this.buildSidebarHtml();
       var footer = this.buildFooterHtml();
+      
+      if (includeCategories) {
+        var sidebar = this.buildSidebarHtml();
+        body.addClass("has-sidebar");
+        content.addClass("has-sidebar")
+        content.append(sidebar)
+      }
 
       body.append(content);
       main.append(toolbar).append(emptyMessage).append(grid);
-      content.append(sidebar).append(main);
+      content.append(main);
       this.$container.append(body).append(footer);
     },
 
