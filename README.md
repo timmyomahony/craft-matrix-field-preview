@@ -109,7 +109,4 @@ Craft Matrix Field now support [Craft Neo Fields too](https://github.com/spicywe
 
 ## Support
 
-<img src="resources/img/feral-logo.svg" width="250px">
-
-Brought to you by [Feral](https://weareferal.com). If you have any problems please leave an issue on Github or find us on the Craft Discord (username `timmy`).
-
+If you have any problems please leave an issue on Github or find us on the Craft Discord (username `timmy`).
