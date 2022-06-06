@@ -17,7 +17,9 @@ abstract class BaseBlockTypeConfigService extends Component
      */
     public function getAll()
     {
-        return $this->BlockTypeRecordConfigClass::find()->all();
+        return $this->BlockTypeRecordConfigClass::find()
+            ->orderBy(['sortOrder' => SORT_ASC])
+            ->all();
     }
 
     /**
@@ -46,6 +48,21 @@ abstract class BaseBlockTypeConfigService extends Component
 
         $blockTypeConfig->save();
 
+        return true;
+    }
+
+    public function reorder(array $blockTypeConfigIds): bool
+    {
+        Craft::info($blockTypeConfigIds, "craft-matrix-field");
+        foreach ($this->getAll() as $i => $blockTypeConfig) {
+            $sortOrder = array_search((string) $blockTypeConfig->id, $blockTypeConfigIds);
+            Craft::info($blockTypeConfig->id, "craft-matrix-field");
+            if ($sortOrder !== false) {
+                Craft::info("-" . $sortOrder, "craft-matrix-field");
+                $blockTypeConfig->sortOrder = $sortOrder;
+                $blockTypeConfig->save();
+            }
+        }
         return true;
     }
 
@@ -105,6 +122,10 @@ abstract class BaseBlockTypeConfigService extends Component
 
             array_push($records, $record);
         }
+
+        usort($records, function ($a, $b) {
+            return strcmp($a->sortOrder, $b->sortOrder);
+        });
 
         return $records;
     }

@@ -39,4 +39,9 @@ class MatrixBlockTypesController extends BaseBlockTypesController
     {
         return 'matrix-field-preview/matrix-block-types/delete-preview';
     }
+
+    protected function getEditAction($id)
+    {
+        return 'matrix-field-preview/settings/matrix-block-types/' . $id;
+    }
 }

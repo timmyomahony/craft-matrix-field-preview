@@ -47,4 +47,9 @@ class NeoBlockTypesController extends BaseBlockTypesController
     {
         return 'matrix-field-preview/neo-block-types/delete-preview';
     }
+
+    protected function getEditAction($id)
+    {
+        return 'matrix-field-preview/settings/neo-block-types/' . $id;
+    }
 }

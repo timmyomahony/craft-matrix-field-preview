@@ -14,7 +14,9 @@ use craft\web\UploadedFile;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
 use craft\helpers\FileHelper;
+use craft\helpers\UrlHelper;
 use craft\elements\Asset;
+use craft\helpers\Json;
 
 
 abstract class BaseBlockTypesController extends Controller {
@@ -35,6 +37,7 @@ abstract class BaseBlockTypesController extends Controller {
      */
     public function actionIndex($templateVars = [])
     {
+        // Required for CSS files
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
 
         $plugin = MatrixFieldPreview::getInstance();
@@ -43,25 +46,66 @@ abstract class BaseBlockTypesController extends Controller {
         $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
         $fieldsConfigService = $this->getFieldsConfigService($plugin);
     
-        $assets = [
-            'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png')
-        ];
-
-        // Assemble the fields and field configs
         $fields = [];
         foreach ($fieldsConfigService->getAllFields() as $field) {
             $fieldConfig = $fieldsConfigService->getOrCreateByFieldHandle($field->handle);
+            $blockTypeConfigs = $blockTypeConfigService->getOrCreateByFieldHandle($field->handle);
+
+            if (! $fieldConfig->enablePreviews) {
+                continue;
+            }
+
+            // Tabledata is required for use with the existing Craft.VueAdminTable
+            $tableData = [];
+            foreach ($blockTypeConfigs as $blockTypeConfig) {
+                $url = UrlHelper::url($this->getEditAction((string) $blockTypeConfig->blockType->id));
+                $hasPreview = $blockTypeConfig->previewImageId !== null;
+                $category = $blockTypeConfig->categoryId !== null ? $blockTypeConfig->category->title : false;
+                $description = $blockTypeConfig->description;
+                $status = $blockTypeConfig->previewImageId !== null; 
+                array_push($tableData, [
+                    "id" => $blockTypeConfig->id,
+                    "title" => $blockTypeConfig->blockType->name,
+                    "hasPreview" => $hasPreview,
+                    "description" => $description,
+                    "category" => $category,
+                    "url" => $url
+                ]);
+            }
+
             array_push($fields, [
-                'field' => $field,
-                'fieldConfig' => $fieldConfig,
-                'blockTypeConfigs' => $blockTypeConfigService->getOrCreateByFieldHandle($field->handle)
+                'id'=>$field->id,
+                'name'=>$field->name,
+                'config' => $fieldConfig,
+                'blockTypeConfigs' => $blockTypeConfigs,
+                'tableData' => $tableData
             ]);
         }
 
         return $this->renderTemplate($this->getIndexTemplate(), [
-            'assets' => $assets,
-            'fields' => $fields
+            'assets' => [
+                'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png'),
+                'cancel' => Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/cancel.png', true)
+            ],
+            'fields' => $fields,
         ]);
+    }
+
+    /**
+     * Reorder block type configs (for a particular field)
+     * 
+     */
+    public function actionReorder()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+        $plugin = MatrixFieldPreview::getInstance();
+
+        $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
+        $blockTypeConfigIds = Json::decode($this->request->getRequiredBodyParam('ids'));
+        $blockTypeConfigService->reorder($blockTypeConfigIds);
+
+        return $this->asJson(['success' => true]);
     }
 
     /**
@@ -263,6 +307,11 @@ abstract class BaseBlockTypesController extends Controller {
     }
 
     protected function getDeleteAction()
+    {
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
+    }
+
+    protected function getEditAction($id)
     {
         throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }

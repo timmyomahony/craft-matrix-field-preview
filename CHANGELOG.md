@@ -94,13 +94,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Fixed migration issues with latest release
 
-## 1.3.0 - 2022-06-01
+## 2.0.0 - 2022-06-06
 
 ### Changed
 
-- Updated the modal layout
+- New modal. Completely overhauled the modal overlay for easier search and filtering.
+- Code cleanup. Overhauled the codebase for easier maintainance.
+- Improved the settings templates with breadcrumbs etc.
+- Fixed issue #62 with Supertable via @daltonrooney PR
 
 ### Added
 
-- Added a search function to the modal
-- Added ability to add markdown to descriptions
+- Categories. Blocks can be assigned to categories for easier filtering.
+- Search. You can now search via the modal preview.
+- Markdown descriptions. Added ability to add markdown to descriptions
