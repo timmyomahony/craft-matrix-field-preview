@@ -213,7 +213,8 @@ var MFP = MFP || {};
             });
             previewButton.on("click", function(ev) {
               new Craft.PreviewFileModal(blockTypeConfig.imageId, null, {
-                startingHeight: "2000px"
+                startingWidth: 2000,
+                startingHeight: 2000,
               });
               ev.preventDefault();
               return false;
