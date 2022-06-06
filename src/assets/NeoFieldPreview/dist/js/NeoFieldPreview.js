@@ -35,7 +35,7 @@ var MFP = MFP || {};
         );
 
         // Create modal and grid
-        var modal = this.createModal(neoInput.$container, config["blockTypes"]);
+        var modal = this.createModal(neoInput.$container, config);
 
         // When preview button clicked
         modalButton.on("click", function () {

@@ -36,7 +36,7 @@ var MFP = MFP || {};
       input.modalButton = modalButton;
 
       // Create modal and grid
-      var modal = this.createModal(input.$container, config["blockTypes"]);
+      var modal = this.createModal(input.$container, config);
 
       // When preview button clicked
       modalButton.on("click", function () {
