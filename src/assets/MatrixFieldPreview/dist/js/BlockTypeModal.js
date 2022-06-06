@@ -190,6 +190,8 @@ var MFP = MFP || {};
 
           var img = $("<img>").attr("src", this.defaultImageUrl);
 
+          
+
           var content = $("<div>", {
             class: "mfp-grid-item__content",
           });
@@ -205,6 +207,18 @@ var MFP = MFP || {};
           if (blockTypeConfig["image"]) {
             imgContainer.removeClass("mfp-grid-item__button--default");
             img.attr("src", blockTypeConfig["image"]);
+
+            var previewButton = $("<div />", {
+              class: "mfp-grid-item__preview expand icon"
+            });
+            previewButton.on("click", function(ev) {
+              new Craft.PreviewFileModal(blockTypeConfig.imageId, null, {
+                startingHeight: "2000px"
+              });
+              ev.preventDefault();
+              return false;
+            }.bind(this));
+            previewButton.appendTo(imgContainer);
           }
           if (blockTypeConfig["name"]) {
             name.text(blockTypeConfig["name"]);
