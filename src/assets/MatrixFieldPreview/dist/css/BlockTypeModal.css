@@ -36,6 +36,17 @@
   font-weight: bold;
 }
 
+/* Sidebar */
+.mfp-modal__sidebar__li span.info {
+  display: none;
+  cursor: help;
+  margin-left: 2px;
+}
+
+.mfp-modal__sidebar__li:hover span.info {
+  display: inline;
+}
+
 /* Grid of items */
 .mfp-modal__grid {
   flex: 0 1 auto;

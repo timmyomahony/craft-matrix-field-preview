@@ -54,11 +54,20 @@ var MFP = MFP || {};
       $.each(
         this.config["categories"],
         function (i, category) {
+          var sidebarHref = $("<a class='mfp-modal__sidebar__a' />")
+            .text(category.name)
+            .attr("data-category", category.id);
           var sidebarLi = $("<li class='mfp-modal__sidebar__li'></li>").append(
-            $("<a class='mfp-modal__sidebar__a' />")
-              .text(category.name)
-              .attr("data-category", category.id)
+            sidebarHref
           );
+          if (category.description.length > 0) {
+            sidebarHref.append(
+              $("<span />", {
+                class: "info",
+                title: category.description
+              })
+            )
+          }
           sidebarUl.append(sidebarLi);
 
           sidebarLi.on("click", this.selectCategory.bind(this));
