@@ -32,4 +32,19 @@ class NeoBlockTypesController extends BaseBlockTypesController
     {
         return 'matrix-field-preview/settings/neo-block-types/index';
     }
+
+    protected function getEditTemplate()
+    {
+        return 'matrix-field-preview/settings/neo-block-types/_edit';
+    }
+
+    protected function getUploadAction()
+    {
+        return 'matrix-field-preview/neo-block-types/upload-preview';
+    }
+
+    protected function getDeleteAction()
+    {
+        return 'matrix-field-preview/neo-block-types/delete-preview';
+    }
 }
