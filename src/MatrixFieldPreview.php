@@ -111,7 +111,6 @@ class MatrixFieldPreview extends Plugin
     private function _setTemplateVariables()
     {
         // Add our helper service as a template variable {{ craft.mfpNeoHelper... }}
-        // so that we can easily
         if (Craft::$app->plugins->isPluginEnabled("neo")) {
             Event::on(
                 CraftVariable::class,
