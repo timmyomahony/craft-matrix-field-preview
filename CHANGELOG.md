@@ -101,10 +101,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - New modal. Completely overhauled the modal overlay for easier search and filtering.
 - Code cleanup. Overhauled the codebase for easier maintainance.
 - Improved the settings templates with breadcrumbs etc.
-- Fixed issue #62 with Supertable via @daltonrooney PR
+- Fixed issue #62 with Supertable via @daltonrooney PR.
 
 ### Added
 
 - Categories. Blocks can be assigned to categories for easier filtering.
 - Search. You can now search via the modal preview.
-- Markdown descriptions. Added ability to add markdown to descriptions
+- Sorting. You can now set the order of previews.
+- Markdown descriptions. Added ability to add markdown to descriptions.
