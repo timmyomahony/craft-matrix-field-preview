@@ -209,6 +209,11 @@ class MatrixFieldPreview extends Plugin
                     $neoMigration->db->schema->refresh();
                     $neoMigration->safeUp();
                     $neoMigration->db->schema->refresh();
+
+                    $neoMigration = new migrations\m220606_112005_add_category_fk_to_neo();
+                    $neoMigration->db->schema->refresh();
+                    $neoMigration->safeUp();
+                    $neoMigration->db->schema->refresh();
                 }
             }
         );
@@ -222,6 +227,9 @@ class MatrixFieldPreview extends Plugin
                     $neoMigration->db->schema->refresh();
                     $neoMigration->safeDown();
                     $neoMigration->db->schema->refresh();
+
+                    // NOTE: Don't need to run the other Neo migrations as
+                    // we're simply deleting the tables entirely.
                 }
             }
         );
