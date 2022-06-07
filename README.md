@@ -4,7 +4,7 @@
 
 Add text and screenshot previews to matrix fields, improving your client's publishing experience with visual prompts via an easy-to-use modal.
 
-![](https://files.weareferal.com/Matrix-Field-Preview-Example-wxsUsO.gif)
+![](https://files.weareferal.com/CleanShot-2022-06-07-at-15.23.30-PqXns5.gif)
 
 ## Features
 
