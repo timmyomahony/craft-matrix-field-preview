@@ -53,12 +53,9 @@ abstract class BaseBlockTypeConfigService extends Component
 
     public function reorder(array $blockTypeConfigIds): bool
     {
-        Craft::info($blockTypeConfigIds, "craft-matrix-field");
         foreach ($this->getAll() as $i => $blockTypeConfig) {
             $sortOrder = array_search((string) $blockTypeConfig->id, $blockTypeConfigIds);
-            Craft::info($blockTypeConfig->id, "craft-matrix-field");
             if ($sortOrder !== false) {
-                Craft::info("-" . $sortOrder, "craft-matrix-field");
                 $blockTypeConfig->sortOrder = $sortOrder;
                 $blockTypeConfig->save();
             }

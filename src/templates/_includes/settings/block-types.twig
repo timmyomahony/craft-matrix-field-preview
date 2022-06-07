@@ -55,12 +55,13 @@
             <div class="mfp-settings-table__table">
                 <div id="matrix-field-preview-block-types-vue-admin-table-{{ field.id }}"></div>
                 {% js %}
+                    var type = "{{ type | lower }}";
                     new Craft.VueAdminTable({
                         columns: columns,
                         container: '#matrix-field-preview-block-types-vue-admin-table-{{ field.id }}',
                         emptyMessage: Craft.t('matrix-field-preview', 'No block types exist yet.'),
                         tableData: {{ field.tableData|json_encode|raw }},
-                        reorderAction: "matrix-field-preview/matrix-block-types/reorder"
+                        reorderAction: "matrix-field-preview/" + type + "-block-types/reorder"
                     });
                 {% endjs %}
             </div>
