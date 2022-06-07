@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.0.0 - 2022-06-06
+## 3.0.0 - 2022-06-07
 
 After an unplanned hiatus we're back with a whole load of useful updates.
+
+Note that we've jumped from version 1.X.X to 3.X.X. This is to make it easier and clearer to add Craft 4 support: plugin version 3.X.X (this version) will continue to work for Craft 3 while plugin version 4.X.X will work for Craft 4 (eventually)
 
 ### Added
 
@@ -21,6 +23,9 @@ After an unplanned hiatus we're back with a whole load of useful updates.
 - New modal design. Completely overhauled the modal overlay for easier search and filtering.
 - Improved the settings templates with breadcrumbs etc.
 - Code cleanup. Overhauled the codebase for easier maintainance and prep for Craft 4.
+
+## Fixed
+
 - Fixed issue #62 with Supertable via @daltonrooney PR.
 
 ## 1.2.3 - 2020-11-23
