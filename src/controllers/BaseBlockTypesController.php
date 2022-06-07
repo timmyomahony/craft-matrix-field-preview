@@ -60,7 +60,7 @@ abstract class BaseBlockTypesController extends Controller {
             foreach ($blockTypeConfigs as $blockTypeConfig) {
                 $url = UrlHelper::url($this->getEditAction((string) $blockTypeConfig->blockType->id));
                 $hasPreview = $blockTypeConfig->previewImageId !== null;
-                $category = $blockTypeConfig->categoryId !== null ? $blockTypeConfig->category->title : false;
+                $category = $blockTypeConfig->categoryId !== null ? $blockTypeConfig->category->name : false;
                 $description = $blockTypeConfig->description;
                 $status = $blockTypeConfig->previewImageId !== null; 
                 array_push($tableData, [
