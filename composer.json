@@ -47,5 +47,9 @@
             "yiisoft/yii2-composer": true,
             "craftcms/plugin-installer": true
         }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.7",
+        "craftcms/phpstan": "dev-main"
     }
 }
