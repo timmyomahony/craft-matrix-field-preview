@@ -50,6 +50,7 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^1.7",
-        "craftcms/phpstan": "dev-main"
+        "craftcms/phpstan": "dev-main",
+        "craftcms/rector": "dev-main"
     }
 }
