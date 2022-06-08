@@ -84,7 +84,7 @@ class MatrixFieldPreview extends Plugin
 
     public function getSettingsResponse(): mixed
     {
-        Craft::$app->controller->redirect(
+        return Craft::$app->controller->redirect(
             UrlHelper::cpUrl('matrix-field-preview/settings')
         );
     }

@@ -10,7 +10,7 @@ class Settings extends Model
     public $previewVolumeUid = null;
     public $previewSubpath = null;
 
-    public function rules()
+    public function rules(): array
     {
         return [
             [['previewVolumeUid', 'previewSubpath'], 'string'],
