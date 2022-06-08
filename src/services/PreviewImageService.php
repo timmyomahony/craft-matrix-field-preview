@@ -2,8 +2,6 @@
 
 namespace weareferal\matrixfieldpreview\services;
 
-use weareferal\matrixfieldpreview\MatrixFieldPreview;
-
 use Craft;
 use craft\base\Component;
 use craft\helpers\Assets as AssetsHelper;
@@ -12,6 +10,8 @@ use craft\errors\VolumeException;
 use craft\helpers\Image;
 use craft\errors\ImageException;
 use craft\errors\InvalidSubpathException;
+
+use weareferal\matrixfieldpreview\MatrixFieldPreview;
 
 
 class PreviewImageService extends Component

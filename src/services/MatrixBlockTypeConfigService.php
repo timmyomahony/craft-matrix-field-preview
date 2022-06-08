@@ -2,14 +2,13 @@
 
 namespace weareferal\matrixfieldpreview\services;
 
-use weareferal\matrixfieldpreview\records\MatrixBlockTypeConfigRecord;
-use weareferal\matrixfieldpreview\services\BaseBlockTypeConfigService;
 use Craft;
 use craft\base\Component;
 
-/**
- * 
- */
+use weareferal\matrixfieldpreview\records\MatrixBlockTypeConfigRecord;
+use weareferal\matrixfieldpreview\services\BaseBlockTypeConfigService;
+
+
 class MatrixBlockTypeConfigService extends BaseBlockTypeConfigService
 {
     protected $BlockTypeRecordConfigClass = MatrixBlockTypeConfigRecord::class;

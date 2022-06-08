@@ -2,11 +2,19 @@
 
 {% do view.registerAssetBundle("craft\\web\\assets\\fileupload\\FileUploadAsset") %}
 
-{% set title = "'" ~ blockTypeConfig.blockType.name ~ "' Preview" %}
+{% set title = blockTypeConfig.blockType.name ~ " Preview" %}
+
+{% set fullPageForm = true %}
 
 {% set crumbs = [
-    { label: plugin.name | t('feed-me'), url: url('matrix-field-preview/settings') },
-    { label: "Neo Block Types" | t('feed-me'), url: url('matrix-field-preview/settings/neo-block-types') }
+    {
+        label: "Neo Field Previews"|t('matrix-field-preview'),
+        url: url('neo-field-preview/settings')
+    },
+    {
+        label: "Configure Neo Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings/neo-block-types')
+    }
 ] %}
 
 {% block content %}
@@ -14,6 +22,12 @@
         <p class="warning with-icon">{{ "Neo version >= 2.8.14 is required for this integration to work properly. You'll still be able to configure the plugin in the meantime, but previews will not appear in the CP for user." | t("matrix-field-preview") }}</p>
         <hr>        
     {% endif %}
+
+    {{ actionInput('matrix-field-preview/neo-block-types/save') }}
+    {{ redirectInput('matrix-field-preview/settings/neo-block-types') }}
+
+    {% if blockType.id %}{{ hiddenInput('blockTypeId', blockType.id) }}{% endif %}
+
     {% include "matrix-field-preview/_includes/settings/block-type.twig" with {
         type: "neo",
     } %}

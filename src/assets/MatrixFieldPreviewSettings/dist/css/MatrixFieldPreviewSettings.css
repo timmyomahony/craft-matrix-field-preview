@@ -20,6 +20,10 @@
   width: 25%;
 }
 
+.mfp-settings-table__table .tablepane {
+  margin: 0;
+}
+
 .mfp-settings-table__overlay {
   position: absolute;
   height: 100%;
@@ -32,7 +36,16 @@
 }
 
 .mfp-settings-table__icon {
-  height: 15px;
+  height: 14px;
+}
+
+.mfp-settings-table__icon--cancel {
+  opacity: 0.40;
+  cursor: not-allowed;
+}
+
+.mfp-settings-table__icon--help {
+  cursor: help;
 }
 
 /**

@@ -1,0 +1,52 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+{% set title = "Create Category" | t("matrix-field-preview") %}
+
+{% set fullPageForm = true %}
+
+{% import "_includes/forms" as forms %}
+
+{% set crumbs = [
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    },
+    {
+        label: "Categories"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings/categories')
+    }
+] %}
+
+{% block content %}
+    {#
+        FIXME: on the action, we have to use the default routing syntax to
+               pick up our controller (i.e. without the UrlManager) but with
+               the redirect it's the opposite, we have to use the URL specified
+               in the UrlManager rules for it to redirect successfully.
+    #}
+    {{ actionInput('matrix-field-preview/categories/save') }}
+    {{ redirectInput('matrix-field-preview/settings/categories') }}
+
+    {% if category.id %}{{ hiddenInput('categoryId', category.id) }}{% endif %}
+
+    {{ forms.textField({
+        first: true,
+        label: "Name"|t('matrix-field-preview'),
+        instructions: "The name of this group. These categories will appear in the sidebar of the preview modal overlay."|t('matrix-field-preview'),
+        id: 'name',
+        name: 'name',
+        value: category.name,
+        errors: category.getErrors('name'),
+        autofocus: true,
+        required: true,
+    }) }}
+
+    {{ forms.textareaField({
+        label: "Description"|t('matrix-field-preview'),
+        instructions: "A short description of this category. This will appear on hover within the preview modal overlay."|t('matrix-field-preview'),
+        id: "description",
+        name: "description",
+        value: category.description,
+        errors: category.getErrors('description'),
+    }) }}
+{% endblock %}

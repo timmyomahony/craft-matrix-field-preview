@@ -6,20 +6,19 @@
     {% set showTakeover = true %}
 {% endif %}
 
-<input type="hidden" name="pluginHandle" value="matrix-field-preview">
-{{ actionInput("matrix-field-preview/settings/" ~ type | lower ~ "-fields") }}
 <div class="field mfp-settings-table">
     <div class="heading">
         <label>{{ "Configure " ~ type | capitalize ~ " Fields"|t('matrix-field-preview') }}</label>
-        <div class="instructions"><p>{{ "Use this page to select the " ~ type | lower ~ " fields you want preview images and descriptions to appear on." | t('matrix-field-preview') }}</p></div>
+        <div class="instructions"><p>{{ "Use this page to configure which " ~ type ~ " fields will display previews." | t('matrix-field-preview') }}</p></div>
     </div>
     {% if fields | length <= 0 %}
-        <p class="warning with-icon">{{ "No " ~ type | lower ~ " blocks exist yet"|t('matrix-field-preview') }}</p>
+        <hr />
+        <p class="warning with-icon"> {{ "No " ~ type | lower ~ " fields exist yet. Create some fields via the control panel and return here to enable image previews."|t('matrix-field-preview') }}</p>
     {% else %}
         <table id="fields" class="data fullwidth">
             <thead>
                 <th scope="col">{{ type | capitalize ~ " Field"|t('matrix-field-preview') }}</th>
-                <th scope="col">{{ "Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field." | t('matrix-field-preview') }}</p></span></th>
+                <th scope="col">{{ "Image Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field in." | t('matrix-field-preview') }}</p></span></th>
                 {% if showTakeover %}
                     <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default " ~ type | lower ~" field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
                 {% endif %}

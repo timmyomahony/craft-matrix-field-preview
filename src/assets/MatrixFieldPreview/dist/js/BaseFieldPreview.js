@@ -1,5 +1,13 @@
 var MFP = MFP || {};
 
+/**
+ * Base field preview class
+ * 
+ * This is essentially a loader class. It's run when a page-load occurs and
+ * then searches for matrix fields (MatrixInput - neo fields also inherit from
+ * this field so don't require their own class). From there it loads our
+ * inline preview images as well as the overlay modals for each field.
+ */
 (function ($) {
   MFP.BaseFieldPreview = Garnish.Base.extend({
     configs: {},
@@ -37,7 +45,7 @@ var MFP = MFP || {};
               }
               this.initialiseInput(input, config);
             } else {
-              console.error(response["error"]);
+              console.warn("No matrix field previews configs found for field " + fieldHandle);
             }
           }.bind(this)
         )

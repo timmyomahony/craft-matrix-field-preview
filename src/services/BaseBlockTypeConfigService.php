@@ -6,9 +6,6 @@ use Craft;
 use craft\base\Component;
 
 
-/**
- *
- */
 abstract class BaseBlockTypeConfigService extends Component
 {
     protected $BlockTypeRecordConfigClass;
@@ -20,7 +17,9 @@ abstract class BaseBlockTypeConfigService extends Component
      */
     public function getAll()
     {
-        return $this->BlockTypeRecordConfigClass::find()->all();
+        return $this->BlockTypeRecordConfigClass::find()
+            ->orderBy(['sortOrder' => SORT_ASC])
+            ->all();
     }
 
     /**
@@ -39,6 +38,29 @@ abstract class BaseBlockTypeConfigService extends Component
         }
 
         return $record;
+    }
+
+    public function save($blockTypeConfig): bool {
+        if (! $blockTypeConfig->validate()) {
+            Craft::info("Category not saved due to validation error", "matrix-field-preview");
+            return false;
+        }
+
+        $blockTypeConfig->save();
+
+        return true;
+    }
+
+    public function reorder(array $blockTypeConfigIds): bool
+    {
+        foreach ($this->getAll() as $i => $blockTypeConfig) {
+            $sortOrder = array_search((string) $blockTypeConfig->id, $blockTypeConfigIds);
+            if ($sortOrder !== false) {
+                $blockTypeConfig->sortOrder = $sortOrder;
+                $blockTypeConfig->save();
+            }
+        }
+        return true;
     }
 
     /**
@@ -97,6 +119,10 @@ abstract class BaseBlockTypeConfigService extends Component
 
             array_push($records, $record);
         }
+
+        usort($records, function ($a, $b) {
+            return strcmp($a->sortOrder, $b->sortOrder);
+        });
 
         return $records;
     }

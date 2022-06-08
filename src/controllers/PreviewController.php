@@ -9,6 +9,7 @@ use Craft;
 use craft\web\Controller;
 
 use yii\web\NotFoundHttpException;
+use yii\helpers\Markdown;
 
 /**
  * Preview controller
@@ -37,7 +38,8 @@ class PreviewController extends Controller
             "config" => [
                 "general" => [],
                 "field" => null,
-                "blockTypes" => []
+                "blockTypes" => [],
+                "categories" => []
             ]
         ];
 
@@ -62,6 +64,7 @@ class PreviewController extends Controller
             return $this->asJson($response);
         }
 
+        // Add field info
         $response['config']['field'] = [
             "name" => $fieldConfig->field->name,
             "handle" => $fieldConfig->field->handle,
@@ -71,6 +74,17 @@ class PreviewController extends Controller
             "buttonText" => "Content Previews"
         ];
 
+        // Add categories
+        foreach ($plugin->categoryService->getAll() as $category) {
+            array_push($response['config']["categories"], [
+                'id' => $category->id,
+                'name' => $category->name,
+                'description' => $category->description,
+                "descriptionHTML" => Markdown::process($category->description)
+            ]);
+        }
+
+        // Add block type preview info
         $blockTypeConfigs = $blockTypeService->getOrCreateByFieldHandle($fieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
@@ -78,11 +92,14 @@ class PreviewController extends Controller
                 "name" => $blockType->name,
                 "handle" => $blockType->handle,
                 "description" => $blockTypeConfig->description,
+                "descriptionHTML" => Markdown::process($blockTypeConfig->description),
+                "categoryId" => $blockTypeConfig->categoryId,
                 "image" => null,
                 "thumb" => null
             ];
             if ($blockTypeConfig->previewImageId) {
                 $asset = Craft::$app->assets->getAssetById($blockTypeConfig->previewImageId);
+                $result["imageId"] = $blockTypeConfig->previewImageId;
                 $result["image"] = $asset ? $asset->getUrl([
                     "width" => 800,
                     "mode" => "stretch",
