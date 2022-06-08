@@ -2,6 +2,8 @@
 
 namespace weareferal\matrixfieldpreview\controllers;
 
+use yii\web\BadRequestHttpException;
+
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\controllers\BaseBlockTypesController;
 

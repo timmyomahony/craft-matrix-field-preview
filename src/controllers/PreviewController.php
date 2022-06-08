@@ -19,7 +19,7 @@ use yii\helpers\Markdown;
 class PreviewController extends Controller
 {
 
-    protected $allowAnonymous = [];
+    protected array|bool|int $allowAnonymous = [];
 
     /**
      * Get preview config 

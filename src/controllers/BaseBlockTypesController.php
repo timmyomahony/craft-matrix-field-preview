@@ -3,6 +3,7 @@
 namespace weareferal\matrixfieldpreview\controllers;
 
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;

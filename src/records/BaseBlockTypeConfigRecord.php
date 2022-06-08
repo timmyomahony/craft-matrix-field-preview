@@ -6,6 +6,7 @@ use yii\db\ActiveQueryInterface;
 
 use Craft;
 use craft\db\ActiveRecord;
+use craft\records\Field;
 use craft\records\Asset;
 use craft\records\MatrixBlockType;
 

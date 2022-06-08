@@ -11,7 +11,7 @@ use craft\web\Controller;
 class SettingsController extends Controller
 {
     public $defaultAction = 'index';
-    protected $allowAnonymous = [];
+    protected array|bool|int $allowAnonymous = [];
 
     public function actionIndex()
     {

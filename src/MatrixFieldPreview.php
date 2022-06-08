@@ -32,6 +32,7 @@ use craft\events\TemplateEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
+use craft\base\Model;
 
 use yii\db\MigrationInterface;
 use yii\di\Instance;
@@ -59,9 +60,9 @@ class MatrixFieldPreview extends Plugin
 {
     public static $plugin;
 
-    public $schemaVersion = '3.0.1';
-    public $hasCpSettings = true;
-    public $hasCpSection = false;
+    public string $schemaVersion = '3.0.1';
+    public bool $hasCpSettings = true;
+    public bool $hasCpSection = false;
 
     public function init()
     {
@@ -76,12 +77,12 @@ class MatrixFieldPreview extends Plugin
         $this->_runManualMigrations();
     }
 
-    protected function createSettingsModel()
+    protected function createSettingsModel(): Model|null
     {
         return new Settings();
     }
 
-    public function getSettingsResponse()
+    public function getSettingsResponse(): mixed
     {
         Craft::$app->controller->redirect(
             UrlHelper::cpUrl('matrix-field-preview/settings')

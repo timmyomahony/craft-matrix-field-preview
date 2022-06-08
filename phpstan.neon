@@ -2,7 +2,6 @@ includes:
     - vendor/craftcms/phpstan/phpstan.neon
 
 parameters:
-    memory-limit: 1G
     level: 0
     paths:
         - src

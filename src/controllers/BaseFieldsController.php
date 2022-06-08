@@ -86,7 +86,7 @@ abstract class BaseFieldsController extends Controller {
      * 
      */
     protected function getService($plugin) {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     /**
@@ -94,13 +94,13 @@ abstract class BaseFieldsController extends Controller {
      * 
      */
     protected function getTemplate() {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     /**
      * Get the underlying message for successful saves
      */
     protected function getSuccessMessage() {
-        throw new Exception(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 }

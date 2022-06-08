@@ -9,6 +9,7 @@ use Craft;
 use craft\web\Controller;
 use craft\helpers\Json;
 
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 
