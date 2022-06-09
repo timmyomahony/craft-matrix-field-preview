@@ -18,12 +18,14 @@ use craft\web\Controller;
 abstract class BaseFieldsController extends Controller {
 
     /**
-     * Enfore admin privileges
+     * Enforce admin privileges
      * 
+     * But ignore the settings `allowAdminChanges`, allowing users to
+     * configure the plugin while on production.
      */
     public function beforeAction($action): bool
     {
-        $this->requireAdmin();
+        $this->requireAdmin($requireAdminChanges=false);
         return parent::beforeAction($action);
     }
 

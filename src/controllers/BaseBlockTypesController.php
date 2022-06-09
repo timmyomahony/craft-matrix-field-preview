@@ -23,12 +23,14 @@ use craft\helpers\Json;
 abstract class BaseBlockTypesController extends Controller {
 
     /**
-     * Enfore admin privileges
+     * Enforce admin privileges
      * 
+     * But ignore the settings `allowAdminChanges`, allowing users to
+     * configure the plugin while on production.
      */
     public function beforeAction($action): bool
     {
-        $this->requireAdmin();
+        $this->requireAdmin($requireAdminChanges=false);
         return parent::beforeAction($action);
     }
 
