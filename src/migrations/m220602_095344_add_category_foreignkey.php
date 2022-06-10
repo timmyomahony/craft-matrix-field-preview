@@ -12,9 +12,7 @@ class m220602_095344_add_category_foreignkey extends Migration
 {
     public function safeUp()
     {
-        $this->addColumn('{{%matrixfieldpreview_blocktypes_config}}', 'categoryId', 'integer');
-        $this->alterColumn('{{%matrixfieldpreview_blocktypes_config}}', 'categoryId', 'DROP NOT NULL');
-        $this->alterColumn('{{%matrixfieldpreview_blocktypes_config}}', 'categoryId', 'SET DEFAULT NULL');
+        $this->addColumn('{{%matrixfieldpreview_blocktypes_config}}', 'categoryId', 'integer null');
         $this->addForeignKey(
             $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', "categoryId"),
             '{{%matrixfieldpreview_blocktypes_config}}',
