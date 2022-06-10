@@ -15,13 +15,19 @@ class m220606_200119_add_matrix_block_type_sort_order extends Migration
 
     public function safeUp()
     {
-        $this->addColumn('{{%matrixfieldpreview_blocktypes_config}}', 'sortOrder', $this->smallInteger()->defaultValue(0));
-        Craft::$app->db->schema->refresh();
+        $this->addColumn(
+            "{{%matrixfieldpreview_blocktypes_config}}",
+            "sortOrder",
+            $this->smallInteger()->defaultValue(0)
+        );
     }
 
     public function safeDown()
     {
-        $this->dropColumn("{{%matrixfieldpreview_blocktypes_config}}", "sortOrder");
+        $this->dropColumn(
+            "{{%matrixfieldpreview_blocktypes_config}}",
+            "sortOrder"
+        );
         return true;
     }
 }

@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.0.2 - 2022-06-10
+
+### Fixed
+
+- Improved migrations to address #77
+- Added missing "Install" migrations
+
+## 3.0.1 - 2022-06-09
+
+### Fixed
+
+- Updated the admin permissions being used to address #75
+
 ## 3.0.0 - 2022-06-07
 
 After an unplanned hiatus we're back with a whole load of useful updates.
@@ -24,7 +37,7 @@ Note that we've jumped from version 1.X.X to 3.X.X. This is to make it easier an
 - Improved the settings templates with breadcrumbs etc.
 - Code cleanup. Overhauled the codebase for easier maintainance and prep for Craft 4.
 
-## Fixed
+### Fixed
 
 - Fixed issue #62 with Supertable via @daltonrooney PR.
 

@@ -27,6 +27,7 @@ class m220531_194116_create_category_table extends Migration
     public function safeDown()
     {
         $this->removeTables();
+        Craft::$app->db->schema->refresh();
         return true;
     }
 
@@ -57,7 +58,6 @@ class m220531_194116_create_category_table extends Migration
 
     protected function removeTables()
     {
-        // matrixfieldpreview_previewrecord table
         $this->dropTableIfExists('{{%matrixfieldpreview_category}}');
     }
 }

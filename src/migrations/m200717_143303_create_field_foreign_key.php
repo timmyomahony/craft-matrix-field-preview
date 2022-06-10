@@ -37,10 +37,6 @@ class m200717_143303_create_field_foreign_key extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey(
-            $this->db->getForeignKeyName('{{%matrixfieldpreview_previewrecord}}', 'fieldId'),
-            '{{%matrixfieldpreview_previewrecord}}'
-        );
         $this->dropColumn('{{%matrixfieldpreview_previewrecord}}', 'fieldId');
         return true;
     }
