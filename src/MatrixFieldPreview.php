@@ -60,7 +60,7 @@ class MatrixFieldPreview extends Plugin
 {
     public static $plugin;
 
-    public string $schemaVersion = '3.0.1';
+    public string $schemaVersion = '3.0.2';
     public bool $hasCpSettings = true;
     public bool $hasCpSection = false;
 

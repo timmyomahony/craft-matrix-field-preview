@@ -20,19 +20,20 @@ class m220606_112005_add_category_fk_to_neo extends Migration
     public function safeUp()
     {
         if ($this->_neoInstalled()) {
-            $this->addColumn('{{%matrixfieldpreview_neo_blocktypes_config}}', 'categoryId', 'integer');
-            $this->alterColumn('{{%matrixfieldpreview_neo_blocktypes_config}}', 'categoryId', 'DROP NOT NULL');
-            $this->alterColumn('{{%matrixfieldpreview_neo_blocktypes_config}}', 'categoryId', 'SET DEFAULT NULL');
+            $this->addColumn(
+                "{{%matrixfieldpreview_neo_blocktypes_config}}",
+                "categoryId",
+                "integer null"
+            );
             $this->addForeignKey(
-                $this->db->getForeignKeyName('{{%matrixfieldpreview_neo_blocktypes_config}}', "categoryId"),
-                '{{%matrixfieldpreview_neo_blocktypes_config}}',
+                "categoryId",
+                "{{%matrixfieldpreview_neo_blocktypes_config}}",
                 "categoryId",
                 "{{%matrixfieldpreview_category}}",
                 "id",
                 "SET NULL",
                 "SET NULL"
             );
-            Craft::$app->db->schema->refresh();
         }
     }
 
@@ -40,7 +41,7 @@ class m220606_112005_add_category_fk_to_neo extends Migration
     {
         if ($this->_neoInstalled()) {
             $this->dropColumn(
-                '{{%matrixfieldpreview_neo_blocktypes_config}}',
+                "{{%matrixfieldpreview_neo_blocktypes_config}}",
                 "categoryId");
         }
         return true;

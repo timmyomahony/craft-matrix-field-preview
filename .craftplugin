@@ -1,11 +1,11 @@
 {
     "pluginName": "Matrix Field Preview",
     "pluginDescription": "Improve the matrix field publishing experience with screenshot previews.",
-    "pluginVersion": "1.0.0",
+    "pluginVersion": "3.0.2",
     "pluginAuthorName": "Timmy O'Mahony ",
     "pluginVendorName": "weareferal",
-    "pluginAuthorUrl": "https://weareferal.com",
-    "pluginAuthorGithub": "weareferal",
+    "pluginAuthorUrl": "https://timmyomahony.com",
+    "pluginAuthorGithub": "timmyomahony",
     "codeComments": "yes",
     "pluginComponents": [
         "controllers",
