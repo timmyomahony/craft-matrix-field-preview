@@ -41,15 +41,25 @@ var MFP = MFP || {};
         // via $view->registerJsVar
         this.defaultImageUrl = matrixFieldPreviewDefaultImage;
         this.previewIcon = matrixFieldPreviewIcon;
-        
-        Garnish.on(
-          this.getInputClass(),
-          "afterInit",
-          {},
-          function (ev) {
-            this.onInputLoaded(ev.target);
-          }.bind(this)
-        );
+
+        var $fields = this.getFieldElements();
+        if ($fields.length > 0) {
+          // If the matrix fields are already rendered
+          $fields.each(function(i, field) {
+            var input = $(field).data(this.getDataKey());
+            this.onInputLoaded(input);
+          }.bind(this))
+        } else {
+          // Otherwise add a listener
+          Garnish.on(
+            this.getInputClass(),
+            "afterInit",
+            {},
+            function (ev) {
+              this.onInputLoaded(ev.target);
+            }.bind(this)
+          );
+        }
       }
     },
 

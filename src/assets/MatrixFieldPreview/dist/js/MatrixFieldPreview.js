@@ -138,6 +138,24 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Field Elements
+     *
+     * @returns the jQuery field elements on the page 
+     */
+    getFieldElements: function () {
+      return $(".matrix-field");
+    },
+
+    /**
+     * Get Data Name
+     *
+     * @returns the key used on the element to store the Garnish plugin
+     */
+     getDataKey: function () {
+      return "matrix";
+    },
+
+    /**
      * 
      * @param {*} config 
      * @returns 

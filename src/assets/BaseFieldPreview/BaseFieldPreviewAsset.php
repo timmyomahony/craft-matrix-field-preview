@@ -4,6 +4,7 @@ namespace weareferal\matrixfieldpreview\assets\BaseFieldPreview;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\assets\matrix\MatrixAsset;
 
 class BaseFieldPreviewAsset extends AssetBundle
 {
@@ -12,7 +13,8 @@ class BaseFieldPreviewAsset extends AssetBundle
         $this->sourcePath = "@weareferal/matrixfieldpreview/assets/BaseFieldPreview/dist";
 
         $this->depends = [
-            CpAsset::class
+            CpAsset::class,
+            MatrixAsset::class
         ];
 
         $this->js = [
