@@ -2,6 +2,13 @@ var MFP = MFP || {};
 
 (function ($) {
   MFP.BlockTypeModalButton = Garnish.Base.extend({
+
+    /**
+     * 
+     * @param {*} target 
+     * @param {*} settings 
+     * @param {*} iconUrl 
+     */
     init: function (target, settings, iconUrl) {
       this.settings = $.extend(
         {
@@ -36,10 +43,18 @@ var MFP = MFP || {};
         }.bind(this)
       );
     },
+    
+    /**
+     * 
+     */
     disable: function () {
       this.$target.addClass("disabled");
       this.$target.attr("disabled", true);
     },
+
+    /**
+     * 
+     */
     enable: function () {
       this.$target.removeClass("disabled");
       this.$target.attr("disabled", false);

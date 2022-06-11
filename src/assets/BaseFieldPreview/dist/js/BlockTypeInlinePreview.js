@@ -4,6 +4,7 @@ var MFP = MFP || {};
   MFP.BlockTypeInlinePreview = Garnish.Base.extend({
     $target: null,
     config: null,
+
     /**
      * @param config: A block type config
      */
@@ -20,6 +21,9 @@ var MFP = MFP || {};
       this.buildPreview();
     },
 
+    /**
+     * 
+     */
     buildPreview: function () {
       this.$target.addClass("mfp-block-type-preview");
 

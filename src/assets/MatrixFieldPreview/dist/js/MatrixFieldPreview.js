@@ -1,9 +1,24 @@
 var MFP = MFP || {};
 
 (function ($) {
+  /**
+   * Matrix Field Preview
+   * 
+   * This is the "loader" class that is injected after every control panel
+   * page load. It's job is to fetch the configurations from the admin panel
+   * via AJAX and then initialise the matrix field modal and inline previews.
+   * 
+   * Inherits: BaseFieldPreview
+   */
   MFP.MatrixFieldPreview = MFP.BaseFieldPreview.extend({
     previewsUrl: "matrix-field-preview/preview/get-previews",
     inputType: "matrix",
+
+    /**
+     * 
+     * @param {*} input 
+     * @param {*} config 
+     */
     initialiseInput: function (input, config) {
       input.$container.addClass("mfp-field mfp-matrix-field");
       if (config["field"]["enableTakeover"]) {
@@ -26,6 +41,12 @@ var MFP = MFP || {};
 
       this.setupInput(input, config);
     },
+
+    /**
+     * 
+     * @param {*} input 
+     * @param {*} config 
+     */
     setupInput: function (input, config) {
       // Create the modal button
       var modalButton = this.createModalButton(
@@ -63,6 +84,15 @@ var MFP = MFP || {};
         }.bind(this)
       );
     },
+
+    /**
+     * 
+     * @param {*} input 
+     * @param {*} $block 
+     * @param {*} config 
+     * @param {*} updateButton 
+     * @returns 
+     */
     blockAdded: function (input, $block, config, updateButton) {
       // Note that we are using the DOM element here and not the Garnish instance:
       // https://github.com/craftcms/cms/issues/7130
@@ -85,15 +115,33 @@ var MFP = MFP || {};
         return input.canAddMoreBlocks();
       });
     },
+
+    /**
+     * 
+     * @param {*} input 
+     * @param {*} $block 
+     * @param {*} config 
+     */
     blockDeleted: function (input, $block, config) {
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreBlocks();
       });
     },
+
+    /**
+     * 
+     * @returns 
+     */
     getInputClass: function () {
       return Craft.MatrixInput;
     },
+
+    /**
+     * 
+     * @param {*} config 
+     * @returns 
+     */
     getModalButtonSettings: function (config) {
       if (config["field"]["enableTakeover"]) {
         return {
@@ -102,6 +150,12 @@ var MFP = MFP || {};
       }
       return {};
     },
+
+    /**
+     * 
+     * @param {*} input 
+     * @returns 
+     */
     getFieldHandle: function (input) {
       return input.id.replace("fields-", "");
     },
