@@ -18,6 +18,13 @@ var MFP = MFP || {};
     query: "",
     category: undefined,
 
+    /**
+     * 
+     * @param {*} container 
+     * @param {*} settings 
+     * @param {*} config 
+     * @param {*} defaultImageUrl 
+     */
     init: function (container, settings, config, defaultImageUrl) {
       this.config = config;
       this.defaultImageUrl = defaultImageUrl;
@@ -35,6 +42,11 @@ var MFP = MFP || {};
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
     },
 
+    /**
+     * 
+     * @param {*} ev 
+     * @returns 
+     */
     selectCategory: function (ev) {
       var $href = $(ev.target);
       this.category = $href.data("category");
@@ -45,6 +57,10 @@ var MFP = MFP || {};
       return false;
     },
 
+    /**
+     * 
+     * @returns 
+     */
     buildSidebarHtml: function () {
       var sidebar = $('<aside class="mfp-modal__sidebar sidebar"/>');
       var sidebarNav = $('<nav class="mfp-modal__sidebar__nav" />');
@@ -64,9 +80,9 @@ var MFP = MFP || {};
             sidebarHref.append(
               $("<span />", {
                 class: "info",
-                title: category.description
+                title: category.description,
               })
-            )
+            );
           }
           sidebarUl.append(sidebarLi);
 
@@ -90,6 +106,10 @@ var MFP = MFP || {};
       return sidebar;
     },
 
+    /**
+     * 
+     * @returns 
+     */
     buildFooterHtml: function () {
       var footer = $("<footer />", {
         class: "mfp-modal__footer footer",
@@ -190,8 +210,6 @@ var MFP = MFP || {};
 
           var img = $("<img>").attr("src", this.defaultImageUrl);
 
-          
-
           var content = $("<div>", {
             class: "mfp-grid-item__content",
           });
@@ -209,16 +227,19 @@ var MFP = MFP || {};
             img.attr("src", blockTypeConfig["image"]);
 
             var previewButton = $("<div />", {
-              class: "mfp-grid-item__preview expand icon"
+              class: "mfp-grid-item__preview expand icon",
             });
-            previewButton.on("click", function(ev) {
-              new Craft.PreviewFileModal(blockTypeConfig.imageId, null, {
-                startingWidth: 2000,
-                startingHeight: 2000,
-              });
-              ev.preventDefault();
-              return false;
-            }.bind(this));
+            previewButton.on(
+              "click",
+              function (ev) {
+                new Craft.PreviewFileModal(blockTypeConfig.imageId, null, {
+                  startingWidth: 2000,
+                  startingHeight: 2000,
+                });
+                ev.preventDefault();
+                return false;
+              }.bind(this)
+            );
             previewButton.appendTo(imgContainer);
           }
           if (blockTypeConfig["name"]) {
@@ -259,25 +280,25 @@ var MFP = MFP || {};
 
       var includeCategories = this.config.categories.length > 0;
 
-      var body = $('<div />', {
-        class: "mfp-modal__body body"
+      var body = $("<div />", {
+        class: "mfp-modal__body body",
       });
-      var content = $('<div />', {
-        class: "mfp-modal__content content"
+      var content = $("<div />", {
+        class: "mfp-modal__content content",
       });
-      var main = $('<main />', {
-        class: "mfp-modal__main main"
+      var main = $("<main />", {
+        class: "mfp-modal__main main",
       });
       var toolbar = this.buildToolbarHtml();
       var grid = this.buildGridItemsHtml();
       var emptyMessage = this.buildEmptyMessageHtml();
       var footer = this.buildFooterHtml();
-      
+
       if (includeCategories) {
         var sidebar = this.buildSidebarHtml();
         body.addClass("has-sidebar");
-        content.addClass("has-sidebar")
-        content.append(sidebar)
+        content.addClass("has-sidebar");
+        content.append(sidebar);
       }
 
       body.append(content);
@@ -300,7 +321,7 @@ var MFP = MFP || {};
       var $allGridItems = this.getGridItems();
       var $activeGridItems = $allGridItems
         .hide()
-        .filter(function() {
+        .filter(function () {
           // First filter by category
           if (hasCategory) {
             return $(this).data("category") === category;
@@ -308,7 +329,7 @@ var MFP = MFP || {};
           return true;
         })
         .filter(function () {
-          if (! hasQuery) {
+          if (!hasQuery) {
             return true;
           } else {
             var blockType = $(this).data("block-type");
@@ -316,15 +337,13 @@ var MFP = MFP || {};
             var description = $(this).data("description");
             return (
               hasQuery &&
-              (
-                blockType.includes(query) ||
+              (blockType.includes(query) ||
                 name.includes(query) ||
-                description.includes(query)
-              )
+                description.includes(query))
             );
           }
         });
-  
+
       $allGridItems.hide();
       if ($activeGridItems.length === 0) {
         this.showEmpty();
@@ -334,22 +353,38 @@ var MFP = MFP || {};
       }
     },
 
+    /**
+     * 
+     * @returns 
+     */
     getGridItems: function () {
       return this.$container.find(".mfp-grid-item");
     },
 
+    /**
+     * 
+     */
     showAll: function () {
       this.getGridItems().show();
     },
 
+    /**
+     * 
+     */
     showEmpty: function () {
       this.$container.find(".mfp-modal__empty").show().css("display", "flex");
     },
 
+    /**
+     * 
+     */
     hideEmpty: function () {
       this.$container.find(".mfp-modal__empty").hide();
     },
 
+    /**
+     * 
+     */
     resetSearch: function () {
       this.$container.find(".mfp-modal__empty").val("");
       this.query = "";
@@ -357,6 +392,13 @@ var MFP = MFP || {};
       this.hideEmpty();
     },
 
+    /**
+     * 
+     * @param {*} func 
+     * @param {*} wait 
+     * @param {*} immediate 
+     * @returns 
+     */
     debounce: function (func, wait, immediate) {
       var timeout;
       return function () {

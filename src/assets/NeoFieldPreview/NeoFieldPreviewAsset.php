@@ -4,7 +4,8 @@ namespace weareferal\matrixfieldpreview\assets\NeoFieldPreview;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
-use weareferal\matrixfieldpreview\assets\MatrixFieldPreview\MatrixFieldPreviewAsset;
+
+use weareferal\matrixfieldpreview\assets\BaseFieldPreview\BaseFieldPreviewAsset;
 
 class NeoFieldPreviewAsset extends AssetBundle
 {
@@ -14,7 +15,7 @@ class NeoFieldPreviewAsset extends AssetBundle
 
         $this->depends = [
             CpAsset::class,
-            MatrixFieldPreviewAsset::class
+            BaseFieldPreviewAsset::class
         ];
 
         $this->js = [

@@ -5,6 +5,8 @@ namespace weareferal\matrixfieldpreview\assets\MatrixFieldPreview;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
+use weareferal\matrixfieldpreview\assets\BaseFieldPreview\BaseFieldPreviewAsset;
+
 class MatrixFieldPreviewAsset extends AssetBundle
 {
     public function init()
@@ -12,21 +14,15 @@ class MatrixFieldPreviewAsset extends AssetBundle
         $this->sourcePath = "@weareferal/matrixfieldpreview/assets/MatrixFieldPreview/dist";
 
         $this->depends = [
-            CpAsset::class
+            CpAsset::class,
+            BaseFieldPreviewAsset::class
         ];
 
         $this->js = [
-            'js/BlockTypeInlinePreview.js',
-            'js/BlockTypeModal.js',
-            'js/BlockTypeModalButton.js',
-            'js/BaseFieldPreview.js',
             'js/MatrixFieldPreview.js',
         ];
 
         $this->css = [
-            'css/BlockTypeInlinePreview.css',
-            'css/BlockTypeModal.css',
-            'css/BlockTypeModalButton.css',
             'css/MatrixFieldPreview.css',
         ];
 

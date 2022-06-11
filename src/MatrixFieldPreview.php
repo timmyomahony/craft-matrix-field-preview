@@ -19,6 +19,7 @@ use weareferal\matrixfieldpreview\services\UtilsService;
 use weareferal\matrixfieldpreview\services\PreviewImageService;
 use weareferal\matrixfieldpreview\services\CategoryService;
 use weareferal\matrixfieldpreview\models\Settings;
+use weareferal\matrixfieldpreview\assets\BaseFieldPreview\BaseFieldPreviewAsset;
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreview\MatrixFieldPreviewAsset;
 use weareferal\matrixfieldpreview\assets\NeoFieldPreview\NeoFieldPreviewAsset;
 use weareferal\matrixfieldpreview\migrations;
@@ -147,7 +148,9 @@ class MatrixFieldPreview extends Plugin
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
                     $view->registerJsVar('matrixFieldPreviewIcon', $iconImage);
 
+                    $view->registerAssetBundle(BaseFieldPreviewAsset::class);
                     $view->registerAssetBundle(MatrixFieldPreviewAsset::class);
+
                     $view->registerJs('new MFP.MatrixFieldPreview();', View::POS_READY, 'matrix-field-preview');
 
                     if (Craft::$app->plugins->isPluginEnabled("neo")) {

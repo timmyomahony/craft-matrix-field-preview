@@ -69,7 +69,9 @@ abstract class BaseFieldsController extends Controller {
             $fieldConfig = $service->getOrCreateByFieldHandle($handle);
             if ($fieldConfig) {
                 $fieldConfig->enablePreviews = $values['enablePreviews'];
-                $fieldConfig->enableTakeover = $values['enableTakeover'];
+                if (isset($values['enableTakeover'])) {
+                    $fieldConfig->enableTakeover = $values['enableTakeover'];
+                }
                 if ($fieldConfig->validate()) {
                     $fieldConfig->save();
                 }
