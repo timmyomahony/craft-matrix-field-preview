@@ -47,14 +47,12 @@ var MFP = MFP || {};
         // before out Matrix Field Preview classes
         var loadFields = function () {
           var fields = [];
-          if (fields.length > 0) {
-            fields.each(function(i, field) {
-              var field = $(field).data(this.getDataKey());
-              if (field) {
-                fields.push(field);
-              }
-            }.bind(this));
-          }
+          this.getFieldElements().each(function(i, field) {
+            var field = $(field).data(this.getDataKey());
+            if (field) {
+              fields.push(field);
+            }
+          }.bind(this));
           return fields;
         }.bind(this);
 
