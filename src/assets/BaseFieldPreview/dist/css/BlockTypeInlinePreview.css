@@ -8,6 +8,7 @@
 .mfp-block-type-preview__thumb {
   width: 60px;
   height: 60px;
+  flex: 0 0 auto;  
   background-color: white;
   background-repeat: no-repeat;
   background-position: center center;
