@@ -144,7 +144,7 @@ Craft Matrix Field now support [Craft Neo Fields too](https://github.com/spicywe
 
 ![Neo field settings](resources/img/screenshot-11.png)
 
-**Bear in mind that you need to be using Neo >= 2.8.14 for Matrix Field Preview to work with Neo.**
+Bear in mind that you need to be using Neo >= 3.0.0 for Matrix Field Preview to work with Neo.
 
 ## Support & Troubleshooting
 
