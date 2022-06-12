@@ -15,6 +15,7 @@ var MFP = MFP || {};
     inputType: "matrix",
 
     /**
+     * Initialise Input
      * 
      * @param {*} input 
      * @param {*} config 
@@ -43,6 +44,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Setup Input
      * 
      * @param {*} input 
      * @param {*} config 
@@ -86,6 +88,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Block Added
      * 
      * @param {*} input 
      * @param {*} $block 
@@ -117,6 +120,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Block Deleted
      * 
      * @param {*} input 
      * @param {*} $block 
@@ -130,6 +134,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Input Class
      * 
      * @returns 
      */
@@ -138,6 +143,25 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Field Elements
+     * 
+     * @returns 
+     */
+     getFieldElements: function () {
+      return $(".matrix-field");
+    },
+
+    /**
+     * Get Data Key
+     * 
+     * @returns 
+     */
+    getDataKey: function () {
+      return "matrix";
+    },
+
+    /**
+     * Get Modal Button Settings
      * 
      * @param {*} config 
      * @returns 
@@ -152,6 +176,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Field Handle
      * 
      * @param {*} input 
      * @returns 

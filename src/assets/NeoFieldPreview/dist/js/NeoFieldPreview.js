@@ -4,6 +4,13 @@ var MFP = MFP || {};
   MFP.NeoFieldPreview = MFP.BaseFieldPreview.extend({
     previewsUrl: "matrix-field-preview/preview/get-previews",
     inputType: "neo",
+
+    /**
+     * Initialise Input
+     * 
+     * @param {*} neoInput 
+     * @param {*} config 
+     */
     initialiseInput: function (neoInput, config) {
       neoInput.on(
         "addBlock",
@@ -21,6 +28,13 @@ var MFP = MFP || {};
 
       this.setupInput(neoInput, config);
     },
+
+    /**
+     * Setup Input
+     * 
+     * @param {*} neoInput 
+     * @param {*} config 
+     */
     setupInput: function (neoInput, config) {
       var neoBlocks = neoInput.getBlocks();
       var neoBlockTypes = neoInput.getBlockTypes();
@@ -70,6 +84,14 @@ var MFP = MFP || {};
         }.bind(this)
       );
     },
+
+    /**
+     * Block Added
+     * 
+     * @param {*} neoBlock 
+     * @param {*} config 
+     * @returns 
+     */
     blockAdded: function (neoBlock, config) {
       var blockHandle = neoBlock._blockType._handle;
       var blockConfig = config["blockTypes"][blockHandle];
@@ -139,11 +161,25 @@ var MFP = MFP || {};
         );
       }
     },
+
+    /**
+     * Block Removed
+     * 
+     * @param {*} neoBlock 
+     */
     blockRemoved: function (neoBlock) {
       this.updateModalButton(neoBlock.modalButton, function () {
         return false;
       });
     },
+
+    /**
+     * Filter Config For Block Types
+     * 
+     * @param {*} neoBlockTypes 
+     * @param {*} config 
+     * @returns 
+     */
     filterConfigForBlockTypes: function (neoBlockTypes, config) {
       var filteredConfigs = {};
       for (var i = 0; i < neoBlockTypes.length; i++) {
@@ -155,11 +191,25 @@ var MFP = MFP || {};
       }
       return filteredConfigs;
     },
+
+    /**
+     * Searchh Neo Block Types
+     * 
+     * @param {*} neoBlockTypes 
+     * @param {*} handle 
+     * @returns 
+     */
     searchNeoBlockTypes: function (neoBlockTypes, handle) {
       return $.grep(neoBlockTypes, function (neoBlockType) {
         return neoBlockType.getHandle() === handle;
       })[0];
     },
+
+    /**
+     * Get Input Class
+     * 
+     * @returns 
+     */
     getInputClass: function () {
       try {
         return window.Neo.Input;
@@ -167,6 +217,31 @@ var MFP = MFP || {};
         return undefined;
       }
     },
+
+    /**
+     * Get Field Elements
+     * 
+     * @returns 
+     */
+    getFieldElements: function () {
+      return $(".neo-input");
+    },
+
+    /**
+     * Get Data Key
+     * 
+     * @returns 
+     */
+    getDataKey: function () {
+      return "neo";
+    },
+
+    /**
+     * Get Field Handle
+     * 
+     * @param {*} input 
+     * @returns 
+     */
     getFieldHandle: function (input) {
       return input._name;
     },
