@@ -15,6 +15,7 @@ var MFP = MFP || {};
     inputType: "matrix",
 
     /**
+     * Initialise Input
      * 
      * @param {*} input 
      * @param {*} config 
@@ -43,6 +44,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Setup Input
      * 
      * @param {*} input 
      * @param {*} config 
@@ -86,6 +88,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Block Added
      * 
      * @param {*} input 
      * @param {*} $block 
@@ -117,6 +120,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Block Deleted
      * 
      * @param {*} input 
      * @param {*} $block 
@@ -130,6 +134,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Input Class
      * 
      * @returns 
      */
@@ -139,23 +144,24 @@ var MFP = MFP || {};
 
     /**
      * Get Field Elements
-     *
-     * @returns the jQuery field elements on the page 
+     * 
+     * @returns 
      */
-    getFieldElements: function () {
+     getFieldElements: function () {
       return $(".matrix-field");
     },
 
     /**
-     * Get Data Name
-     *
-     * @returns the key used on the element to store the Garnish plugin
+     * Get Data Key
+     * 
+     * @returns 
      */
-     getDataKey: function () {
+    getDataKey: function () {
       return "matrix";
     },
 
     /**
+     * Get Modal Button Settings
      * 
      * @param {*} config 
      * @returns 
@@ -170,6 +176,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Field Handle
      * 
      * @param {*} input 
      * @returns 

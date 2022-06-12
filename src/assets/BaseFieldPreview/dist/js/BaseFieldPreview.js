@@ -42,15 +42,30 @@ var MFP = MFP || {};
         this.defaultImageUrl = matrixFieldPreviewDefaultImage;
         this.previewIcon = matrixFieldPreviewIcon;
 
-        var $fields = this.getFieldElements();
-        if ($fields.length > 0) {
-          // If the matrix fields are already rendered
-          $fields.each(function(i, field) {
-            var input = $(field).data(this.getDataKey());
-            this.onInputLoaded(input);
-          }.bind(this))
+        // Attempt to load existing Garnish elements. This handles the
+        // the situation where our matrix or neo fields have already loaded
+        // before out Matrix Field Preview classes
+        var loadFields = function () {
+          var fields = [];
+          if (fields.length > 0) {
+            fields.each(function(i, field) {
+              var field = $(field).data(this.getDataKey());
+              if (field) {
+                fields.push(field);
+              }
+            }.bind(this));
+          }
+          return fields;
+        }.bind(this);
+
+        var fields = loadFields();
+        if (fields.length > 0) {
+          fields.forEach(function(field) {
+            console.debug("Loading FP via existing loaded fields");
+            this.onInputLoaded(field);
+          }.bind(this));
         } else {
-          // Otherwise add a listener
+          console.debug("Loading MFP via Garnish 'afterInit' listener");
           Garnish.on(
             this.getInputClass(),
             "afterInit",
@@ -145,6 +160,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Modal Button Settings
      * 
      * @param {*} config 
      * @returns 
@@ -154,6 +170,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Update Modal Button
      * 
      * @param {*} button 
      * @param {*} callback 
@@ -178,6 +195,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Create Modal
      * 
      * @param {*} $target 
      * @param {*} config 
@@ -200,6 +218,7 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Input Class
      * 
      * @returns 
      */
@@ -208,6 +227,25 @@ var MFP = MFP || {};
     },
 
     /**
+     * Get Field Elements
+     * 
+     * @returns 
+     */
+    getFieldElements: function () {
+      return null;
+    },
+
+    /**
+     * Get Data Key
+     * 
+     * @returns 
+     */
+     getDataKey: function () {
+      return null;
+    },
+
+    /**
+     * Get Config
      * 
      * @param {*} fieldHandle 
      * @returns 
