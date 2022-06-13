@@ -141,21 +141,16 @@ class MatrixFieldPreview extends Plugin
             function (TemplateEvent $event) {
                 if (Craft::$app->request->isCpRequest) {
                     $view = Craft::$app->getView();
-
                     $defaultImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/no-dummy-image.png', true);
                     $iconImage = Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/preview-icon.svg', true);
-
                     $view->registerJsVar('matrixFieldPreviewDefaultImage', $defaultImage);
                     $view->registerJsVar('matrixFieldPreviewIcon', $iconImage);
-
                     $view->registerAssetBundle(BaseFieldPreviewAsset::class);
                     $view->registerAssetBundle(MatrixFieldPreviewAsset::class);
-
-                    $view->registerJs('new MFP.MatrixFieldPreview();', View::POS_READY, 'matrix-field-preview');
-
+                    $view->registerJs('new MFP.MatrixFieldPreview();', View::POS_END, 'matrix-field-preview');
                     if (Craft::$app->plugins->isPluginEnabled("neo")) {
                         $view->registerAssetBundle(NeoFieldPreviewAsset::class);
-                        $view->registerJs('new MFP.NeoFieldPreview();', View::POS_READY, 'neo-field-preview');
+                        $view->registerJs('new MFP.NeoFieldPreview();', View::POS_END, 'neo-field-preview');
                     }
                 }
             }
