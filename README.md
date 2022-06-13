@@ -40,7 +40,10 @@ As well as a preview on existing blocks.
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0 or later.
+Matrix Field Preview supports both Craft 3 and Craft 4.
+
+- For Craft 3 use versions `3.X.X` of the plugin.
+- For Craft 4 use versions `4.X.X` of the plugin.
 
 ## Installation
 
