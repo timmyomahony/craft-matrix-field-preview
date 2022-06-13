@@ -38,41 +38,17 @@ var MFP = MFP || {};
      */
     init: function () {
       if (typeof this.getInputClass() !== "undefined") {
-        // via $view->registerJsVar
         this.defaultImageUrl = matrixFieldPreviewDefaultImage;
         this.previewIcon = matrixFieldPreviewIcon;
 
-        // Attempt to load existing Garnish elements. This handles the
-        // the situation where our matrix or neo fields have already loaded
-        // before out Matrix Field Preview classes
-        var loadFields = function () {
-          var fields = [];
-          this.getFieldElements().each(function(i, field) {
-            var field = $(field).data(this.getDataKey());
-            if (field) {
-              fields.push(field);
-            }
-          }.bind(this));
-          return fields;
-        }.bind(this);
-
-        var fields = loadFields();
-        if (fields.length > 0) {
-          fields.forEach(function(field) {
-            console.debug("Loading FP via existing loaded fields");
-            this.onInputLoaded(field);
-          }.bind(this));
-        } else {
-          console.debug("Loading MFP via Garnish 'afterInit' listener");
-          Garnish.on(
-            this.getInputClass(),
-            "afterInit",
-            {},
-            function (ev) {
-              this.onInputLoaded(ev.target);
-            }.bind(this)
-          );
-        }
+        Garnish.on(
+          this.getInputClass(),
+          "afterInit",
+          {},
+          function (ev) {
+            this.onInputLoaded(ev.target);
+          }.bind(this)
+        );
       }
     },
 
