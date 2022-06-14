@@ -15,10 +15,14 @@
         <div class="mfp-settings-preview-image__controls">
             <input type="file" name="preview-image" class="hidden">
             {% if blockTypeConfig.previewImage %}
-                <button type="button" class="btn mfp-settings-preview-image__upload">{{ "Change preview image"|t('matrix-field-preview') }}</button>
-                <button type="button" class="btn mfp-settings-preview-image__delete">{{ "Delete preview image"|t('matrix-field-preview') }}</button>
+                <div class="flex flex-nowrap">
+                    <button type="button" class="btn mfp-settings-preview-image__upload">{{ "Change preview image"|t('matrix-field-preview') }}</button>
+                    <button type="button" class="btn mfp-settings-preview-image__delete">{{ "Delete preview image"|t('matrix-field-preview') }}</button>
+                </div>
             {% else %}
-                <button type="button" class="btn mfp-settings-preview-image__upload">{{ "Upload a preview image"|t('matrix-field-preview') }}</button>
+                <div class="flex flex-nowrap">
+                    <button type="button" class="btn mfp-settings-preview-image__upload">{{ "Upload a preview image"|t('matrix-field-preview') }}</button>
+                </div>
             {% endif %}
         </div>
     </div>
