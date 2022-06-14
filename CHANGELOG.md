@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.2 - 2022-06-15
+
+## Fixed
+
+- Version 4 of the plugin still included Craft 3/PHP 7 as valid requirements so these have been removed.
+
 ## 4.0.1 - 2022-06-14
 
 ### Fixed
