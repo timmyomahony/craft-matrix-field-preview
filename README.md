@@ -1,6 +1,6 @@
 # Matrix Field Preview
 
-<img src="src/icon.svg" width="125px">
+> For Craft 3 use the `3.X` release of the plugin. For Craft 4 support use the `4.X` release.
 
 Add text and screenshot previews to matrix fields, improving your client's publishing experience with visual prompts via an easy-to-use modal.
 
