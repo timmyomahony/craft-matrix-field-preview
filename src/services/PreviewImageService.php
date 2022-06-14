@@ -64,7 +64,7 @@ class PreviewImageService extends Component
         }
 
         // Create a new asset
-        $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+        $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume)->id;
         $filenameToUse = $assetsService->getNameReplacementInFolder($filenameToUse, $folderId);
 
         $previewImage = new Asset();
