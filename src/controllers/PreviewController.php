@@ -88,6 +88,20 @@ class PreviewController extends Controller
         $blockTypeConfigs = $blockTypeService->getOrCreateByFieldHandle($fieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
+
+		        if(Craft::$app->plugins->isPluginInstalled('matrixmate')) {
+			        $matrixmate = MatrixMate::getInstance()->getSettings();
+			        $skip = false;
+			        if(isset($matrixmate->fields[$response['config']["field"]['handle']])) {
+				        foreach($matrixmate->fields[$response['config']["field"]['handle']] as $value) {
+					        foreach ($value['hiddenTypes'] as $hiddentype) {
+						        if($hiddentype == $blockType->handle) $skip = true;
+					        }
+				        }
+			        }
+			        if($skip) continue;
+		        }
+
             $result = [
                 "name" => $blockType->name,
                 "handle" => $blockType->handle,
