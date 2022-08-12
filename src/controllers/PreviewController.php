@@ -95,16 +95,18 @@ class PreviewController extends Controller
 				$entry_id = intval(basename(parse_url(Craft::$app->request->getReferrer(), PHP_URL_PATH)));
 				$site = Craft::$app->elements->getEnabledSiteIdsForElement($entry_id);
 				$entry = Craft::$app->entries->getEntryById($entry_id, $site);
-				$section_handle = $entry->getSection()->handle;
-				$skip = false;
-				if(isset($matrixmate->fields[$response['config']["field"]['handle']])) {
-					foreach($matrixmate->fields[$response['config']["field"]['handle']] as $key => $value) {
-						foreach ($value['hiddenTypes'] as $hiddentype) {
-							if($hiddentype == $blockType->handle && isset(explode(':',$key)[1]) && $section_handle == explode(':',$key)[1]) $skip = true;
+				if(isset($entry))  {
+					$section_handle = $entry->getSection()->handle;
+					$skip = false;
+					if(isset($matrixmate->fields[$response['config']["field"]['handle']])) {
+						foreach($matrixmate->fields[$response['config']["field"]['handle']] as $key => $value) {
+							foreach ($value['hiddenTypes'] as $hiddentype) {
+								if($hiddentype == $blockType->handle && isset(explode(':',$key)[1]) && $section_handle == explode(':',$key)[1]) $skip = true;
+							}
 						}
 					}
+					if($skip) continue;
 				}
-				if($skip) continue;
 			}
 
 			$result = [
