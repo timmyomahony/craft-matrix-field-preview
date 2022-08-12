@@ -93,8 +93,9 @@ class PreviewController extends Controller
 			if(Craft::$app->plugins->isPluginInstalled('matrixmate')) {
 				$matrixmate = MatrixMate::getInstance()->getSettings();
 				$entry_id = intval(basename(parse_url(Craft::$app->request->getReferrer(), PHP_URL_PATH)));
-				$site = Craft::$app->elements->getEnabledSiteIdsForElement($entry_id);
-				$entry = Craft::$app->entries->getEntryById($entry_id, $site);
+				$site_ids =  Craft::$app->sites->getAllSiteIds();
+				$entry = Craft::$app->entries->getEntryById($entry_id, $site_ids, ['status' => array('live', 'pending', 'disabled', 'expired')]);
+
 				if(isset($entry))  {
 					$section_handle = $entry->getSection()->handle;
 					$skip = false;
