@@ -37,7 +37,16 @@ var MFP = MFP || {};
      */
     setupInput: function (neoInput, config) {
       var neoBlocks = neoInput.getBlocks();
-      var neoBlockTypes = neoInput.getBlockTypes();
+      var neoBlockTypes = $.grep(
+        neoInput.getBlockTypes(),
+        function (neoBlockType) {
+          return neoBlockType.getTopLevel();
+        }
+      );
+      var topLevelConfig = this.filterConfigForBlockTypes(
+        neoBlockTypes,
+        config
+      );
       var modal, modalButton;
 
       neoInput.$container.addClass("mfp-field mfp-neo-field");
@@ -45,11 +54,11 @@ var MFP = MFP || {};
         // Create modal trigger button
         var modalButton = this.createModalButton(
           neoInput.$buttonsContainer.find("> .ni_buttons"),
-          config
+          topLevelConfig
         );
 
         // Create modal and grid
-        var modal = this.createModal(neoInput.$container, config);
+        var modal = this.createModal(neoInput.$container, topLevelConfig);
 
         // When preview button clicked
         modalButton.on("click", function () {
@@ -99,17 +108,16 @@ var MFP = MFP || {};
 
       if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn("No block types configured for this Neo block");
-        return;
+      } else {
+        // Add inline preview
+        var inlinePreview = this.createInlinePreview(
+          neoBlock.$bodyContainer,
+          blockConfig,
+          neoBlock
+        );
+
+        neoBlock.inlinePreview = inlinePreview;
       }
-
-      // Add inline preview
-      var inlinePreview = this.createInlinePreview(
-        neoBlock.$bodyContainer,
-        blockConfig,
-        neoBlock
-      );
-
-      neoBlock.inlinePreview = inlinePreview;
 
       if (neoBlockTypes.length > 0) {
         // Filter out the block types we need to display for this particular
@@ -181,15 +189,17 @@ var MFP = MFP || {};
      * @returns 
      */
     filterConfigForBlockTypes: function (neoBlockTypes, config) {
-      var filteredConfigs = {};
+      var filteredConfigs = {
+        blockTypes: {},
+      };
       for (var i = 0; i < neoBlockTypes.length; i++) {
         var neoBlockType = neoBlockTypes[i];
         var _config = config["blockTypes"][neoBlockType["_handle"]];
         if (_config) {
-          filteredConfigs[_config["handle"]] = _config;
+          filteredConfigs["blockTypes"][_config["handle"]] = _config;
         }
       }
-      return filteredConfigs;
+      return $.extend({}, config, filteredConfigs);
     },
 
     /**
