@@ -9,7 +9,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Fixed
 
 - Fixed issue with Neo migration not being run correctly (issue #88)
-
+- Fixed issue with ordering > 10 fields (issue #93)
+ 
 ## 4.0.2 - 2022-06-15
 
 ## Fixed
