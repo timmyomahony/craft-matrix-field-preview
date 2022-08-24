@@ -36,13 +36,13 @@ class PreviewController extends Controller
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
         $response = [
-                "success" => false,
-                "config" => [
-                        "general" => [],
-                        "field" => null,
-                        "blockTypes" => [],
-                        "categories" => []
-                ]
+            "success" => false,
+            "config" => [
+                "general" => [],
+                "field" => null,
+                "blockTypes" => [],
+                "categories" => []
+            ]
         ];
 
         switch ($type) {
@@ -68,21 +68,21 @@ class PreviewController extends Controller
 
         // Add field info
         $response['config']['field'] = [
-                "name" => $fieldConfig->field->name,
-                "handle" => $fieldConfig->field->handle,
-                "enablePreviews" => $fieldConfig->enablePreviews,
-                "enableTakeover" => $fieldConfig->enableTakeover,
-                // TODO: make this configurable via the settings
-                "buttonText" => "Content Previews"
+            "name" => $fieldConfig->field->name,
+            "handle" => $fieldConfig->field->handle,
+            "enablePreviews" => $fieldConfig->enablePreviews,
+            "enableTakeover" => $fieldConfig->enableTakeover,
+            // TODO: make this configurable via the settings
+            "buttonText" => "Content Previews"
         ];
 
         // Add categories
         foreach ($plugin->categoryService->getAll() as $category) {
             array_push($response['config']["categories"], [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                    'description' => $category->description,
-                    "descriptionHTML" => Markdown::process($category->description)
+                'id' => $category->id,
+                'name' => $category->name,
+                'description' => $category->description,
+                "descriptionHTML" => Markdown::process($category->description)
             ]);
         }
 
@@ -111,21 +111,21 @@ class PreviewController extends Controller
             }
 
             $result = [
-                    "name" => $blockType->name,
-                    "handle" => $blockType->handle,
-                    "description" => $blockTypeConfig->description,
-                    "descriptionHTML" => Markdown::process($blockTypeConfig->description),
-                    "categoryId" => $blockTypeConfig->categoryId,
-                    "image" => null,
-                    "thumb" => null
+                "name" => $blockType->name,
+                "handle" => $blockType->handle,
+                "description" => $blockTypeConfig->description,
+                "descriptionHTML" => Markdown::process($blockTypeConfig->description),
+                "categoryId" => $blockTypeConfig->categoryId,
+                "image" => null,
+                "thumb" => null
             ];
             if ($blockTypeConfig->previewImageId) {
                 $asset = Craft::$app->assets->getAssetById($blockTypeConfig->previewImageId);
                 $result["imageId"] = $blockTypeConfig->previewImageId;
                 $result["image"] = $asset ? $asset->getUrl([
-                        "width" => 800,
-                        "mode" => "stretch",
-                        "position" => "center-center"
+                    "width" => 800,
+                    "mode" => "stretch",
+                    "position" => "center-center"
                 ]) : "";
                 $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";
             }
