@@ -203,15 +203,17 @@ class MatrixFieldPreview extends Plugin
                     // table, which already exist, so we just run it manually
                     //
                     // See https://craftcms.stackexchange.com/q/36657/9612
-                    $neoMigration = new migrations\m201031_120401_add_neo_support();
-                    $neoMigration->db->schema->refresh();
-                    $neoMigration->safeUp();
-                    $neoMigration->db->schema->refresh();
+                    $neoMigrations = [
+                        new migrations\m201031_120401_add_neo_support(),
+                        new migrations\m220606_112005_add_category_fk_to_neo(),
+                        new migrations\m220606_200131_add_neo_block_type_sort_order()
+                    ];
 
-                    $neoMigration = new migrations\m220606_112005_add_category_fk_to_neo();
-                    $neoMigration->db->schema->refresh();
-                    $neoMigration->safeUp();
-                    $neoMigration->db->schema->refresh();
+                    foreach ($neoMigrations as $neoMigration) {
+                        $neoMigration->db->schema->refresh();
+                        $neoMigration->safeUp();
+                        $neoMigration->db->schema->refresh();
+                    }
                 }
             }
         );
