@@ -121,7 +121,10 @@ abstract class BaseBlockTypeConfigService extends Component
         }
 
         usort($records, function ($a, $b) {
-            return strcmp($a->sortOrder, $b->sortOrder);
+            if ($a->sortOrder === $b->sortOrder) {
+                return 0;
+            }
+            return $a->sortOrder > $b->sortOrder ? 1 : -1;
         });
 
         return $records;

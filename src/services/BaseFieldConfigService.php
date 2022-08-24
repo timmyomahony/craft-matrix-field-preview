@@ -38,7 +38,10 @@ abstract class BaseFieldConfigService extends Component
         
         if ($sort) {
             usort($fieldConfigs, function ($a, $b) {
-                return strcmp($a->field->name, $b->field->name);
+                if ($a->sortOrder === $b->sortOrder) {
+                    return 0;
+                }
+                return $a->sortOrder > $b->sortOrder ? 1 : -1;
             });
         }
 
