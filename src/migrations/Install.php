@@ -40,9 +40,9 @@ class Install extends Migration
     public function safeDown()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
-        $this->removeMatrixFieldTables();
         // Always remove, even if Neo not currently installed
         $this->removeNeoFieldTables();
+        $this->removeMatrixFieldTables();
         return true;
     }
 
