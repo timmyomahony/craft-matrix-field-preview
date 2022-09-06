@@ -17,7 +17,7 @@ abstract class BaseFieldConfigService extends Component
      * Get or create new field configs for every matrix field currently
      * saved in the system
      */
-    public function getAll($sort = false)
+    public function getAll()
     {
         // TODO: performance can be improved here
         foreach ($this->getAllFields() as $field) {
@@ -35,15 +35,6 @@ abstract class BaseFieldConfigService extends Component
         }
 
         $fieldConfigs = $this->FieldRecordConfigClass::find()->all();
-        
-        if ($sort) {
-            usort($fieldConfigs, function ($a, $b) {
-                if ($a->sortOrder === $b->sortOrder) {
-                    return 0;
-                }
-                return $a->sortOrder > $b->sortOrder ? 1 : -1;
-            });
-        }
 
         return $fieldConfigs;
     }

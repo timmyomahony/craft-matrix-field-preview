@@ -79,7 +79,7 @@ abstract class BaseFieldsController extends Controller {
         }
 
         $fields = $service->getAllFields();
-        $fieldConfigs = $service->getAll($sort = true);
+        $fieldConfigs = $service->getAll();
 
         $this->setSuccessFlash($this->getSuccessMessage());
         return $this->redirectToPostedUrl();
