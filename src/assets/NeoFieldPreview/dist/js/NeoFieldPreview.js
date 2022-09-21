@@ -12,6 +12,9 @@ var MFP = MFP || {};
      * @param {*} config 
      */
     initialiseInput: function (neoInput, config) {
+
+      console.debug("Initialising Neo Input:" + neoInput._name);
+
       neoInput.on(
         "addBlock",
         function (ev) {
@@ -115,7 +118,7 @@ var MFP = MFP || {};
         // Filter out the block types we need to display for this particular
         // neo block. Not all neo blocks show all block types, so we should
         // only display those relevant
-        var filteredConfig = this.filterConfigForBlockTypes(
+        var blockConfig = this.createBlockConfig(
           neoBlockTypes,
           config
         );
@@ -131,7 +134,7 @@ var MFP = MFP || {};
         // Create modal
         var modal = this.createModal(
           neoBlock.$container,
-          filteredConfig,
+          blockConfig,
           neoBlock,
           neoBlockTypes
         );
@@ -176,20 +179,23 @@ var MFP = MFP || {};
     /**
      * Filter Config For Block Types
      * 
+     * Given a list of Neo block types, return the matching configs.
+     * 
      * @param {*} neoBlockTypes 
      * @param {*} config 
-     * @returns 
+     * @returns A object that maps the block type handle to the MFP config
+     * object
      */
-    filterConfigForBlockTypes: function (neoBlockTypes, config) {
-      var filteredConfigs = {};
+    createBlockConfig: function (neoBlockTypes, config) {
+      var configCopy = $.extend({}, config);
       for (var i = 0; i < neoBlockTypes.length; i++) {
         var neoBlockType = neoBlockTypes[i];
         var _config = config["blockTypes"][neoBlockType["_handle"]];
         if (_config) {
-          filteredConfigs[_config["handle"]] = _config;
+          configCopy["blockTypes"][_config["handle"]] = _config;
         }
       }
-      return filteredConfigs;
+      return configCopy;
     },
 
     /**
