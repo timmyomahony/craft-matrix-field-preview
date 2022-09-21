@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 4.5.0 - 2022-09-21
+## 4.0.5 - 2022-09-21
 
 Thanks @ttempleton for PR #91, helping to address issues with Neo.
 
