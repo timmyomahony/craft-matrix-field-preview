@@ -12,9 +12,6 @@ var MFP = MFP || {};
      * @param {*} config 
      */
     initialiseInput: function (neoInput, config) {
-
-      console.debug("Initialising Neo Input:" + neoInput._name);
-
       neoInput.on(
         "addBlock",
         function (ev) {
@@ -115,57 +112,49 @@ var MFP = MFP || {};
      * @returns 
      */
     setupNestedPreview: function (neoBlock, config) {
+      console.log("setting up block", neoBlock)
       var blockHandle = neoBlock._blockType._handle;
       var blockConfig = config["blockTypes"][blockHandle];
       var neoChildBlockTypes = neoBlock.getButtons().getBlockTypes();
 
+      // Add inline preview
       if (!blockConfig["image"] && !blockConfig["description"]) {
-        console.warn("No block types configured for this Neo block");
-        return;
+        console.warn("No inline preview block types configured for this Neo block");
+      } else {        
+        neoBlock.inlinePreview = this.createInlinePreview(
+          neoBlock.$bodyContainer,
+          blockConfig,
+          neoBlock
+        );
       }
 
-      // Add inline preview
-      var inlinePreview = this.createInlinePreview(
-        neoBlock.$bodyContainer,
-        blockConfig,
-        neoBlock
-      );
-
-      neoBlock.inlinePreview = inlinePreview;
-
       if (neoChildBlockTypes.length > 0) {
-        // Filter out the block types we need to display for this particular
-        // neo block. Not all neo blocks show all block types, so we should
-        // only display those relevant
+        var modal, modalButton;
         var blockConfig = this.createBlockConfig(
           neoChildBlockTypes,
           config
         );
 
         // Create modal trigger button
-        var modalButton = this.createModalButton(
+        modalButton = this.createModalButton(
           neoBlock.$buttonsContainer.find(".ni_buttons"),
           config
         );
 
-        neoBlock.modalButton = modalButton;
-
         // Create modal
-        var modal = this.createModal(
+        modal = this.createModal(
           neoBlock.$container,
           blockConfig,
           neoBlock,
           neoChildBlockTypes
         );
 
-        neoBlock.modal = modal;
-
-        // When preview button clicked
+        // Show modal on click
         modalButton.on("click", function () {
           modal.show();
         });
 
-        // When a modal grid item is clicked
+        // Add block when preview is clicked in modal
         modal.on(
           "gridItemClicked",
           {},
@@ -181,6 +170,9 @@ var MFP = MFP || {};
             modal.hide();
           }.bind(this)
         );
+
+        neoBlock.modalButton = modalButton;
+        neoBlock.modal = modal;
       }
     },
 
@@ -190,9 +182,9 @@ var MFP = MFP || {};
      * @param {*} neoBlock 
      */
     tearDownNestedPreview: function (neoBlock) {
-      this.updateModalButton(neoBlock.modalButton, function () {
-        return false;
-      });
+      // this.updateModalButton(neoBlock.modalButton, function () {
+      //   return false;
+      // });
     },
 
     /**
