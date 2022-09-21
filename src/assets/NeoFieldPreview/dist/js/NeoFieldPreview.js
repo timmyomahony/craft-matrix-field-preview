@@ -44,7 +44,7 @@ var MFP = MFP || {};
       // Now find all nested blocks that allow for children to be added
       neoInput.getBlocks()
         .filter(function(neoBlock) {
-          return neoBlock.getBlockType().hasChildBlocksUiElement();
+          return neoBlock.getBlockType().getChildBlocks() !== null;
         })
         .forEach(function(nestedNeoBlock) {
           this.setupNestedPreview(nestedNeoBlock, config);
@@ -112,7 +112,6 @@ var MFP = MFP || {};
      * @returns 
      */
     setupNestedPreview: function (neoBlock, config) {
-      console.log("setting up block", neoBlock)
       var blockHandle = neoBlock._blockType._handle;
       var blockConfig = config["blockTypes"][blockHandle];
       var neoChildBlockTypes = neoBlock.getButtons().getBlockTypes();
