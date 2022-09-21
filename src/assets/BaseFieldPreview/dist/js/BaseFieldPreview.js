@@ -139,7 +139,12 @@ var MFP = MFP || {};
      * @param {*} config 
      * @returns 
      */
-    getModalButtonSettings: function (config) {
+     getModalButtonSettings: function (config) {
+      if (config["field"]["enableTakeover"]) {
+        return {
+          takeover: true,
+        };
+      }
       return {};
     },
 

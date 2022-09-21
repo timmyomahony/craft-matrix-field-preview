@@ -12,6 +12,10 @@ var MFP = MFP || {};
      * @param {*} config 
      */
     initialiseInput: function (neoInput, config) {
+      if (config["field"]["enableTakeover"]) {
+        neoInput.$container.addClass("mfp-field--takeover");
+      }
+  
       neoInput.on(
         "addBlock",
         function (ev) {

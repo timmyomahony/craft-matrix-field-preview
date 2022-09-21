@@ -161,21 +161,6 @@ var MFP = MFP || {};
     },
 
     /**
-     * Get Modal Button Settings
-     * 
-     * @param {*} config 
-     * @returns 
-     */
-    getModalButtonSettings: function (config) {
-      if (config["field"]["enableTakeover"]) {
-        return {
-          takeover: true,
-        };
-      }
-      return {};
-    },
-
-    /**
      * Get Field Handle
      * 
      * @param {*} input 
