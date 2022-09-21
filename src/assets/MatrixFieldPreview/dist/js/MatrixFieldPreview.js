@@ -102,16 +102,15 @@ var MFP = MFP || {};
       var blockHandle = $block.attr("data-type");
       var blockConfig = config["blockTypes"][blockHandle];
 
+      // Add inline preview
       if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn("No block types configured for this block");
-        return;
+      } else {
+        var inlinePreview = this.createInlinePreview(
+          $block.find("> .fields"),
+          blockConfig
+        );
       }
-
-      // Add inline preview
-      var inlinePreview = this.createInlinePreview(
-        $block.find("> .fields"),
-        blockConfig
-      );
 
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
