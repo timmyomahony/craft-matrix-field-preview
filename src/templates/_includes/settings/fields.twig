@@ -2,10 +2,6 @@
 
 {% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
 
-{% if showTakeover is not defined %}
-    {% set showTakeover = true %}
-{% endif %}
-
 <div class="field mfp-settings-table">
     <div class="heading">
         <label>{{ "Configure " ~ type | capitalize ~ " Fields"|t('matrix-field-preview') }}</label>
@@ -18,10 +14,8 @@
         <table id="fields" class="data fullwidth">
             <thead>
                 <th scope="col">{{ type | capitalize ~ " Field"|t('matrix-field-preview') }}</th>
-                <th scope="col">{{ "Image Previews Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field in." | t('matrix-field-preview') }}</p></span></th>
-                {% if showTakeover %}
-                    <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default " ~ type | lower ~" field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
-                {% endif %}
+                <th scope="col">{{ "Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field." | t('matrix-field-preview') }}</p></span></th>
+                <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default " ~ type | lower ~" field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
             </thead>
             <tbody>
                 {% for fieldConfig in fieldConfigs %}
@@ -37,15 +31,13 @@
                                 on: fieldConfig.enablePreviews
                             }) }}
                         </td>
-                        {% if showTakeover %}
-                            <td scope="row" data-title="Takeover">
-                                {{ forms.lightswitchField({
-                                    name: 'settings[' ~ field.handle ~ '][enableTakeover]',
-                                    id:  field.handle ~ '-enableTakeover',
-                                    on: fieldConfig.enableTakeover
-                                }) }}
-                            </td>
-                        {% endif %}
+                        <td scope="row" data-title="Takeover">
+                            {{ forms.lightswitchField({
+                                name: 'settings[' ~ field.handle ~ '][enableTakeover]',
+                                id:  field.handle ~ '-enableTakeover',
+                                on: fieldConfig.enableTakeover
+                            }) }}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

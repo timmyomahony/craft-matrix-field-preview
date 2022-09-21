@@ -12,17 +12,21 @@ var MFP = MFP || {};
      * @param {*} config 
      */
     initialiseInput: function (neoInput, config) {
+      if (config["field"]["enableTakeover"]) {
+        neoInput.$container.addClass("mfp-field--takeover");
+      }
+  
       neoInput.on(
         "addBlock",
         function (ev) {
-          this.blockAdded(ev.block, config);
+          this.setupNestedPreview(ev.block, config);
         }.bind(this)
       );
 
       neoInput.on(
         "removeBlock",
         function (ev) {
-          this.blockRemoved(ev.block);
+          this.tearDownNestedPreview(ev.block);
         }.bind(this)
       );
 
@@ -36,120 +40,130 @@ var MFP = MFP || {};
      * @param {*} config 
      */
     setupInput: function (neoInput, config) {
-      var neoBlocks = neoInput.getBlocks();
-      var neoBlockTypes = neoInput.getBlockTypes();
-      var modal, modalButton;
-
       neoInput.$container.addClass("mfp-field mfp-neo-field");
-      if (neoBlockTypes.length > 0) {
+
+      // First setup previews for the top-level input
+      this.setupTopLevelPreview(neoInput, config)
+      
+      // Now find all nested blocks that allow for children to be added
+      neoInput.getBlocks()
+        .filter(function(neoBlock) {
+          return neoBlock.getBlockType().getChildBlocks() !== null;
+        })
+        .forEach(function(nestedNeoBlock) {
+          this.setupNestedPreview(nestedNeoBlock, config);
+        }.bind(this))
+  
+    },
+
+    /**
+     * Setup previews on the top-level element
+     * 
+     * 
+     * @param {*} neoInput 
+     * @param {*} config 
+     */
+    setupTopLevelPreview: function(neoInput, config) {
+      var topLevelModal, topLevelModalButton;
+      var topLevelBlockTypes = neoInput.getBlockTypes(true);
+      var topLevelConfig = this.createBlockConfig(
+        topLevelBlockTypes,
+        config
+      );
+
+      if (topLevelBlockTypes.length > 0) {
         // Create modal trigger button
-        var modalButton = this.createModalButton(
+        topLevelModalButton = this.createModalButton(
           neoInput.$buttonsContainer.find("> .ni_buttons"),
-          config
+          topLevelConfig
         );
 
         // Create modal and grid
-        var modal = this.createModal(neoInput.$container, config);
+        topLevelModal = this.createModal(neoInput.$container, topLevelConfig);
 
         // When preview button clicked
-        modalButton.on("click", function () {
-          modal.show();
+        topLevelModalButton.on("click", function () {
+          topLevelModal.show();
         });
 
         // When a modal grid item is clicked
-        modal.on(
+        topLevelModal.on(
           "gridItemClicked",
           {},
           function (event) {
             var neoBlockType = this.searchNeoBlockTypes(
-              neoBlockTypes,
+              topLevelBlockTypes,
               event.config.handle
             );
             // FIXME: not sure is this the best way to trigger a new block
             neoInput["@newBlock"]({
               blockType: neoBlockType,
             });
-            modal.hide();
+            topLevelModal.hide();
           }.bind(this)
         );
 
-        neoInput.modal = modal;
-        neoInput.modalButtons = modalButton;
+        neoInput.modal = topLevelModal;
+        neoInput.modalButtons = topLevelModalButton;
       }
-
-      // Now handle all child blocks
-      neoBlocks.forEach(
-        function (neoBlock) {
-          this.blockAdded(neoBlock, config);
-        }.bind(this)
-      );
     },
-
+  
     /**
-     * Block Added
+     * Setup preview on nested block
      * 
      * @param {*} neoBlock 
      * @param {*} config 
      * @returns 
      */
-    blockAdded: function (neoBlock, config) {
+    setupNestedPreview: function (neoBlock, config) {
       var blockHandle = neoBlock._blockType._handle;
       var blockConfig = config["blockTypes"][blockHandle];
-      var neoBlockTypes = neoBlock.getButtons().getBlockTypes();
-
-      if (!blockConfig["image"] && !blockConfig["description"]) {
-        console.warn("No block types configured for this Neo block");
-        return;
-      }
+      var neoChildBlockTypes = neoBlock.getButtons().getBlockTypes();
 
       // Add inline preview
-      var inlinePreview = this.createInlinePreview(
-        neoBlock.$bodyContainer,
-        blockConfig,
-        neoBlock
-      );
+      if (!blockConfig["image"] && !blockConfig["description"]) {
+        console.warn("No inline preview block types configured for this Neo block");
+      } else {        
+        neoBlock.inlinePreview = this.createInlinePreview(
+          neoBlock.$bodyContainer,
+          blockConfig,
+          neoBlock
+        );
+      }
 
-      neoBlock.inlinePreview = inlinePreview;
-
-      if (neoBlockTypes.length > 0) {
-        // Filter out the block types we need to display for this particular
-        // neo block. Not all neo blocks show all block types, so we should
-        // only display those relevant
-        var filteredConfig = this.filterConfigForBlockTypes(
-          neoBlockTypes,
+      if (neoChildBlockTypes.length > 0) {
+        var modal, modalButton;
+        var blockConfig = this.createBlockConfig(
+          neoChildBlockTypes,
           config
         );
 
         // Create modal trigger button
-        var modalButton = this.createModalButton(
+        modalButton = this.createModalButton(
           neoBlock.$buttonsContainer.find(".ni_buttons"),
           config
         );
 
-        neoBlock.modalButton = modalButton;
-
         // Create modal
-        var modal = this.createModal(
+        modal = this.createModal(
           neoBlock.$container,
-          filteredConfig,
+          blockConfig,
           neoBlock,
-          neoBlockTypes
+          neoChildBlockTypes
         );
 
-        neoBlock.modal = modal;
-
-        // When preview button clicked
+        // Show modal on click
         modalButton.on("click", function () {
           modal.show();
         });
 
-        // When a modal grid item is clicked
+        // Add block when preview is clicked in modal
         modal.on(
           "gridItemClicked",
           {},
           function (event) {
             var neoBlockType = this.searchNeoBlockTypes(
-              neoBlockTypes,
+              neoChildBlockTypes,
               event.config.handle
             );
             neoBlock.trigger("newBlock", {
@@ -159,37 +173,43 @@ var MFP = MFP || {};
             modal.hide();
           }.bind(this)
         );
+
+        neoBlock.modalButton = modalButton;
+        neoBlock.modal = modal;
       }
     },
 
     /**
-     * Block Removed
+     * Tear down preview for nested block
      * 
      * @param {*} neoBlock 
      */
-    blockRemoved: function (neoBlock) {
-      this.updateModalButton(neoBlock.modalButton, function () {
-        return false;
-      });
+    tearDownNestedPreview: function (neoBlock) {
+      // this.updateModalButton(neoBlock.modalButton, function () {
+      //   return false;
+      // });
     },
 
     /**
      * Filter Config For Block Types
      * 
+     * Given a list of Neo block types, return the matching configs.
+     * 
      * @param {*} neoBlockTypes 
      * @param {*} config 
-     * @returns 
+     * @returns A object that maps the block type handle to the MFP config
+     * object
      */
-    filterConfigForBlockTypes: function (neoBlockTypes, config) {
-      var filteredConfigs = {};
+    createBlockConfig: function (neoBlockTypes, config) {
+      var filteredBlockTypes = {}
       for (var i = 0; i < neoBlockTypes.length; i++) {
         var neoBlockType = neoBlockTypes[i];
         var _config = config["blockTypes"][neoBlockType["_handle"]];
         if (_config) {
-          filteredConfigs[_config["handle"]] = _config;
+          filteredBlockTypes[_config["handle"]] = _config;
         }
       }
-      return filteredConfigs;
+      return $.extend({}, config, { blockTypes: filteredBlockTypes});
     },
 
     /**

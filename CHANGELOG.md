@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.5.0 - 2022-09-21
+
+Thanks @ttempleton for PR #91, helping to address issues with Neo.
+
+### Added
+
+- Ability to takeover the default Neo block button (addressing issue #85 and potentially #84)
+
+### Fixed
+
+- Fixed inline previews not showing in Neo fields (issue #92)
+- Added/fixed proper modal filtering for Neo fields, now the modal respects the children available to the block (issue #87)
+- Fixed bug with Neo block configuration crashing the previews (issue #88)
+- Fixed Supertable "matrix row" issue, where previews were incorrectly showing in nested Supertable rows for Matrix Fields (issue #96)
+ 
 ## 4.0.4 - 2022-09-06
 
 ### Fixed
