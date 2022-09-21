@@ -109,7 +109,7 @@ var MFP = MFP || {};
 
       // Add inline preview
       var inlinePreview = this.createInlinePreview(
-        $block.find(".fields"),
+        $block.find("> .fields"),
         blockConfig
       );
 
