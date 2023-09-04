@@ -4,7 +4,6 @@ var MFP = MFP || {};
   MFP.NeoFieldPreview = MFP.BaseFieldPreview.extend({
     previewsUrl: "matrix-field-preview/preview/get-previews",
     inputType: "neo",
-
     /**
      * Initialise Input
      *
@@ -19,7 +18,7 @@ var MFP = MFP || {};
       neoInput.on(
         "addBlock",
         function (ev) {
-          this.setupNestedPreview(ev.block, config);
+          this.setupNestedPreview(neoInput, ev.block, config);
         }.bind(this)
       );
 
@@ -46,8 +45,8 @@ var MFP = MFP || {};
       this.setupTopLevelPreview(neoInput, config);
 
       // Now setup all included blocks
-      neoInput.getBlocks().map(neoBlock => {
-        this.setupNestedPreview(neoBlock, config);
+      neoInput.getBlocks().map((neoBlock) => {
+        this.setupNestedPreview(neoInput, neoBlock, config);
       });
     },
 
@@ -107,7 +106,7 @@ var MFP = MFP || {};
      * @param {*} config
      * @returns
      */
-    setupNestedPreview: function (neoBlock, config) {
+    setupNestedPreview: function (neoInput, neoBlock, config) {
       var blockHandle = neoBlock._blockType._handle;
       var blockConfig = config["blockTypes"][blockHandle];
       var neoChildBlockTypes = neoBlock.getButtons().getBlockTypes();
@@ -168,6 +167,30 @@ var MFP = MFP || {};
         neoBlock.modalButton = modalButton;
         neoBlock.modal = modal;
       }
+
+      // Handle "add block above" on Neo dropdown menu
+      // https://github.com/spicywebau/craft-neo/blob/main/src/assets/src/input/Input.js#L1141
+      neoBlock.on(
+        "addBlockAbove",
+        function (ev) {
+          neoInput._tempButtons.$container.css("height", "auto");
+
+          var inlineModalButton = this.createModalButton(
+            neoInput._tempButtons.$container,
+            config
+          );
+
+          inlineModalButton.on("click", function () {
+            var parentBlock = neoBlock.getParent();
+            // Parent is top-level
+            if (parentBlock === null) {
+              neoInput.modal.show();
+            } else {
+              parentBlock.modal.show();
+            }
+          });
+        }.bind(this)
+      );
     },
 
     /**
