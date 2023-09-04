@@ -8,8 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
 
-- Fixed inline previews not showing on the top-level Neo blocks (issue #103)
-- Fixed issue with "add block above" option on Neo menus not working (issue #104)
+- Fixed inline previews not showing on the top-level Neo blocks (issue #103).
+- Fixed issue with "add block above" option on Neo menus not working (issue #104).
+
+### Changed
+
+- Changed preview image transform from "stretch" to "fit", possibly addressing #105.
 
 ## 4.0.5 - 2022-09-21
 
