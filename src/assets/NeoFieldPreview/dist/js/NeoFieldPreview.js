@@ -45,17 +45,10 @@ var MFP = MFP || {};
       // First setup previews for the top-level input
       this.setupTopLevelPreview(neoInput, config);
 
-      // Now find all nested blocks that allow for children to be added
-      neoInput
-        .getBlocks()
-        .filter(function (neoBlock) {
-          return neoBlock.getBlockType().getChildBlocks() !== null;
-        })
-        .forEach(
-          function (nestedNeoBlock) {
-            this.setupNestedPreview(nestedNeoBlock, config);
-          }.bind(this)
-        );
+      // Now setup all included blocks
+      neoInput.getBlocks().map(neoBlock => {
+        this.setupNestedPreview(neoBlock, config);
+      });
     },
 
     /**
