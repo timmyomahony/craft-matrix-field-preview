@@ -7,15 +7,15 @@ var MFP = MFP || {};
 
     /**
      * Initialise Input
-     * 
-     * @param {*} neoInput 
-     * @param {*} config 
+     *
+     * @param {*} neoInput
+     * @param {*} config
      */
     initialiseInput: function (neoInput, config) {
       if (config["field"]["enableTakeover"]) {
         neoInput.$container.addClass("mfp-field--takeover");
       }
-  
+
       neoInput.on(
         "addBlock",
         function (ev) {
@@ -35,41 +35,40 @@ var MFP = MFP || {};
 
     /**
      * Setup Input
-     * 
-     * @param {*} neoInput 
-     * @param {*} config 
+     *
+     * @param {*} neoInput
+     * @param {*} config
      */
     setupInput: function (neoInput, config) {
       neoInput.$container.addClass("mfp-field mfp-neo-field");
 
       // First setup previews for the top-level input
-      this.setupTopLevelPreview(neoInput, config)
-      
+      this.setupTopLevelPreview(neoInput, config);
+
       // Now find all nested blocks that allow for children to be added
-      neoInput.getBlocks()
-        .filter(function(neoBlock) {
+      neoInput
+        .getBlocks()
+        .filter(function (neoBlock) {
           return neoBlock.getBlockType().getChildBlocks() !== null;
         })
-        .forEach(function(nestedNeoBlock) {
-          this.setupNestedPreview(nestedNeoBlock, config);
-        }.bind(this))
-  
+        .forEach(
+          function (nestedNeoBlock) {
+            this.setupNestedPreview(nestedNeoBlock, config);
+          }.bind(this)
+        );
     },
 
     /**
      * Setup previews on the top-level element
-     * 
-     * 
-     * @param {*} neoInput 
-     * @param {*} config 
+     *
+     *
+     * @param {*} neoInput
+     * @param {*} config
      */
-    setupTopLevelPreview: function(neoInput, config) {
+    setupTopLevelPreview: function (neoInput, config) {
       var topLevelModal, topLevelModalButton;
       var topLevelBlockTypes = neoInput.getBlockTypes(true);
-      var topLevelConfig = this.createBlockConfig(
-        topLevelBlockTypes,
-        config
-      );
+      var topLevelConfig = this.createBlockConfig(topLevelBlockTypes, config);
 
       if (topLevelBlockTypes.length > 0) {
         // Create modal trigger button
@@ -107,13 +106,13 @@ var MFP = MFP || {};
         neoInput.modalButtons = topLevelModalButton;
       }
     },
-  
+
     /**
      * Setup preview on nested block
-     * 
-     * @param {*} neoBlock 
-     * @param {*} config 
-     * @returns 
+     *
+     * @param {*} neoBlock
+     * @param {*} config
+     * @returns
      */
     setupNestedPreview: function (neoBlock, config) {
       var blockHandle = neoBlock._blockType._handle;
@@ -122,8 +121,10 @@ var MFP = MFP || {};
 
       // Add inline preview
       if (!blockConfig["image"] && !blockConfig["description"]) {
-        console.warn("No inline preview block types configured for this Neo block");
-      } else {        
+        console.warn(
+          "No inline preview block types configured for this Neo block"
+        );
+      } else {
         neoBlock.inlinePreview = this.createInlinePreview(
           neoBlock.$bodyContainer,
           blockConfig,
@@ -133,10 +134,7 @@ var MFP = MFP || {};
 
       if (neoChildBlockTypes.length > 0) {
         var modal, modalButton;
-        var blockConfig = this.createBlockConfig(
-          neoChildBlockTypes,
-          config
-        );
+        var blockConfig = this.createBlockConfig(neoChildBlockTypes, config);
 
         // Create modal trigger button
         modalButton = this.createModalButton(
@@ -181,8 +179,8 @@ var MFP = MFP || {};
 
     /**
      * Tear down preview for nested block
-     * 
-     * @param {*} neoBlock 
+     *
+     * @param {*} neoBlock
      */
     tearDownNestedPreview: function (neoBlock) {
       // this.updateModalButton(neoBlock.modalButton, function () {
@@ -192,16 +190,16 @@ var MFP = MFP || {};
 
     /**
      * Filter Config For Block Types
-     * 
+     *
      * Given a list of Neo block types, return the matching configs.
-     * 
-     * @param {*} neoBlockTypes 
-     * @param {*} config 
+     *
+     * @param {*} neoBlockTypes
+     * @param {*} config
      * @returns A object that maps the block type handle to the MFP config
      * object
      */
     createBlockConfig: function (neoBlockTypes, config) {
-      var filteredBlockTypes = {}
+      var filteredBlockTypes = {};
       for (var i = 0; i < neoBlockTypes.length; i++) {
         var neoBlockType = neoBlockTypes[i];
         var _config = config["blockTypes"][neoBlockType["_handle"]];
@@ -209,15 +207,15 @@ var MFP = MFP || {};
           filteredBlockTypes[_config["handle"]] = _config;
         }
       }
-      return $.extend({}, config, { blockTypes: filteredBlockTypes});
+      return $.extend({}, config, { blockTypes: filteredBlockTypes });
     },
 
     /**
      * Searchh Neo Block Types
-     * 
-     * @param {*} neoBlockTypes 
-     * @param {*} handle 
-     * @returns 
+     *
+     * @param {*} neoBlockTypes
+     * @param {*} handle
+     * @returns
      */
     searchNeoBlockTypes: function (neoBlockTypes, handle) {
       return $.grep(neoBlockTypes, function (neoBlockType) {
@@ -227,8 +225,8 @@ var MFP = MFP || {};
 
     /**
      * Get Input Class
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getInputClass: function () {
       try {
@@ -240,8 +238,8 @@ var MFP = MFP || {};
 
     /**
      * Get Field Elements
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getFieldElements: function () {
       return $(".neo-input");
@@ -249,8 +247,8 @@ var MFP = MFP || {};
 
     /**
      * Get Data Key
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getDataKey: function () {
       return "neo";
@@ -258,9 +256,9 @@ var MFP = MFP || {};
 
     /**
      * Get Field Handle
-     * 
-     * @param {*} input 
-     * @returns 
+     *
+     * @param {*} input
+     * @returns
      */
     getFieldHandle: function (input) {
       return input._name;
