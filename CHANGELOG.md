@@ -10,10 +10,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Fixed inline previews not showing on the top-level Neo blocks (issue #103).
 - Fixed issue with "add block above" option on Neo menus not working (issue #104).
+- Fixed issue with Spoon compatibility (issue #100).
 
 ### Changed
 
-- Changed preview image transform from "stretch" to "fit", possibly addressing #105.
+- Changed preview image transform from "stretch" to "fit", possibly addressing issue #105.
 
 ## 4.0.5 - 2022-09-21
 
