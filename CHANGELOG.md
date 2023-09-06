@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.6 - 2023-09-6
+
+### Fixed
+
+- Fixed inline previews not showing on the top-level Neo blocks (issue #103).
+- Fixed issue with "add block above" option on Neo menus not working (issue #104).
+- Fixed issue with Spoon compatibility (issue #100).
+
+### Changed
+
+- Changed preview image transform from "stretch" to "fit", possibly addressing issue #105.
+
 ## 4.0.5 - 2022-09-21
 
 Thanks @ttempleton for PR #91, helping to address issues with Neo.
@@ -18,20 +30,20 @@ Thanks @ttempleton for PR #91, helping to address issues with Neo.
 - Added/fixed proper modal filtering for Neo fields, now the modal respects the children available to the block (issue #87)
 - Fixed bug with Neo block configuration crashing the previews (issue #88)
 - Fixed Supertable "matrix row" issue, where previews were incorrectly showing in nested Supertable rows for Matrix Fields (issue #96)
- 
+
 ## 4.0.4 - 2022-09-06
 
 ### Fixed
 
 - Fixed issue with `sortOrder` missing (issue #95)
- 
+
 ## 4.0.3 - 2022-08-24
 
 ### Fixed
 
 - Fixed issue with Neo migration not being run correctly (issue #88)
 - Fixed issue with ordering > 10 fields (issue #93)
- 
+
 ## 4.0.2 - 2022-06-15
 
 ### Fixed

@@ -13,7 +13,7 @@ use yii\helpers\Markdown;
 
 /**
  * Preview controller
- * 
+ *
  * Controller to handle Ajax requests for configuration from the cp
  */
 class PreviewController extends Controller
@@ -22,10 +22,10 @@ class PreviewController extends Controller
     protected array|bool|int $allowAnonymous = [];
 
     /**
-     * Get preview config 
-     * 
+     * Get preview config
+     *
      * Return a JSON configuration for the frontend to use
-     * 
+     *
      * NOTE: there are two "handles" in play here: the matrix field handle
      * as well as the block type handles
      */
@@ -102,7 +102,7 @@ class PreviewController extends Controller
                 $result["imageId"] = $blockTypeConfig->previewImageId;
                 $result["image"] = $asset ? $asset->getUrl([
                     "width" => 800,
-                    "mode" => "stretch",
+                    "mode" => "fit",
                     "position" => "center-center"
                 ]) : "";
                 $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";

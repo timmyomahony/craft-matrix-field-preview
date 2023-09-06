@@ -13,7 +13,7 @@ Add text and screenshot previews to matrix fields, improving your client's publi
 - Sorting: sort previews, placing the most-used ones at the top where they're quicker to find.
 - Searching: search through previews, quickly finding what you need.
 - Neo support: supports previewing of Neo fields as well as matrix fields.
-- Supertable-aware: doesn't interfere with existing Supertable fields. 
+- Supertable-aware: doesn't interfere with existing Supertable fields.
 - Spoon-aware: works alongside Spoon to improve the publishing experience.
 
 ## Background
@@ -91,7 +91,7 @@ Alternatively, by disabling "takeover" you can have a separate complimentary "co
 
 ### Add Previews
 
-Finally, configure the actual descriptions and previews for your matrix block types. 
+Finally, configure the actual descriptions and previews for your matrix block types.
 
 ![Matrix blocks configuration](resources/img/screenshot-5.png)
 
@@ -148,6 +148,16 @@ Craft Matrix Field now support [Craft Neo Fields too](https://github.com/spicywe
 ![Neo field settings](resources/img/screenshot-11.png)
 
 Bear in mind that you need to be using Neo >= 3.0.0 for Matrix Field Preview to work with Neo.
+
+## Spoon Support
+
+Craft Matrix Field works alongside [Spoon](https://github.com/doublesecretagency/craft-spoon). In order to get best results, disable the "takeover" feature in the Matrix Field Preview settings.
+
+![Matrix Field Preview with Spoon screenshot](resources/img/screenshot-18.jpg)
+
+You'll now have a "Content Preview" button alongside your Spoon buttons:
+
+![Matrix Field Preview with Spoon screenshot](resources/img/screenshot-17.jpg)
 
 ## Support & Troubleshooting
 

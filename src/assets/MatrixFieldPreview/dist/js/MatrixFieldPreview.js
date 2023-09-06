@@ -3,11 +3,11 @@ var MFP = MFP || {};
 (function ($) {
   /**
    * Matrix Field Preview
-   * 
+   *
    * This is the "loader" class that is injected after every control panel
    * page load. It's job is to fetch the configurations from the admin panel
    * via AJAX and then initialise the matrix field modal and inline previews.
-   * 
+   *
    * Inherits: BaseFieldPreview
    */
   MFP.MatrixFieldPreview = MFP.BaseFieldPreview.extend({
@@ -16,9 +16,9 @@ var MFP = MFP || {};
 
     /**
      * Initialise Input
-     * 
-     * @param {*} input 
-     * @param {*} config 
+     *
+     * @param {*} input
+     * @param {*} config
      */
     initialiseInput: function (input, config) {
       input.$container.addClass("mfp-field mfp-matrix-field");
@@ -45,16 +45,21 @@ var MFP = MFP || {};
 
     /**
      * Setup Input
-     * 
-     * @param {*} input 
-     * @param {*} config 
+     *
+     * @param {*} input
+     * @param {*} config
      */
     setupInput: function (input, config) {
       // Create the modal button
-      var modalButton = this.createModalButton(
-        input.$container.find("> .buttons"),
-        config
-      );
+      var $modalButtonTarget = input.$container.find("> .buttons");
+
+      // Spoon compatibility
+      var $spoonButtons = input.$container.find("> .buttons-spooned");
+      if ($spoonButtons.length > 0) {
+        $modalButtonTarget = $spoonButtons;
+      }
+
+      var modalButton = this.createModalButton($modalButtonTarget, config);
 
       input.modalButton = modalButton;
 
@@ -89,12 +94,12 @@ var MFP = MFP || {};
 
     /**
      * Block Added
-     * 
-     * @param {*} input 
-     * @param {*} $block 
-     * @param {*} config 
-     * @param {*} updateButton 
-     * @returns 
+     *
+     * @param {*} input
+     * @param {*} $block
+     * @param {*} config
+     * @param {*} updateButton
+     * @returns
      */
     blockAdded: function (input, $block, config, updateButton) {
       // Note that we are using the DOM element here and not the Garnish instance:
@@ -120,10 +125,10 @@ var MFP = MFP || {};
 
     /**
      * Block Deleted
-     * 
-     * @param {*} input 
-     * @param {*} $block 
-     * @param {*} config 
+     *
+     * @param {*} input
+     * @param {*} $block
+     * @param {*} config
      */
     blockDeleted: function (input, $block, config) {
       // Update the modal button
@@ -134,8 +139,8 @@ var MFP = MFP || {};
 
     /**
      * Get Input Class
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getInputClass: function () {
       return Craft.MatrixInput;
@@ -143,17 +148,17 @@ var MFP = MFP || {};
 
     /**
      * Get Field Elements
-     * 
-     * @returns 
+     *
+     * @returns
      */
-     getFieldElements: function () {
+    getFieldElements: function () {
       return $(".matrix-field");
     },
 
     /**
      * Get Data Key
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getDataKey: function () {
       return "matrix";
@@ -161,9 +166,9 @@ var MFP = MFP || {};
 
     /**
      * Get Field Handle
-     * 
-     * @param {*} input 
-     * @returns 
+     *
+     * @param {*} input
+     * @returns
      */
     getFieldHandle: function (input) {
       return input.id.replace("fields-", "");
