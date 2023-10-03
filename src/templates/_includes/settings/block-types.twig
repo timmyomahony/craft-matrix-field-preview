@@ -2,14 +2,25 @@
 
 {% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
 
+{% do view.registerTranslations('matrix-field-preview', [
+    'Block Type',
+    'Configure {type} Field Previews',
+    'Category',
+    'Description',
+    'No block types exist yet.',
+    "No {type} fields have been created or enabled for previews yet. Please visit the 'Configure Fields' and enable image previews for your {type} fields.",
+    'Not configured yet',
+    'Preview Image',
+]) %}
+
 <div class="field mfp-settings-table">
     <div class="heading">
-        <label>{{ "Configure " ~ type | capitalize ~ " Field Previews"|t('matrix-field-preview') }}</label>
-        <div class="instructions"><p>{{ "Use this page to configure the image and text previews that appear for your enabled " ~ type | lower ~ " fields." | t('matrix-field-preview') }}</p></div>
+        <label>{{ "Configure {type} Field Previews"|t('matrix-field-preview', params = { type: type | lower }) }}</label>
+        <div class="instructions"><p>{{ "Use this page to configure the image and text previews that appear for your enabled {type} fields." | t('matrix-field-preview', params = { type: type | lower }) }}</p></div>
     </div>
     {% if fields | length <= 0 %}
         <hr />
-        <p class="warning with-icon">{{ "No " ~ type | lower ~" fields have been created or enabled for previews yet. Please visit the 'Configure Fields' and enable image previews for your matrix fields."|t('matrix-field-preview') }}</p>
+        <p class="warning with-icon">{{ "No {type} fields have been created or enabled for previews yet. Please visit the 'Configure Fields' and enable image previews for your {type} fields."|t('matrix-field-preview', params = { type: type | lower }) }}</p>
     {% else %}
         {% js %}
             var notConfiguredText = Craft.t('matrix-field-preview', 'Not configured yet');

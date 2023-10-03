@@ -8,6 +8,13 @@
 
 {% set title = "General Settings" | t("matrix-field-preview") %}
 
+{% do view.registerTranslations('matrix-field-preview', [
+    "Matrix Field Previews",
+    "Preview Image Location",
+    "Where do you want to store matrix field preview images?",
+    "Please save this volume location for your preview images before continuing",
+    "No volumes exist yet.",
+]) %}
 
 {% set crumbs = [
     {
@@ -37,7 +44,7 @@
                     first: true,
                     label: "Preview Image Location"|t('matrix-field-preview'),
                     instructions: "Where do you want to store matrix field preview images?"|t('matrix-field-preview'),
-                    warning: (not settings.previewVolumeUid) ? "Please save this volume location for your preview images before continuing" : null
+                    warning: (not settings.previewVolumeUid) ? "Please save this volume location for your preview images before continuing"|t("matrix-field-preview") : null
                 },
                 assetLocationInput(volumeList, settings.previewVolumeUid, settings.previewSubpath)
             ) }}

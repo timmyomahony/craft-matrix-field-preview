@@ -152,6 +152,18 @@ class MatrixFieldPreview extends Plugin
                         $view->registerAssetBundle(NeoFieldPreviewAsset::class);
                         $view->registerJs('new MFP.NeoFieldPreview();', View::POS_END, 'neo-field-preview');
                     }
+                    // Most of our translations are only registered within the
+                    // templates they are in, but these translations are used
+                    // by the MFP JavaScript interface and therefore need to
+                    // be always registered.
+                    $view->registerTranslations('matrix-field-preview', [
+                        'All Categories',
+                        'Add Block',
+                        'Content Preview',
+                        'Matrix Field Previews',
+                        'Neo Field Previews',
+                        'Close',
+                    ]);
                 }
             }
         );

@@ -2,20 +2,31 @@
 
 {% from "matrix-field-preview/_includes/macros" import assetLocationInput,configWarning  %}
 
+{% do view.registerTranslations('matrix-field-preview', [
+    "Enabled",
+    "Matrix Field",
+    "No {type} fields exist yet. Create some fields via the control panel and return here to enable image previews.",
+    "Neo Field",
+    "Takeover",
+    "Use this page to configure which {type} fields will display previews.",
+]) %}
+
 <div class="field mfp-settings-table">
     <div class="heading">
-        <label>{{ "Configure " ~ type | capitalize ~ " Fields"|t('matrix-field-preview') }}</label>
-        <div class="instructions"><p>{{ "Use this page to configure which " ~ type ~ " fields will display previews." | t('matrix-field-preview') }}</p></div>
+        <label>{{ "Configure {type} Fields"|t('matrix-field-preview', params = { type: type | lower }) }}</label>
+        <div class="instructions"><p>{{ "Use this page to configure which {type} fields will display previews." | t('matrix-field-preview', params = { type: type | lower }) }}</p></div>
     </div>
     {% if fields | length <= 0 %}
         <hr />
-        <p class="warning with-icon"> {{ "No " ~ type | lower ~ " fields exist yet. Create some fields via the control panel and return here to enable image previews."|t('matrix-field-preview') }}</p>
+        <p class="warning with-icon"> {{ "No {type} fields exist yet. Create some fields via the control panel and return here to enable image previews."|t('matrix-field-preview', params = {
+            type: type | lower
+        }) }}</p>
     {% else %}
         <table id="fields" class="data fullwidth">
             <thead>
-                <th scope="col">{{ type | capitalize ~ " Field"|t('matrix-field-preview') }}</th>
-                <th scope="col">{{ "Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this " ~ type | lower ~ " field." | t('matrix-field-preview') }}</p></span></th>
-                <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default " ~ type | lower ~" field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview') }}</p></span></th>
+                <th scope="col">{{ "{type} Field"|t('matrix-field-preview', params = { type: type | capitalize }) }}</th>
+                <th scope="col">{{ "Enabled"|t('matrix-field-preview') }} <span class="info"><p>{{ "Whether or not to show previews for this {type} field." | t('matrix-field-preview', params = { type: type | lower }) }}</p></span></th>
+                <th scope="col">{{ "Takeover"|t('matrix-field-preview') }} <span class="info"><p>{{ "Take-over the default {type} field UI. If disabled, previews will still be available via a separate button" | t('matrix-field-preview', params = { type: type | lower }) }}</p></span></th>
             </thead>
             <tbody>
                 {% for fieldConfig in fieldConfigs %}

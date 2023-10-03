@@ -14,8 +14,6 @@ var MFP = MFP || {};
         {
           takeover: false,
           extraClasses: "",
-          previewText: "Content Previews",
-          takeoverText: "Add Block",
         },
         settings
       );
@@ -26,12 +24,12 @@ var MFP = MFP || {};
       if (!this.settings.takeover) {
         this.$target
           .addClass("mfp-modal-button--secondary dashed")
-          .text(this.settings.previewText);
+          .text(Craft.t('matrix-field-preview', 'Content Preview'));
         this.$target.css("background-image", "url('" + iconUrl + "')");
       } else {
         this.$target
           .addClass("mfp-modal-button--primary icon add")
-          .text(this.settings.takeoverText);
+          .text(Craft.t('matrix-field-preview', 'Add Block'));
       }
 
       this.$target.on(
