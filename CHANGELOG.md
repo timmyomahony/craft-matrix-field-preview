@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 
 - Added basic MatrixMate compatibility (issue #109 & PR #90)
+- Added proper static translation, allowing interface to be updated (issue #110)
 
 ## 4.0.6 - 2023-09-6
 
