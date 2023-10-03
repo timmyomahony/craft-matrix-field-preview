@@ -1,6 +1,15 @@
+{% import "_includes/forms" as forms %}
+
 {% extends "matrix-field-preview/_layouts/settings" %}
 
 {% set title = "Neo Fields" | t("matrix-field-preview") %}
+
+{% do view.registerTranslations('matrix-field-preview', [
+    'Matrix Field Previews',
+    'Disable previews for single children',
+    "If there is only one configured child for a Neo block, don't show previews for it.",
+
+]) %}
 
 {% if craft.matrixFieldPreview.neoIsCompatibleVersion() and fields | length > 0 %}
     {% set fullPageForm = true %}
@@ -19,9 +28,17 @@
 
     {% if not craft.matrixFieldPreview.neoIsCompatibleVersion() %}
         <p class="warning with-icon"> {{ "Neo version >= 2.8.14 is required for this integration to work properly. You'll still be able to configure the plugin in the meantime, but previews will not appear in the CP for user." | t("matrix-field-preview") }}</p>
-        <hr>        
+        <hr>
     {% endif %}
     {% include "matrix-field-preview/_includes/settings/fields.twig" with {
         type: "neo"
     } %}
+
+    {{ forms.lightswitchField({
+        label: "Disable previews for single children"|t('matrix-field-preview'),
+        instructions: "If there is only one configured child for a Neo block, don't show previews for it."|t('matrix-field-preview'),
+        name: 'neoDisableForSingleChilden',
+        id: 'neoDisableForSingleChilden',
+        on: settings.neoDisableForSingleChilden
+    }) }}
 {% endblock %}

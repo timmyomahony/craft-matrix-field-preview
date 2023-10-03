@@ -102,6 +102,13 @@ class PreviewController extends Controller
             $response['config']["blockTypes"][$blockType->handle] = $result;
         }
 
+        // Add neo-specific setting
+        if ($type == "neo") {
+            $response["config"]["neo"] = [
+                "neoDisableForSingleChilden" => $settings->neoDisableForSingleChilden
+            ];
+        }
+
         $response["success"] = true;
 
         return $this->asJson($response);

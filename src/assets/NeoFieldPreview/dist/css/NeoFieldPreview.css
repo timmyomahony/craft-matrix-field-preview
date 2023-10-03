@@ -29,8 +29,13 @@
 }
 
 /* Takeover */
-.mfp-neo-field.mfp-field--takeover .ni_buttons .btngroup,
-.mfp-neo-field.mfp-field--takeover .ni_buttons .menubtn {
+.mfp-neo-field.mfp-field--takeover .last .ni_buttons .btngroup,
+.mfp-neo-field.mfp-field--takeover .last .ni_buttons .menubtn {
+  display: none !important;
+}
+
+.mfp-nested-field--takeover .ni_buttons .btngroup,
+.mfp-nested-field--takeover .ni_buttons .menubtn {
   display: none !important;
 }
 
