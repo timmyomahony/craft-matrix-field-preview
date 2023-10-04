@@ -24,22 +24,49 @@
   top: 0;
 }
 
-.mfp-neo-field.mfp-field--takeover .mfp-modal-button {
-  position: block;
-}
 
-/* Takeover */
+/*
+ * Takeover
+ *
+ * When "taking over" a neo field, we need to hide the default buttons and
+ * show our own.
+ *
+ * - This needs to work for "top level" blocks
+ * - But also needs to work for nested blocks
+ *
+ * Furthermore, we have a "disable previews for single children" which
+ * complicates things. Even on "take over", if there is a nested block that
+ * can only have one type of child, we hide our buttons and let the default
+ * neo experience take over.
+ */
+
+/* Hide neo top-level buttons on takeover */
 .mfp-neo-field.mfp-field--takeover .last .ni_buttons .btngroup,
 .mfp-neo-field.mfp-field--takeover .last .ni_buttons .menubtn {
   display: none !important;
 }
 
+/* Show our button on takeover */
+.mfp-neo-field.mfp-field--takeover .mfp-modal-button {
+  position: block;
+}
+
+
+/* Move our button into position on takeover */
+.mfp-neo-field.mfp-field--takeover .mfp-modal-button {
+  position: static;
+  margin-left: 0;
+}
+
+/* Hide nested neo buttons on takeover */
+.mfp-neo-field.mfp-field--takeover > .ni_blocks > .ni_buttons .btngroup,
+.mfp-neo-field.mfp-field--takeover > .ni_blocks > .ni_buttons .menubtn, 
 .mfp-nested-field--takeover .ni_buttons .btngroup,
 .mfp-nested-field--takeover .ni_buttons .menubtn {
   display: none !important;
 }
 
-.mfp-neo-field.mfp-field--takeover .mfp-modal-button {
-  position: static;
-  margin-left: 0;
+/* Deal with "disable previews for single children" exception */
+.mfp-nested-field--disable-single-child .mfp-modal-button {
+  display: none !important;
 }

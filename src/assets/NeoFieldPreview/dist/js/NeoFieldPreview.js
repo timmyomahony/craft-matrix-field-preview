@@ -116,6 +116,7 @@ var MFP = MFP || {};
         neoChildBlockTypes.length == 1 &&
         config["field"]["enableTakeover"]
       ) {
+        neoBlock.$container.addClass("mfp-nested-field--disable-single-child");
         return;
       }
       
@@ -184,7 +185,7 @@ var MFP = MFP || {};
       neoBlock.on(
         "addBlockAbove",
         function (ev) {
-          neoInput._tempButtons.$container.css("height", "auto");
+          neoInput._tempButtons.$container.css("height", "35px");
 
           var inlineModalButton = this.createModalButton(
             neoInput._tempButtons.$container,
