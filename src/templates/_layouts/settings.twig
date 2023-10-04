@@ -11,6 +11,13 @@
 {% set neo = craft.app.plugins.getPlugin('neo', false) %}
 {% set selectedItem = craft.app.request.getSegment(3)|default("fields") %}
 
+{% do view.registerTranslations('matrix-field-preview', [
+    "General",
+    "Categories",
+    "Configure Fields",
+    "Configure Previews",
+]) %}
+
 {% block sidebar %}
     <nav>
         <ul>

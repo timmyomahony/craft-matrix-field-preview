@@ -2,11 +2,21 @@
 
 {% import '_includes/forms' as forms %}
 
+{% do view.registerTranslations('matrix-field-preview', [
+    "A short description of this {type} preview. Can include markdown.",
+    "Category",
+    "Description",
+    "No category",
+    "Preview Image",
+    "Select a category for this preview to appear within.",
+    "Upload a screenshot of your {type} field block here. This will be visible when publishing content via the {type} field."
+]) %}
+
 {% block content %}
     {{ forms.textareaField({
         first: true,
         label: "Description"|t('matrix-field-preview'),
-        instructions: "A short description of this " ~ type | lower ~ " preview. Can include markdown."|t('matrix-field-preview'),
+        instructions: "A short description of this {type} preview. Can include markdown."|t('matrix-field-preview', params = {type: type | lower }),
         id: "description",
         name: "description",
         value: blockTypeConfig.description,
@@ -35,7 +45,7 @@
 
     {{ forms.field(
         {
-            instructions: "Upload a screenshot of your " ~ type | lower ~ " field block here. This will be visible when publishing content via the " ~ type | lower ~ " field.",
+            instructions: "Upload a screenshot of your {type} field block here. This will be visible when publishing content via the {type} field."|t('matrix-field-preview', params = { type: type | lower}),
             label: "Preview Image"|t('matrix-field-preview'),
             id: 'preview'
         },

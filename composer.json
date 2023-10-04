@@ -1,6 +1,6 @@
 {
     "name": "weareferal/matrix-field-preview",
-    "description": "Gives you the ability to configure a preview for all your matrix field blocks, giving your clients a better publishing experience.",
+    "description": "Add screenshot previews to matrix and neo fields, helping you publish content quicker.",
     "type": "craft-plugin",
     "keywords": [
         "craft",

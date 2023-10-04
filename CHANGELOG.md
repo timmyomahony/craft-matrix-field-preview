@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.0 - 2023-10-04
+
+### Added
+
+- Added basic MatrixMate compatibility (issue #109 & PR #90).
+- Added proper static translation, allowing interface to be updated (issue #110).
+- Ability to disable previews on nested Neo fields, if there's only a single child (issue #111).
+
 ## 4.0.6 - 2023-09-6
 
 ### Fixed

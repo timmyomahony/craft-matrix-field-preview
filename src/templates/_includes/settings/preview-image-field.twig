@@ -6,6 +6,12 @@
 
     Note: This is a partial so that the JS can re-render this snippet after upload 
 #}
+{% do view.registerTranslations('matrix-field-preview', [
+    "Change preview image",
+    "Delete preview image",
+    "Upload a preview image",
+    "Please set a volume for storing preview images in the general settings page."
+]) %}
 {% set volumeUid = settings.previewVolumeUid %}
 {% if volumeUid %}
     <div class="mfp-settings-preview-image" data-blocktypeconfig="{{ blockTypeConfig.id }}">

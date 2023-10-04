@@ -1,14 +1,10 @@
 <?php
 
-
 namespace weareferal\matrixfieldpreview\controllers;
-
-use weareferal\matrixfieldpreview\MatrixFieldPreview;
 
 use Craft;
 use craft\web\Controller;
-
-use yii\web\NotFoundHttpException;
+use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use yii\helpers\Markdown;
 
 /**
@@ -36,11 +32,10 @@ class PreviewController extends Controller
         $response = [
             "success" => false,
             "config" => [
-                "general" => [],
                 "field" => null,
                 "blockTypes" => [],
                 "categories" => []
-            ]
+            ],
         ];
 
         switch ($type) {
@@ -57,7 +52,6 @@ class PreviewController extends Controller
                 return $this->asJson($response);
         }
 
-
         $fieldConfig = $fieldService->getOrCreateByFieldHandle($fieldHandle);
 
         if (!$fieldConfig) {
@@ -70,8 +64,6 @@ class PreviewController extends Controller
             "handle" => $fieldConfig->field->handle,
             "enablePreviews" => $fieldConfig->enablePreviews,
             "enableTakeover" => $fieldConfig->enableTakeover,
-            // TODO: make this configurable via the settings
-            "buttonText" => "Content Previews"
         ];
 
         // Add categories
@@ -80,7 +72,7 @@ class PreviewController extends Controller
                 'id' => $category->id,
                 'name' => $category->name,
                 'description' => $category->description,
-                "descriptionHTML" => Markdown::process($category->description)
+                "descriptionHTML" => Markdown::process($category->description),
             ]);
         }
 
@@ -95,7 +87,7 @@ class PreviewController extends Controller
                 "descriptionHTML" => Markdown::process($blockTypeConfig->description),
                 "categoryId" => $blockTypeConfig->categoryId,
                 "image" => null,
-                "thumb" => null
+                "thumb" => null,
             ];
             if ($blockTypeConfig->previewImageId) {
                 $asset = Craft::$app->assets->getAssetById($blockTypeConfig->previewImageId);
@@ -103,11 +95,18 @@ class PreviewController extends Controller
                 $result["image"] = $asset ? $asset->getUrl([
                     "width" => 800,
                     "mode" => "fit",
-                    "position" => "center-center"
+                    "position" => "center-center",
                 ]) : "";
                 $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";
             }
             $response['config']["blockTypes"][$blockType->handle] = $result;
+        }
+
+        // Add neo-specific setting
+        if ($type == "neo") {
+            $response["config"]["neo"] = [
+                "neoDisableForSingleChilden" => $settings->neoDisableForSingleChilden
+            ];
         }
 
         $response["success"] = true;

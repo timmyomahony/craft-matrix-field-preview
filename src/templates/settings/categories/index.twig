@@ -8,6 +8,13 @@
 
 {% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
 
+{% do view.registerTranslations('matrix-field-preview', [
+    "Categories",
+    "Matrix Field Previews",
+    "New category",
+    "No categories exist yet.",
+]) %}
+
 {% block actionButton %}
     <a href="{{ url('matrix-field-preview/settings/categories/create') }}" class="btn submit add icon">{{ "New category"|t('matrix-field-preview') }}</a>
 {% endblock %}
@@ -27,8 +34,8 @@
 {% for category in categories %}
     {% set tableData = tableData|merge([{
         id: category.id,
-        title: category.name|t('matrix-field-preview'),
-        description: category.description|t('matrix-field-preview'),
+        title: category.name,
+        description: category.description,
         url: url('matrix-field-preview/settings/categories/' ~ category.id),
     }]) %}
 {% endfor %}
@@ -37,7 +44,7 @@
     var columns = [
         {
             name: '__slot:title',
-            title: Craft.t('matrix-field-preview', 'Name'),
+            title: Craft.t('app', 'Name'),
         },
     ];
 

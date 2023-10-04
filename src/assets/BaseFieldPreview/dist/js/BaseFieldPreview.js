@@ -5,15 +5,15 @@ var MFP = MFP || {};
  *
  * This is base class for handling the initialisation of all of the JavasScript
  * related to Matrix Field Preview.
- * 
+ *
  * Note that both the "Matrix Field Preview" and "Neo Field Preview" JavaScript
  * initialisation stem from this base class:
- * 
+ *
  * - MatrixFieldPreview.js
  * - NeoFieldPreview.js (in a different asset bundle)
- * 
+ *
  * There are 3 things that need to be loaded:
- * 
+ *
  * - BlockTypeInlinePreview: the inline preview for every matrix field block
  *   type that shows a screenshot plus small overlay on-hover.
  * - BlockTypeModalButton: either a simple "preview content" button that shows
@@ -32,7 +32,7 @@ var MFP = MFP || {};
 
     /**
      * Initalise
-     * 
+     *
      * This is called automatically by Garnish when a new instance is created
      * via new MatrixFieldPreview();
      */
@@ -54,11 +54,11 @@ var MFP = MFP || {};
 
     /**
      * On Input Loaded
-     * 
+     *
      * Initalise our Matrix Field Preview classes once the Craft input has
      * finishing loading. Fetch the configurations via Ajax then create
      * the modal and previews.
-     * 
+     *
      * @param {*} input - the Craft input class being targeted (Craft.MatrixInput)
      */
     onInputLoaded: function (input) {
@@ -94,14 +94,14 @@ var MFP = MFP || {};
 
     /**
      * Create Inline Preview
-     * 
+     *
      * Initialise the inline preview that is displayed on every existing
      * matrix field block type. This preview shows a screenshot and opens
      * a small overlay on hover.
-     * 
-     * @param {*} $target 
-     * @param {*} config 
-     * @returns 
+     *
+     * @param {*} $target
+     * @param {*} config
+     * @returns
      */
     createInlinePreview: function ($target, config) {
       var inlinePreview = new MFP.BlockTypeInlinePreview(
@@ -115,12 +115,12 @@ var MFP = MFP || {};
 
     /**
      * Create Modal Button
-     * 
+     *
      * Initialise the button that launches the modal for this matrix field.
-     * 
-     * @param {*} $target 
-     * @param {*} config 
-     * @returns 
+     *
+     * @param {*} $target
+     * @param {*} config
+     * @returns
      */
     createModalButton: function ($target, config) {
       var settings = this.getModalButtonSettings(config);
@@ -135,24 +135,21 @@ var MFP = MFP || {};
 
     /**
      * Get Modal Button Settings
-     * 
-     * @param {*} config 
-     * @returns 
+     *
+     * @param {*} config
+     * @returns
      */
-     getModalButtonSettings: function (config) {
-      if (config["field"]["enableTakeover"]) {
-        return {
-          takeover: true,
-        };
-      }
-      return {};
+    getModalButtonSettings: function (config) {
+      return {
+        takeover: config["field"]["enableTakeover"],
+      };
     },
 
     /**
      * Update Modal Button
-     * 
-     * @param {*} button 
-     * @param {*} callback 
+     *
+     * @param {*} button
+     * @param {*} callback
      */
     updateModalButton: function (button, callback) {
       // FIXME: There is a bug in Craft. When we remove a block Craft fires
@@ -175,10 +172,10 @@ var MFP = MFP || {};
 
     /**
      * Create Modal
-     * 
-     * @param {*} $target 
-     * @param {*} config 
-     * @returns 
+     *
+     * @param {*} $target
+     * @param {*} config
+     * @returns
      */
     createModal: function ($target, config) {
       var modal = new MFP.BlockTypeModal(
@@ -198,8 +195,8 @@ var MFP = MFP || {};
 
     /**
      * Get Input Class
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getInputClass: function () {
       return this.inputClass;
@@ -207,8 +204,8 @@ var MFP = MFP || {};
 
     /**
      * Get Field Elements
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getFieldElements: function () {
       return null;
@@ -216,18 +213,18 @@ var MFP = MFP || {};
 
     /**
      * Get Data Key
-     * 
-     * @returns 
+     *
+     * @returns
      */
-     getDataKey: function () {
+    getDataKey: function () {
       return null;
     },
 
     /**
      * Get Config
-     * 
-     * @param {*} fieldHandle 
-     * @returns 
+     *
+     * @param {*} fieldHandle
+     * @returns
      */
     getConfig: function (fieldHandle) {
       return $.get({

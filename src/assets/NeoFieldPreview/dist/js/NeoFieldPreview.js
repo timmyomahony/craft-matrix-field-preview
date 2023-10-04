@@ -111,6 +111,19 @@ var MFP = MFP || {};
       var blockConfig = config["blockTypes"][blockHandle];
       var neoChildBlockTypes = neoBlock.getButtons().getBlockTypes();
 
+      if (
+        config["neo"]["neoDisableForSingleChilden"] &&
+        neoChildBlockTypes.length == 1 &&
+        config["field"]["enableTakeover"]
+      ) {
+        neoBlock.$container.addClass("mfp-nested-field--disable-single-child");
+        return;
+      }
+      
+      if (config["field"]["enableTakeover"]) {
+        neoBlock.$container.addClass("mfp-nested-field--takeover");
+      }
+
       // Add inline preview
       if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn(
@@ -127,7 +140,6 @@ var MFP = MFP || {};
       if (neoChildBlockTypes.length > 0) {
         var modal, modalButton;
         var blockConfig = this.createBlockConfig(neoChildBlockTypes, config);
-
         // Create modal trigger button
         modalButton = this.createModalButton(
           neoBlock.$buttonsContainer.find(".ni_buttons"),
@@ -173,7 +185,7 @@ var MFP = MFP || {};
       neoBlock.on(
         "addBlockAbove",
         function (ev) {
-          neoInput._tempButtons.$container.css("height", "auto");
+          neoInput._tempButtons.$container.css("height", "35px");
 
           var inlineModalButton = this.createModalButton(
             neoInput._tempButtons.$container,

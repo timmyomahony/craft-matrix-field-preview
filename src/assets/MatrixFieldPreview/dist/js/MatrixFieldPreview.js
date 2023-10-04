@@ -59,6 +59,13 @@ var MFP = MFP || {};
         $modalButtonTarget = $spoonButtons;
       }
 
+      // MatrixMate compatibility
+      var $matrixMateButton = input.$container.find("> .matrixmate-buttons");
+      if ($matrixMateButton.length > 0) {
+        $modalButtonTarget = $matrixMateButton;
+        input.$container.addClass("mfp-field--matrix-mate");
+      }
+
       var modalButton = this.createModalButton($modalButtonTarget, config);
 
       input.modalButton = modalButton;
