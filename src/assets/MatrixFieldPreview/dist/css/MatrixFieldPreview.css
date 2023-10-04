@@ -14,3 +14,13 @@
   position: static;
   margin-left: 0;
 }
+
+/* 
+ * Matrix Mate
+ *
+ * We hide our field if matrix mate is available, making the previews only
+ * available when "take over" is false.
+ */
+ .mfp-field--takeover.mfp-field--matrix-mate .mfp-modal-button {
+  display: none !important;
+}
