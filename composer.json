@@ -13,14 +13,14 @@
         "matrix field preview"
     ],
     "support": {
-        "docs": "https://github.com/weareferal/matrix-field-preview/blob/master/README.md",
-        "issues": "https://github.com/weareferal/matrix-field-preview/issues"
+        "docs": "https://craft-plugins.timmyomahony.com/matrix-field-preview",
+        "issues": "https://github.com/timmyomahony/matrix-field-preview/issues"
     },
     "license": "proprietary",
     "authors": [
         {
             "name": "Timmy O'Mahony ",
-            "homepage": "https://weareferal.com"
+            "homepage": "https://timmyomahony.com"
         }
     ],
     "require": {
@@ -36,7 +36,7 @@
         "name": "Matrix Field Preview",
         "handle": "matrix-field-preview",
         "hasCpSettings": true,
-        "changelogUrl": "https://raw.githubusercontent.com/weareferal/matrix-field-preview/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/timmyomahony/matrix-field-preview/master/CHANGELOG.md",
         "class": "weareferal\\matrixfieldpreview\\MatrixFieldPreview"
     },
     "suggest": {
