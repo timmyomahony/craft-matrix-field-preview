@@ -1,6 +1,6 @@
 # Matrix Field Preview Craft CMS Plugin
 
-![Header image for plugin](/resources/img/matrix-field-preview-plugin-header.png)
+![Header image for plugin](https://craft-plugins-cdn.timmyomahony.com/website/matrix-field-preview/matrix-field-preview-plugin-header.png)
 
 📓 [**Documentation**](https://craft-plugins.timmyomahony.com/matrix-field-preview) | 💳 [**Purchase**](https://plugins.craftcms.com/matrix-field-preview?craft4) | 🤷🏻‍♂️ [**Get help**](https://craft-plugins.timmyomahony.com/matrix-field-preview/docs/get-help)
 
