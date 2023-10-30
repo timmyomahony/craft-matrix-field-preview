@@ -2,7 +2,7 @@
 
 ![Header image for plugin](https://craft-plugins-cdn.timmyomahony.com/website/matrix-field-preview/matrix-field-preview-plugin-header.png)
 
-📓 [**Documentation**](https://craft-plugins.timmyomahony.com/matrix-field-preview) | 💳 [**Purchase**](https://plugins.craftcms.com/matrix-field-preview?craft4) | 🤷🏻‍♂️ [**Get help**](https://craft-plugins.timmyomahony.com/matrix-field-preview/docs/get-help)
+📓 [**Documentation**](https://craft-plugins.timmyomahony.com/matrix-field-preview?utm=github) | 💳 [**Purchase**](https://plugins.craftcms.com/matrix-field-preview?craft4) | 🤷🏻‍♂️ [**Get help**](https://craft-plugins.timmyomahony.com/matrix-field-preview/docs/get-help)
 
 Matrix Field Preview is a plugin for Craft CMS that lets you create a visual guide to your matrix fields, making it much easier for content publishers to find what they're looking for.
 
