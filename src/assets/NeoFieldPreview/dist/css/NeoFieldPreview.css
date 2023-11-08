@@ -60,7 +60,7 @@
 
 /* Hide nested neo buttons on takeover */
 .mfp-neo-field.mfp-field--takeover > .ni_blocks > .ni_buttons .btngroup,
-.mfp-neo-field.mfp-field--takeover > .ni_blocks > .ni_buttons .menubtn, 
+.mfp-neo-field.mfp-field--takeover > .ni_blocks > .ni_buttons .menubtn,
 .mfp-nested-field--takeover .ni_buttons .btngroup,
 .mfp-nested-field--takeover .ni_buttons .menubtn {
   display: none !important;
