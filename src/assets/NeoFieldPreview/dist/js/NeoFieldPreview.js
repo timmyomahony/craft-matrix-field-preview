@@ -149,6 +149,8 @@ var MFP = MFP || {};
 
         // Show modal on click
         modalButton.on("click", function () {
+          modal.insertionIndex = neoInput.getBlocks().indexOf(neoBlock);
+          console.log(modal.insertionIndex, neoBlock.getLevel());
           modal.show();
         });
 
@@ -166,6 +168,7 @@ var MFP = MFP || {};
               index: ev.insertionIndex,
               level: neoBlock.getLevel() + 1,
             });
+            console.log(ev.insertionIndex, neoBlock.getLevel() + 1);
             modal.hide();
           }.bind(this)
         );
@@ -194,8 +197,6 @@ var MFP = MFP || {};
             targetModal.insertionIndex = targetIndex;
             targetModal.show();
           });
-
-          inlineModalButton.trigger("click");
         }.bind(this)
       );
     },
