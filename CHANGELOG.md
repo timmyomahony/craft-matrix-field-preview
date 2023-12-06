@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.2 - 2023-12-06
+
+### Added
+
+- Support for GIFs when transforms are disabled (issue #119). See the [troubleshooting](https://craft-plugins.timmyomahony.com/matrix-field-preview/docs/troubleshooting) docs for more on issues with GIFs.
+
 ## 4.1.1 - 2023-10-26
 
 ### Changed
