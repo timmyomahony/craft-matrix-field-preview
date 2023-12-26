@@ -80,6 +80,9 @@ class PreviewController extends Controller
         $blockTypeConfigs = $blockTypeService->getOrCreateByFieldHandle($fieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
+            if ($blockType->hasAttribute('enabled') && !$blockType->enabled) {
+                continue;
+            }
             $result = [
                 "name" => $blockType->name,
                 "handle" => $blockType->handle,
