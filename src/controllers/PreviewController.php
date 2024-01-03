@@ -80,6 +80,9 @@ class PreviewController extends Controller
         $blockTypeConfigs = $blockTypeService->getOrCreateByFieldHandle($fieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
+            if ($type == "neo" && $blockType->hasAttribute('enabled') && !$blockType->enabled) {
+                continue;
+            }
             $result = [
                 "name" => $blockType->name,
                 "handle" => $blockType->handle,
@@ -92,12 +95,19 @@ class PreviewController extends Controller
             if ($blockTypeConfig->previewImageId) {
                 $asset = Craft::$app->assets->getAssetById($blockTypeConfig->previewImageId);
                 $result["imageId"] = $blockTypeConfig->previewImageId;
-                $result["image"] = $asset ? $asset->getUrl([
-                    "width" => 800,
-                    "mode" => "fit",
-                    "position" => "center-center",
-                ]) : "";
-                $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";
+                if ($asset->extension == "gif" && Craft::$app->config->general->transformGifs == false) {
+                    $result["image"] = $asset ? $asset->getUrl() : "";
+                    $result["thumb"] = $asset ? $asset->getUrl() : "";
+                } else {
+                    $result["image"] = $asset ? $asset->getUrl([
+                        "width" => 800,
+                        "mode" => "fit",
+                        "position" => "center-center",
+                    ]) : "";
+                    $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";
+                }
+
+
             }
             $response['config']["blockTypes"][$blockType->handle] = $result;
         }

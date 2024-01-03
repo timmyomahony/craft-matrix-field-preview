@@ -21,6 +21,7 @@ This visual alternative makes it much easier to see at-a-glance what each block 
   - **Optional**: you don't have to completely _replace_ the default dropdown field, you can choose to instead augment it, giving you the best of both worlds.
 - **Inline previews**: when browsing your entries, get a visual hint as to what each block looks like on the page with our inline previews that are added to all matrix or neo blocks.
 - **Integrations**: Neo, Spoon, MatrixMate & Supertable are all supported out of the box.
+- **GIFs**: use GIFs to make previews even more intuitive.
 
 ## Documentation
 
