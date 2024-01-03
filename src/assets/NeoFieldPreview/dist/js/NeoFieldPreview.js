@@ -111,6 +111,11 @@ var MFP = MFP || {};
       var blockConfig = config["blockTypes"][blockHandle];
       var neoChildBlockTypes = neoBlock.getButtons().getBlockTypes();
 
+      // If blockConfig is undefined, the block type was disabled
+      if (typeof blockConfig === 'undefined') {
+        return
+      }
+
       if (
         config["neo"]["neoDisableForSingleChilden"] &&
         neoChildBlockTypes.length == 1 &&
