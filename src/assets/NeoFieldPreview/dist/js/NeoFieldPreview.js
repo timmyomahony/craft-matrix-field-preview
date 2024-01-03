@@ -11,10 +11,20 @@ var MFP = MFP || {};
      * @param {*} config
      */
     initialiseInput: function (neoInput, config) {
+      neoInput.$container.addClass("mfp-field mfp-neo-field");
+
       if (config["field"]["enableTakeover"]) {
         neoInput.$container.addClass("mfp-field--takeover");
       }
 
+      // Set up inline & modal previews on all *initial* blocks
+      this.setupTopLevelPreview(neoInput, config);
+
+      neoInput.getBlocks().map((neoBlock) => {
+        this.setupNestedPreview(neoInput, neoBlock, config);
+      });
+
+      // Set up inline & modal previews when *new* blocks added
       neoInput.on(
         "addBlock",
         function (ev) {
@@ -28,26 +38,6 @@ var MFP = MFP || {};
           this.tearDownNestedPreview(ev.block);
         }.bind(this)
       );
-
-      this.setupInput(neoInput, config);
-    },
-
-    /**
-     * Setup Input
-     *
-     * @param {*} neoInput
-     * @param {*} config
-     */
-    setupInput: function (neoInput, config) {
-      neoInput.$container.addClass("mfp-field mfp-neo-field");
-
-      // First setup previews for the top-level input
-      this.setupTopLevelPreview(neoInput, config);
-
-      // Now setup all included blocks
-      neoInput.getBlocks().map((neoBlock) => {
-        this.setupNestedPreview(neoInput, neoBlock, config);
-      });
     },
 
     /**
@@ -81,14 +71,15 @@ var MFP = MFP || {};
         topLevelModal.on(
           "gridItemClicked",
           {},
-          function (event) {
+          function (ev) {
             var neoBlockType = this.searchNeoBlockTypes(
               topLevelBlockTypes,
-              event.config.handle
+              ev.config.handle
             );
             // FIXME: not sure is this the best way to trigger a new block
             neoInput["@newBlock"]({
               blockType: neoBlockType,
+              index: ev.insertionIndex,
             });
             topLevelModal.hide();
           }.bind(this)
@@ -124,12 +115,12 @@ var MFP = MFP || {};
         neoBlock.$container.addClass("mfp-nested-field--disable-single-child");
         return;
       }
-      
+
       if (config["field"]["enableTakeover"]) {
         neoBlock.$container.addClass("mfp-nested-field--takeover");
       }
 
-      // Add inline preview
+      // Add inline preview to this block
       if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn(
           "No inline preview block types configured for this Neo block"
@@ -142,6 +133,7 @@ var MFP = MFP || {};
         );
       }
 
+      // If this block allows children, configure the modal button and overlay
       if (neoChildBlockTypes.length > 0) {
         var modal, modalButton;
         var blockConfig = this.createBlockConfig(neoChildBlockTypes, config);
@@ -161,22 +153,26 @@ var MFP = MFP || {};
 
         // Show modal on click
         modalButton.on("click", function () {
+          modal.insertionIndex = neoInput.getBlocks().indexOf(neoBlock);
+          console.log(modal.insertionIndex, neoBlock.getLevel());
           modal.show();
         });
 
-        // Add block when preview is clicked in modal
+        // Add block when preview thumbnail is clicked in modal
         modal.on(
           "gridItemClicked",
           {},
-          function (event) {
+          function (ev) {
             var neoBlockType = this.searchNeoBlockTypes(
               neoChildBlockTypes,
-              event.config.handle
+              ev.config.handle
             );
-            neoBlock.trigger("newBlock", {
+            neoInput["@newBlock"]({
               blockType: neoBlockType,
+              index: ev.insertionIndex,
               level: neoBlock.getLevel() + 1,
             });
+            console.log(ev.insertionIndex, neoBlock.getLevel() + 1);
             modal.hide();
           }.bind(this)
         );
@@ -190,6 +186,7 @@ var MFP = MFP || {};
       neoBlock.on(
         "addBlockAbove",
         function (ev) {
+          var sourceBlock = ev.block;
           neoInput._tempButtons.$container.css("height", "35px");
 
           var inlineModalButton = this.createModalButton(
@@ -198,13 +195,11 @@ var MFP = MFP || {};
           );
 
           inlineModalButton.on("click", function () {
-            var parentBlock = neoBlock.getParent();
-            // Parent is top-level
-            if (parentBlock === null) {
-              neoInput.modal.show();
-            } else {
-              parentBlock.modal.show();
-            }
+            var targetModal = sourceBlock.isTopLevel() ? neoInput.modal : sourceBlock.getParent().modal;
+            var targetIndex = neoInput.getBlocks().indexOf(sourceBlock);
+
+            targetModal.insertionIndex = targetIndex;
+            targetModal.show();
           });
         }.bind(this)
       );

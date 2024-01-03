@@ -17,13 +17,15 @@ var MFP = MFP || {};
 
     query: "",
     category: undefined,
+    // Used for Neo only: when inserting a block "above" we need to track positioning
+    insertionIndex: undefined,
 
     /**
-     * 
-     * @param {*} container 
-     * @param {*} settings 
-     * @param {*} config 
-     * @param {*} defaultImageUrl 
+     *
+     * @param {*} container
+     * @param {*} settings
+     * @param {*} config
+     * @param {*} defaultImageUrl
      */
     init: function (container, settings, config, defaultImageUrl) {
       this.config = config;
@@ -43,9 +45,9 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @param {*} ev 
-     * @returns 
+     *
+     * @param {*} ev
+     * @returns
      */
     selectCategory: function (ev) {
       var $href = $(ev.target);
@@ -58,8 +60,8 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     buildSidebarHtml: function () {
       var sidebar = $('<aside class="mfp-modal__sidebar sidebar"/>');
@@ -107,8 +109,8 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     buildFooterHtml: function () {
       var footer = $("<footer />", {
@@ -258,6 +260,7 @@ var MFP = MFP || {};
           var onClickHandler = function () {
             this.trigger("gridItemClicked", {
               config: blockTypeConfig,
+              insertionIndex: this.insertionIndex
             });
           };
           imgContainer.on("click", onClickHandler.bind(this));
@@ -354,36 +357,36 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getGridItems: function () {
       return this.$container.find(".mfp-grid-item");
     },
 
     /**
-     * 
+     *
      */
     showAll: function () {
       this.getGridItems().show();
     },
 
     /**
-     * 
+     *
      */
     showEmpty: function () {
       this.$container.find(".mfp-modal__empty").show().css("display", "flex");
     },
 
     /**
-     * 
+     *
      */
     hideEmpty: function () {
       this.$container.find(".mfp-modal__empty").hide();
     },
 
     /**
-     * 
+     *
      */
     resetSearch: function () {
       this.$container.find(".mfp-modal__empty").val("");
@@ -393,11 +396,11 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @param {*} func 
-     * @param {*} wait 
-     * @param {*} immediate 
-     * @returns 
+     *
+     * @param {*} func
+     * @param {*} wait
+     * @param {*} immediate
+     * @returns
      */
     debounce: function (func, wait, immediate) {
       var timeout;
