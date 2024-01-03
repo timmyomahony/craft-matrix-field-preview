@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.3 - 2024-03-01
+
+### Fixed
+
+- Neo previews now respect the "enabled" tag. (Issue #118 & PR #121)
+
 ## 4.1.2 - 2023-12-06
 
 ### Added
@@ -167,7 +173,7 @@ Note that we've jumped from version 1.X.X to 3.X.X. This is to make it easier an
 ### Changed
 
 - Improved settings page. Setting should now be available without needing to enable the settings (Issue #18).
-- Fixed bug with enabling/disabling "add block" button when max block types reached.
+- Fixed bug with enabling/disabling "add block" button when max block types reached (Issue #71)
 - Fixed deprecation for Composer 2.0 (Issue #43).
 - Fixed bug with block type names (Issue #32).
 - Refactored code base for easier maintenance.
