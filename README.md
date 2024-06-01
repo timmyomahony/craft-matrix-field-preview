@@ -1,5 +1,7 @@
 # Matrix Field Preview Craft CMS Plugin
 
+🚨 **Craft 5 support is on the way (June 2024)**
+
 ![Header image for plugin](https://craft-plugins-cdn.timmyomahony.com/website/matrix-field-preview/matrix-field-preview-plugin-header.png)
 
 📓 [**Documentation**](https://craft-plugins.timmyomahony.com/matrix-field-preview?utm_source=github&utm_campaign=documentation-launch) | 💳 [**Purchase**](https://plugins.craftcms.com/matrix-field-preview?craft4) | 🤷🏻‍♂️ [**Get help**](https://craft-plugins.timmyomahony.com/matrix-field-preview/docs/get-help)
