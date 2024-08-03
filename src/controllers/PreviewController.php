@@ -104,7 +104,7 @@ class PreviewController extends Controller
                         "mode" => "fit",
                         "position" => "center-center",
                     ]) : "";
-                    $result["thumb"] = $asset ? $asset->getThumbUrl(300, 300) : "";
+                    $result["thumb"] = $asset ? Craft::$app->assets->getThumbUrl($asset, 300, 300) : "";
                 }
 
 
