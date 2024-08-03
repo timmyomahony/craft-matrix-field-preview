@@ -27,7 +27,7 @@ var MFP = MFP || {};
       }
 
       input.on(
-        "blockAdded",
+        "entryAdded",
         function (ev) {
           this.blockAdded(input, ev.$block, config, true);
         }.bind(this)
@@ -83,7 +83,7 @@ var MFP = MFP || {};
         "gridItemClicked",
         {},
         function (event) {
-          input.addBlock(event.config.handle);
+          input.addEntry(event.config.handle);
           modal.hide();
         }.bind(this)
       );
