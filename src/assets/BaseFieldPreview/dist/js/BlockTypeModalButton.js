@@ -28,8 +28,8 @@ var MFP = MFP || {};
         this.$target.css("background-image", "url('" + iconUrl + "')");
       } else {
         this.$target
-          .addClass("mfp-modal-button--primary icon add")
-          .text(Craft.t('matrix-field-preview', 'Add Block'));
+          .addClass("mfp-modal-button--primary icon add dashed")
+          .text(Craft.t('matrix-field-preview', 'New Entry'));
       }
 
       this.$target.on(

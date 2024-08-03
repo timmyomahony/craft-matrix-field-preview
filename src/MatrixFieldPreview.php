@@ -158,7 +158,7 @@ class MatrixFieldPreview extends Plugin
                     // be always registered.
                     $view->registerTranslations('matrix-field-preview', [
                         'All Categories',
-                        'Add Block',
+                        'New Entry',
                         'Content Preview',
                         'Matrix Field Previews',
                         'Neo Field Previews',
