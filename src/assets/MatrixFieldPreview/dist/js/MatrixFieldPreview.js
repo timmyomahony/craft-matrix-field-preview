@@ -121,6 +121,8 @@ var MFP = MFP || {};
       var blockHandle = $block.attr("data-type");
       var blockConfig = config["blockTypes"][blockHandle];
 
+      console.debug("Block added to matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
+
       // Add inline preview
       if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn("No block types configured for this block");
@@ -145,6 +147,10 @@ var MFP = MFP || {};
      * @param {*} config
      */
     blockDeleted: function (input, $block, config) {
+      var blockHandle = $block.attr("data-type");
+      
+      console.debug("Block deleted from matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
+    
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
