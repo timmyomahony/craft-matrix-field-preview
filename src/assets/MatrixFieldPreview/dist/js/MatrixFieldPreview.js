@@ -148,7 +148,7 @@ var MFP = MFP || {};
      */
     blockDeleted: function (input, $block, config) {
       var blockHandle = $block.attr("data-type");
-      
+
       console.debug("Block deleted from matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
     
       // Update the modal button
@@ -186,12 +186,21 @@ var MFP = MFP || {};
 
     /**
      * Get Field Handle
-     *
+     * 
+     * FIXME: Ideally there would be a better approach to getting the matrix
+     * field handle from Craft's matrix field implementations, but that information
+     * doesn't seem to be stored so we have to use the element's CSS ID along with
+     * some regex to pull it.
+     * 
      * @param {*} input
      * @returns
      */
     getFieldHandle: function (input) {
-      return input.id.replace("fields-", "");
+      const regex = /fields-([^-]+)(?!(.*fields-))/g;
+      while ((match = regex.exec(input.id)) !== null) {
+        lastMatch = match[1];
+      }
+      return lastMatch;
     },
   });
 })(jQuery);
