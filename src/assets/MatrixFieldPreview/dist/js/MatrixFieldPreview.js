@@ -31,14 +31,14 @@ var MFP = MFP || {};
       input.on(
         "entryAdded",
         function (ev) {
-          this.blockAdded(input, ev.$block, config, true);
+          this.blockAdded(input, ev.$entry, config, true);
         }.bind(this)
       );
 
       input.on(
-        "blockDeleted",
+        "entryDeleted",
         function (ev) {
-          this.blockDeleted(input, ev.$block, config);
+          this.blockDeleted(input, ev.$entry, config);
         }.bind(this)
       );
 
@@ -147,7 +147,7 @@ var MFP = MFP || {};
     blockDeleted: function (input, $block, config) {
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
-        return input.canAddMoreBlocks();
+        return input.canAddMoreEntries();
       });
     },
 
