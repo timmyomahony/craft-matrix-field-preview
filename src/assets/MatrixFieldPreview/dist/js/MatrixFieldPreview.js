@@ -17,6 +17,8 @@ var MFP = MFP || {};
     /**
      * Initialise Input
      *
+     * Create listeners on the input
+     * 
      * @param {*} input
      * @param {*} config
      */
@@ -91,7 +93,7 @@ var MFP = MFP || {};
       input.modal = modal;
 
       // Setup all existing blocks
-      var $blocks = input.$blockContainer.children();
+      var $blocks = input.$entriesContainer.children();
       $blocks.each(
         function (i, $block) {
           this.blockAdded(input, $($block), config, false);
@@ -101,6 +103,11 @@ var MFP = MFP || {};
 
     /**
      * Block Added
+     * 
+     * Respond to the matrix field adding a new block by setting
+     * up MFP previews.
+     * 
+     * TODO: Rename to "onEntryAdded"
      *
      * @param {*} input
      * @param {*} $block
@@ -126,7 +133,7 @@ var MFP = MFP || {};
 
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
-        return input.canAddMoreBlocks();
+        return input.canAddMoreEntries();
       });
     },
 

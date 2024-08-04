@@ -47,6 +47,7 @@ var MFP = MFP || {};
           $img.fadeOut("fast");
         });
       } else {
+        console.warn("No preview image found for handle " + this.config.handle);
         $thumb.css("background-image", "url('" + this.defaultImageUrl + "')");
       }
 

@@ -40,12 +40,13 @@ var MFP = MFP || {};
       if (typeof this.getInputClass() !== "undefined") {
         this.defaultImageUrl = matrixFieldPreviewDefaultImage;
         this.previewIcon = matrixFieldPreviewIcon;
-
+        
         Garnish.on(
           this.getInputClass(),
           "afterInit",
           {},
           function (ev) {
+            console.debug("New matrix field initialised on the page with id '#" + ev.target.id + "'");
             this.onInputLoaded(ev.target);
           }.bind(this)
         );
@@ -69,6 +70,7 @@ var MFP = MFP || {};
             if (response["success"]) {
               var config = response["config"];
               this.configs[fieldHandle] = config;
+              console.debug("Retrieved config from server for handle '" + fieldHandle + "' :", response["config"]);
               if (!config["field"]["enablePreviews"]) {
                 return;
               }

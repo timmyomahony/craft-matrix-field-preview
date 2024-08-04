@@ -1,10 +1,10 @@
 {
     "pluginName": "Matrix Field Preview",
     "pluginDescription": "Improve the matrix field publishing experience with screenshot previews.",
-    "pluginVersion": "4.0.2",
+    "pluginVersion": "5.0.0",
     "pluginAuthorName": "Timmy O'Mahony ",
     "pluginVendorName": "weareferal",
-    "pluginAuthorUrl": "https://timmyomahony.com",
+    "pluginAuthorUrl": "https://craft-plugins.timmyomahony.com/matrix-field-preview",
     "pluginAuthorGithub": "timmyomahony",
     "codeComments": "yes",
     "pluginComponents": [
