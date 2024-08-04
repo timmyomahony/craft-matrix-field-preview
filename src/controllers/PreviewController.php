@@ -100,11 +100,12 @@ class PreviewController extends Controller
                     $result["thumb"] = $asset ? $asset->getUrl() : "";
                 } else {
                     $result["image"] = $asset ? $asset->getUrl([
-                        "width" => 800,
+                        "width" => 1600,
                         "mode" => "fit",
                         "position" => "center-center",
+                        "quality" => 99
                     ]) : "";
-                    $result["thumb"] = $asset ? Craft::$app->assets->getThumbUrl($asset, 300, 300) : "";
+                    $result["thumb"] = $asset ? Craft::$app->assets->getThumbUrl($asset, 600, 600) : "";
                 }
 
 
