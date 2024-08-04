@@ -4,6 +4,10 @@
   top: 0;
 }
 
+.mfp-matrix-field.matrix:last-child .buttons {
+  margin-bottom: 0 !important;
+}
+
 /* Takeover */
 .mfp-matrix-field.mfp-field--takeover > .buttons .btngroup,
 .mfp-matrix-field.mfp-field--takeover > .buttons .menubtn {
