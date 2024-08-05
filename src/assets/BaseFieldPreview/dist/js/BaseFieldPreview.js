@@ -46,7 +46,6 @@ var MFP = MFP || {};
           "afterInit",
           {},
           function (ev) {
-            console.debug("New matrix field initialised on the page with id '#" + ev.target.id + "'");
             this.onInputLoaded(ev.target);
           }.bind(this)
         );
