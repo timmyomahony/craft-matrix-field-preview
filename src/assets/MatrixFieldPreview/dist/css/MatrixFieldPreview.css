@@ -4,6 +4,10 @@
   top: 0;
 }
 
+.mfp-matrix-field.matrix .buttons {
+  justify-content: space-between;
+}
+
 .mfp-matrix-field.matrix:last-child .buttons {
   margin-bottom: 0 !important;
 }
