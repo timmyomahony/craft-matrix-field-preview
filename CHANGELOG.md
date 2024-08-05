@@ -16,7 +16,8 @@ After updating to version 5, you'll need to re-enter titles, descriptions and im
 
 ### Fixed
 
-
+- Fixed "add block above" issue with Neo fields (see Issue #112 and PR #123)
+- Stop page scroll bug when modal is closed (Issue #106)
 
 ## 4.1.3 - 2024-03-01
 

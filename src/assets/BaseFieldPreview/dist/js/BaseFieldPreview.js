@@ -186,6 +186,7 @@ var MFP = MFP || {};
           closeOtherModals: true,
           hideOnEsc: true,
           resizable: false,
+          triggerElement: $target
         },
         config,
         this.defaultImageUrl
