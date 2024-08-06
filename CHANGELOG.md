@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0 - 2024-08-08
+
+**🚨 Read Before Updating**
+
+We need to reset the Matrix Field Preview data as part of the Craft 5 upgrade. Unfortunately there's no way to migrate existing data from version 4 to 5, due to the changes in matrix fields in Craft 5 (specifically the migration from "block types" to "entry types").
+
+Therefore, after updating to version 5 you'll need to re-enter titles, descriptions and images for the entry types within your matrix fields. Neo fields are unaffected, as is any other data on your site.
+
+**⚠️ Matrix Field "Views"**
+
+Currently, only the "block" view for matrix fields is supported. Support for the "card" and "element index" views will follow shortly in a future update (5.1). This is due to requiring some additions in the Craft codebase to be able to detect these new views in the Craft CP Javascript environment.
+
+### Added
+
+- Craft 5 support
+
+### Fixed
+
+- Fixed "add block above" issue with Neo fields (see Issue #112 and PR #123)
+- Stop page scroll bug when modal is closed (Issue #106)
+
 ## 4.1.3 - 2024-03-01
 
 ### Fixed

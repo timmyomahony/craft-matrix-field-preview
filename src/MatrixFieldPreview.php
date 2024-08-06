@@ -61,7 +61,7 @@ class MatrixFieldPreview extends Plugin
 {
     public static $plugin;
 
-    public string $schemaVersion = '3.0.3';
+    public string $schemaVersion = '5.0.0';
     public bool $hasCpSettings = true;
     public bool $hasCpSection = false;
 
@@ -158,7 +158,7 @@ class MatrixFieldPreview extends Plugin
                     // be always registered.
                     $view->registerTranslations('matrix-field-preview', [
                         'All Categories',
-                        'Add Block',
+                        'New Entry',
                         'Content Preview',
                         'Matrix Field Previews',
                         'Neo Field Previews',

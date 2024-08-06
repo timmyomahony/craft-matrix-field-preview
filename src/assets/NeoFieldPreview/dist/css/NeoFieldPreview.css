@@ -2,11 +2,9 @@
 .mfp-neo-field {
 }
 
-/* Fix the neo tab border */
-.mfp-neo-field .mfp-block-type-preview {
-  padding: 12px 0 0 0;
-  margin: 0;
-  border-top: 1px solid #e3e5e8;
+.mfp-neo-field .ni_block_body > .mfp-block-type-preview {
+  margin: 12px 14px 0 14px;
+  padding: 0;
 }
 
 .mfp-neo-field

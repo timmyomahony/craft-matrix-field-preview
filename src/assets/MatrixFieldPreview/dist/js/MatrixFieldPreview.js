@@ -17,6 +17,8 @@ var MFP = MFP || {};
     /**
      * Initialise Input
      *
+     * Create listeners on the input
+     * 
      * @param {*} input
      * @param {*} config
      */
@@ -27,16 +29,16 @@ var MFP = MFP || {};
       }
 
       input.on(
-        "blockAdded",
+        "entryAdded",
         function (ev) {
-          this.blockAdded(input, ev.$block, config, true);
+          this.blockAdded(input, ev.$entry, config, true);
         }.bind(this)
       );
 
       input.on(
-        "blockDeleted",
+        "entryDeleted",
         function (ev) {
-          this.blockDeleted(input, ev.$block, config);
+          this.blockDeleted(input, ev.$entry, config);
         }.bind(this)
       );
 
@@ -83,7 +85,7 @@ var MFP = MFP || {};
         "gridItemClicked",
         {},
         function (event) {
-          input.addBlock(event.config.handle);
+          input.addEntry(event.config.handle);
           modal.hide();
         }.bind(this)
       );
@@ -91,7 +93,7 @@ var MFP = MFP || {};
       input.modal = modal;
 
       // Setup all existing blocks
-      var $blocks = input.$blockContainer.children();
+      var $blocks = input.$entriesContainer.children();
       $blocks.each(
         function (i, $block) {
           this.blockAdded(input, $($block), config, false);
@@ -101,6 +103,11 @@ var MFP = MFP || {};
 
     /**
      * Block Added
+     * 
+     * Respond to the matrix field adding a new block by setting
+     * up MFP previews.
+     * 
+     * TODO: Rename to "onEntryAdded"
      *
      * @param {*} input
      * @param {*} $block
@@ -114,6 +121,8 @@ var MFP = MFP || {};
       var blockHandle = $block.attr("data-type");
       var blockConfig = config["blockTypes"][blockHandle];
 
+      console.debug("Block added to matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
+
       // Add inline preview
       if (!blockConfig["image"] && !blockConfig["description"]) {
         console.warn("No block types configured for this block");
@@ -126,7 +135,7 @@ var MFP = MFP || {};
 
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
-        return input.canAddMoreBlocks();
+        return input.canAddMoreEntries();
       });
     },
 
@@ -138,9 +147,13 @@ var MFP = MFP || {};
      * @param {*} config
      */
     blockDeleted: function (input, $block, config) {
+      var blockHandle = $block.attr("data-type");
+
+      console.debug("Block deleted from matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
+    
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
-        return input.canAddMoreBlocks();
+        return input.canAddMoreEntries();
       });
     },
 
@@ -173,12 +186,21 @@ var MFP = MFP || {};
 
     /**
      * Get Field Handle
-     *
+     * 
+     * FIXME: Ideally there would be a better approach to getting the matrix
+     * field handle from Craft's matrix field implementations, but that information
+     * doesn't seem to be stored so we have to use the element's CSS ID along with
+     * some regex to pull it.
+     * 
      * @param {*} input
      * @returns
      */
     getFieldHandle: function (input) {
-      return input.id.replace("fields-", "");
+      const regex = /fields-([^-]+)(?!(.*fields-))/g;
+      while ((match = regex.exec(input.id)) !== null) {
+        lastMatch = match[1];
+      }
+      return lastMatch;
     },
   });
 })(jQuery);

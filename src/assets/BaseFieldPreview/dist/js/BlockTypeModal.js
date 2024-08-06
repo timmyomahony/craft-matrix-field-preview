@@ -17,7 +17,9 @@ var MFP = MFP || {};
 
     query: "",
     category: undefined,
-
+    // Used for Neo only: when inserting a block "above" we need to track positioning
+    insertionIndex: undefined,
+  
     /**
      * 
      * @param {*} container 
@@ -258,6 +260,7 @@ var MFP = MFP || {};
           var onClickHandler = function () {
             this.trigger("gridItemClicked", {
               config: blockTypeConfig,
+              insertionIndex: this.insertionIndex
             });
           };
           imgContainer.on("click", onClickHandler.bind(this));

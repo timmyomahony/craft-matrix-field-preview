@@ -15,14 +15,14 @@ class MatrixBlockTypeConfigService extends BaseBlockTypeConfigService
 
     public function getBlockTypeById($blockTypeId)
     {
-        return Craft::$app->matrix->getBlockTypeById($blockTypeId);
+        return Craft::$app->entries->getEntryTypeById($blockTypeId);
     }
 
     public function getBlockTypeByFieldHandle($handle)
     {
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
         if ($field) {
-            return Craft::$app->matrix->getBlockTypesByFieldId($field->id);
+            return $field->getEntryTypes();
         }
         return null;
     }

@@ -22,7 +22,7 @@
  */
 return [
     "All Categories" => "All Categories",
-    "Add Block" => "Add Block",
+    "New Entry" => "New Entry",
     "A short description of this {type} preview. Can include markdown." => "A short description of this {type} preview. Can include markdown.",
     "Block Type" => "Block Type",
     "Content Preview" => "Content Preview",

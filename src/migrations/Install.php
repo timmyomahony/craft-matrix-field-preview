@@ -172,7 +172,7 @@ class Install extends Migration
             $this->db->getForeignKeyName('{{%matrixfieldpreview_blocktypes_config}}', 'blockTypeId'),
             '{{%matrixfieldpreview_blocktypes_config}}',
             'blockTypeId',
-            '{{%matrixblocktypes}}',
+            '{{%entrytypes}}',
             'id',
             'CASCADE',
             'CASCADE'

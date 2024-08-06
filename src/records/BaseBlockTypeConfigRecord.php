@@ -8,7 +8,7 @@ use Craft;
 use craft\db\ActiveRecord;
 use craft\records\Field;
 use craft\records\Asset;
-use craft\records\MatrixBlockType;
+use craft\records\EntryType;
 
 use weareferal\matrixfieldpreview\records\CategoryRecord;
 

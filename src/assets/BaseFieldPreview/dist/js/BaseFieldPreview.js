@@ -40,7 +40,7 @@ var MFP = MFP || {};
       if (typeof this.getInputClass() !== "undefined") {
         this.defaultImageUrl = matrixFieldPreviewDefaultImage;
         this.previewIcon = matrixFieldPreviewIcon;
-
+        
         Garnish.on(
           this.getInputClass(),
           "afterInit",
@@ -69,6 +69,7 @@ var MFP = MFP || {};
             if (response["success"]) {
               var config = response["config"];
               this.configs[fieldHandle] = config;
+              console.debug("Retrieved config from server for handle '" + fieldHandle + "' :", response["config"]);
               if (!config["field"]["enablePreviews"]) {
                 return;
               }
@@ -185,6 +186,7 @@ var MFP = MFP || {};
           closeOtherModals: true,
           hideOnEsc: true,
           resizable: false,
+          triggerElement: $target
         },
         config,
         this.defaultImageUrl
