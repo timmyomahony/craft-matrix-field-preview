@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.4 - 2024-08-09
+
+### Fixed
+
+- Fix for Neo field takeover CSS issue (Issue #129)
+
 ## 4.1.3 - 2024-03-01
 
 ### Fixed
