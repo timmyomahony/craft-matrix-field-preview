@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.1 - 2025-01-30
+
+### Fixed
+
+- [Add fix for Neo field takeover button styling. Issue #129](https://github.com/timmyomahony/craft-matrix-field-preview/issues/129)
+
 ## 5.0.0 - 2024-08-08
 
 **🚨 Read Before Updating**
