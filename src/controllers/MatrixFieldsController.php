@@ -2,6 +2,7 @@
 
 namespace weareferal\matrixfieldpreview\controllers;
 
+use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use weareferal\matrixfieldpreview\controllers\BaseFieldsController;
 
 use Craft;
@@ -19,5 +20,10 @@ class MatrixFieldsController extends BaseFieldsController
 
     protected function getSuccessMessage() {
         return Craft::t('matrix-field-preview', 'Matrix field configurations saved.');
+    }
+
+    protected function getEditAction($id)
+    {
+        return 'matrix-field-preview/settings/matrix-fields/' . $id;
     }
 }

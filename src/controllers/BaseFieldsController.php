@@ -3,6 +3,8 @@ namespace weareferal\matrixfieldpreview\controllers;
 
 use Craft;
 use craft\web\Controller;
+use craft\helpers\UrlHelper;
+
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 
@@ -43,9 +45,27 @@ abstract class BaseFieldsController extends Controller
         $fields = $service->getAllFields();
         $fieldConfigs = $service->getAll($sort = true);
 
+        // Tabledata is required for use with the existing Craft.VueAdminTable
+        $tableData = [];
+        foreach ($fieldConfigs as $fieldConfig) {
+            $url = UrlHelper::url($this->getEditAction((string) $fieldConfig->id));
+            array_push($tableData, [
+                "id" => $fieldConfig->id,
+                "title" => $fieldConfig->field->name,
+                "enablePreviews" => $fieldConfig->enablePreviews,
+                "enableTakeover" => $fieldConfig->enableTakeover,
+                "url" => $url
+            ]);
+        }
+
         return $this->renderTemplate($template, [
+            'assets' => [
+                'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png'),
+                'cancel' => Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/cancel.png', true)
+            ],
             'fields' => $fields,
             'fieldConfigs' => $fieldConfigs,
+            'tableData' => $tableData,
             'settings' => $settings,
         ]);
     }
@@ -108,6 +128,11 @@ abstract class BaseFieldsController extends Controller
      * Get the underlying message for successful saves
      */
     protected function getSuccessMessage()
+    {
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
+    }
+
+    protected function getEditAction($id)
     {
         throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
