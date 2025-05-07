@@ -13,7 +13,7 @@
 
 <div class="field mfp-settings-table">
     <div class="heading">
-        <label>{{ "Configure {type} Fields"|t('matrix-field-preview', params = { type: type | lower }) }}</label>
+        <label>{{ "Configure {type} Fields"|t('matrix-field-preview', params = { type: type | lower }) | capitalize }}</label>
         <div class="instructions"><p>{{ "Use this page to configure which {type} fields will display previews." | t('matrix-field-preview', params = { type: type | lower }) }}</p></div>
     </div>
     {% if fields | length <= 0 %}
