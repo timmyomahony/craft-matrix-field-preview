@@ -5,7 +5,7 @@ var MFP = MFP || {};
    * Matrix Field Preview
    *
    * This is the "loader" class that is injected after every control panel
-   * page load. It's job is to fetch the configurations from the admin panel
+   * page load. Its job is to fetch the configurations from the admin panel
    * via AJAX and then initialise the matrix field modal and inline previews.
    *
    * Inherits: BaseFieldPreview

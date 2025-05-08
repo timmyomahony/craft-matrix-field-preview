@@ -9,6 +9,6 @@
 .mfp-modal-button--secondary {
   background-position: 10px 52%;
   background-repeat: no-repeat;
-  padding-left: 35px;
+  /* padding-left: 35px; */
   background-size: 19px auto;
 }

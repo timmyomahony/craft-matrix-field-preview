@@ -21,11 +21,18 @@ var MFP = MFP || {};
       this.$target = $(target);
       this.$target.addClass("mfp-modal-button btn");
 
+      console.log(this.settings);
+
+      var buttonLabel = this.settings.buttonLabel;
+      if (! buttonLabel || buttonLabel == "") {
+        buttonLabel = Craft.t('matrix-field-preview', 'New Entry');
+      }
+
       if (!this.settings.takeover) {
         this.$target
           .addClass("mfp-modal-button--secondary dashed")
-          .text(Craft.t('matrix-field-preview', 'Content Preview'));
-        this.$target.css("background-image", "url('" + iconUrl + "')");
+          .text(buttonLabel);
+        // this.$target.css("background-image", "url('" + iconUrl + "')");
       } else {
         this.$target
           .addClass("mfp-modal-button--primary icon add dashed")

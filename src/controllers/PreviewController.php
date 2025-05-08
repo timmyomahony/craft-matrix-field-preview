@@ -64,6 +64,7 @@ class PreviewController extends Controller
             "handle" => $fieldConfig->field->handle,
             "enablePreviews" => $fieldConfig->enablePreviews,
             "enableTakeover" => $fieldConfig->enableTakeover,
+            "buttonLabel" => $fieldConfig->buttonLabel,
         ];
 
         // Add categories

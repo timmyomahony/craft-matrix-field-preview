@@ -143,6 +143,7 @@ var MFP = MFP || {};
     getModalButtonSettings: function (config) {
       return {
         takeover: config["field"]["enableTakeover"],
+        buttonLabel: config["field"]["buttonLabel"],
       };
     },
 
