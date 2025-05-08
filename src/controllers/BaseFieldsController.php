@@ -49,7 +49,7 @@ abstract class BaseFieldsController extends Controller
         // Tabledata is required for use with the existing Craft.VueAdminTable
         $tableData = [];
         foreach ($fieldConfigs as $fieldConfig) {
-            $url = UrlHelper::url($this->getEditAction((string) $fieldConfig->id));
+            $url = UrlHelper::url($this->getEditAction((string) $fieldConfig->field->id));  // Note field id and not fieldConfig id
             array_push($tableData, [
                 "id" => $fieldConfig->id,
                 "title" => $fieldConfig->field->name,
@@ -65,6 +65,24 @@ abstract class BaseFieldsController extends Controller
                 'cancel' => Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/cancel.png', true)
             ],
             'tableData' => $tableData,
+        ]);
+    }
+
+     /**
+     * Edit a field configuration
+     * 
+     */
+    public function actionEdit(int $fieldId)
+    {
+        $plugin = MatrixFieldPreview::getInstance();
+        $settings = MatrixFieldPreview::getInstance()->getSettings();
+
+        $service = $this->getService($plugin);
+
+        $fieldConfig = $service->getOrCreateByFieldId($fieldId);
+    
+        return $this->renderTemplate($this->getEditTemplate(), [
+            'fieldConfig' => $fieldConfig,
         ]);
     }
 

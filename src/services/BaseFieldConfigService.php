@@ -40,13 +40,39 @@ abstract class BaseFieldConfigService extends Component
     }
 
     /**
-     * Get By Handle
+     * Get or create a MFP Field Config given the underlying field handle
      * 
-     * Get a field config row based on it's associated matrix field handle
      */
     public function getOrCreateByFieldHandle($handle)
     {
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
+
+        if ($field) {
+            $record = $this->FieldRecordConfigClass::findOne([
+                'fieldId' => $field->id
+            ]);
+
+            if ($record == null) {
+                $record = new $this->FieldRecordConfigClass();
+                $record->fieldId = $field->id ?? null;
+                $record->enablePreviews = true;
+                $record->enableTakeover = true;
+                $record->save();
+            }
+
+            return $record;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get or create a MFP Field Config given the underlying field ID
+     * 
+     */
+    public function getOrCreateByFieldId($fieldId)
+    {
+        $field = Craft::$app->getFields()->getFieldById($fieldId);
 
         if ($field) {
             $record = $this->FieldRecordConfigClass::findOne([
