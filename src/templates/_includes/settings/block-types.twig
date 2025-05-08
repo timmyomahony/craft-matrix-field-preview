@@ -62,6 +62,7 @@
             ];
         {% endjs %}
         {% for field in fields %}
+            <h4><em>{{ field.name }}</em> {{ type | capitalize ~ " Field" | t("matrix-field-preview") }}</h4>
             <div class="mfp-settings-table__table">
                 <div id="matrix-field-preview-block-types-vue-admin-table-{{ field.id }}"></div>
                 {% js %}
