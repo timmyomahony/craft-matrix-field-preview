@@ -13,7 +13,7 @@
 
 <div class="field mfp-settings-table">
     <div class="heading">
-        <label>{{ "Configure {type} Fields"|t('matrix-field-preview', params = { type: type }) | capitalize }}</label>
+        <label>{{ "Configure {type} fields"|t('matrix-field-preview', params = { type: type }) | capitalize }}</label>
         <div class="instructions"><p>{{ "Use this page to configure which {type} fields will display previews." | t('matrix-field-preview', params = { type: type | lower }) }}</p></div>
     </div>
     {% if fields | length <= 0 %}
@@ -27,11 +27,11 @@
             var columns = [
                 {
                     name: '__slot:title',
-                    title: Craft.t('matrix-field-preview', 'Field'),
+                    title: Craft.t('matrix-field-preview', 'Field name'),
                 },
                 {
                     name: 'enablePreviews',
-                    title: Craft.t('matrix-field-preview', 'Enabled'),
+                    title: Craft.t('matrix-field-preview', 'Previews Enabled'),
                     callback: function(value) {
                         if (value === true) {
                             return '<img class="mfp-settings-table__icon" src="{{ assets.success }}">'
@@ -41,7 +41,7 @@
                 },
                 {
                     name: 'enableTakeover',
-                    title: Craft.t('matrix-field-preview', 'Takeover'),
+                    title: Craft.t('matrix-field-preview', 'Takeover Enabled'),
                     callback: function(value) {
                         if (value === true) {
                             return '<img class="mfp-settings-table__icon" src="{{ assets.success }}">'

@@ -37,10 +37,11 @@ abstract class BaseFieldsController extends Controller
     public function actionIndex()
     {
         $this->view->registerAssetBundle(MatrixFieldPreviewSettingsAsset::class);
+
         $plugin = MatrixFieldPreview::getInstance();
-        $service = $this->getService($plugin);
-        $template = $this->getTemplate();
         $settings = $plugin->getSettings();
+    
+        $service = $this->getService($plugin);
 
         $fields = $service->getAllFields();
         $fieldConfigs = $service->getAll($sort = true);
@@ -58,7 +59,7 @@ abstract class BaseFieldsController extends Controller
             ]);
         }
 
-        return $this->renderTemplate($template, [
+        return $this->renderTemplate($this->getIndexTemplate(), [
             'assets' => [
                 'success' => Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/success.png'),
                 'cancel' => Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/cancel.png', true)
@@ -74,52 +75,55 @@ abstract class BaseFieldsController extends Controller
      * Save the configuration of fields
      *
      */
-    public function actionSave()
-    {
-        $this->requirePostRequest();
-        $plugin = MatrixFieldPreview::getInstance();
-        $service = $this->getService($plugin);
+    // public function actionSave()
+    // {
+    //     $this->requirePostRequest();
+    //     $plugin = MatrixFieldPreview::getInstance();
+    //     $service = $this->getService($plugin);
 
-        $post = $this->request->post();
+    //     $post = $this->request->post();
 
-        if (!$post['settings']) {
-            return null;
-        }
+    //     if (!$post['settings']) {
+    //         return null;
+    //     }
 
-        foreach ($post['settings'] as $handle => $values) {
-            $fieldConfig = $service->getOrCreateByFieldHandle($handle);
-            if ($fieldConfig) {
-                $fieldConfig->enablePreviews = $values['enablePreviews'];
-                if (isset($values['enableTakeover'])) {
-                    $fieldConfig->enableTakeover = $values['enableTakeover'];
-                }
-                if ($fieldConfig->validate()) {
-                    $fieldConfig->save();
-                }
-            }
-        }
+    //     foreach ($post['settings'] as $handle => $values) {
+    //         $fieldConfig = $service->getOrCreateByFieldHandle($handle);
+    //         if ($fieldConfig) {
+    //             $fieldConfig->enablePreviews = $values['enablePreviews'];
+    //             if (isset($values['enableTakeover'])) {
+    //                 $fieldConfig->enableTakeover = $values['enableTakeover'];
+    //             }
+    //             if ($fieldConfig->validate()) {
+    //                 $fieldConfig->save();
+    //             }
+    //         }
+    //     }
 
-        // $fields = $service->getAllFields();
-        // $fieldConfigs = $service->getAll();
+    //     // $fields = $service->getAllFields();
+    //     // $fieldConfigs = $service->getAll();
 
-        $this->setSuccessFlash($this->getSuccessMessage());
-        return $this->redirectToPostedUrl();
-    }
+    //     $this->setSuccessFlash($this->getSuccessMessage());
+    //     return $this->redirectToPostedUrl();
+    // }
 
     /**
      * Get the underlying service for the field type
      *
+     * This base class is abstract, so this method must be implemented by the
+     * child matrix field or neo field controller.
      */
     protected function getService($plugin)
     {
         throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
-    /**
-     * Get the underlying template to render
-     *
-     */
-    protected function getTemplate()
+    protected function getIndexTemplate()
+    {
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
+    }
+
+    protected function getEditTemplate()
     {
         throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }

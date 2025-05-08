@@ -10,8 +10,12 @@ use Craft;
 
 class MatrixFieldsController extends BaseFieldsController
 {
-    protected function getTemplate() {
+    protected function getIndexTemplate() {
         return 'matrix-field-preview/settings/matrix-fields/index';
+    }
+
+    protected function getEditTemplate() {
+        return 'matrix-field-preview/settings/matrix-fields/_edit';
     }
 
     protected function getService($plugin) {
@@ -19,7 +23,7 @@ class MatrixFieldsController extends BaseFieldsController
     }
 
     protected function getSuccessMessage() {
-        return Craft::t('matrix-field-preview', 'Matrix field configurations saved.');
+        return Craft::t('matrix-field-preview', 'Matrix field configuration saved.');
     }
 
     protected function getEditAction($id)
