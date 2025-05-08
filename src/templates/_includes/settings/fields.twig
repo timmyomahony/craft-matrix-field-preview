@@ -16,7 +16,7 @@
         <label>{{ "Configure {type} fields"|t('matrix-field-preview', params = { type: type }) | capitalize }}</label>
         <div class="instructions"><p>{{ "Use this page to configure which {type} fields will display previews." | t('matrix-field-preview', params = { type: type | lower }) }}</p></div>
     </div>
-    {% if fields | length <= 0 %}
+    {% if tableData | length <= 0 %}
         <hr />
         <p class="warning with-icon"> {{ "No {type} fields exist yet. Create some fields via the control panel and return here to enable image previews."|t('matrix-field-preview', params = {
             type: type | lower
