@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
 
 - Fixed a bug with the preview button not properly "taking over" the default button.
+- Fixed layout issue with button when pasting a matrix field (issue #136).
 
 ### Security
 
