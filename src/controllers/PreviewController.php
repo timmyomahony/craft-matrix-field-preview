@@ -3,6 +3,7 @@
 namespace weareferal\matrixfieldpreview\controllers;
 
 use Craft;
+use craft\helpers\Cp;
 use craft\web\Controller;
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use yii\helpers\Markdown;
@@ -65,7 +66,13 @@ class PreviewController extends Controller
             "enablePreviews" => $fieldConfig->enablePreviews,
             "enableTakeover" => $fieldConfig->enableTakeover,
             "buttonLabel" => $fieldConfig->buttonLabel,
+            "buttonIcon" => "",
         ];
+
+        // Add button icon SVG if configured
+        if ($fieldConfig->buttonIcon && $fieldConfig->buttonIcon !== "") {
+            $response['config']['field']['buttonIcon'] = Cp::iconSvg($fieldConfig->buttonIcon);
+        }
 
         // Add categories
         foreach ($plugin->categoryService->getAll() as $category) {

@@ -13,31 +13,39 @@ var MFP = MFP || {};
       this.settings = $.extend(
         {
           takeover: false,
+          buttonLabel: "",
+          buttonIcon: "",
           extraClasses: "",
         },
         settings
       );
 
       this.$target = $(target);
-      this.$target.addClass("mfp-modal-button btn");
 
-      console.log(this.settings);
+      var classes = "mfp-modal-button btn flex flex-nowrap gap-xs";
+      var $label = $("<span>");
+      var $icon = $("<span>", {
+        class: "mfp-modal-button__icon cp-icon small",
+      });
 
-      var buttonLabel = this.settings.buttonLabel;
-      if (! buttonLabel || buttonLabel == "") {
-        buttonLabel = Craft.t('matrix-field-preview', 'New Entry');
+      var buttonLabel = this.settings.buttonLabel || Craft.t('matrix-field-preview', 'New Entry');
+      var buttonIcon = this.settings.buttonIcon;
+
+      // Set an optional button icon
+      if (buttonIcon) {
+        $icon.append(buttonIcon);
+        this.$target.append($icon);
       }
 
       if (!this.settings.takeover) {
-        this.$target
-          .addClass("mfp-modal-button--secondary dashed")
-          .text(buttonLabel);
-        // this.$target.css("background-image", "url('" + iconUrl + "')");
+        classes += " mfp-modal-button--secondary dashed";
       } else {
-        this.$target
-          .addClass("mfp-modal-button--primary icon add dashed")
-          .text(Craft.t('matrix-field-preview', 'New Entry'));
+        classes += " mfp-modal-button--primary dashed";
       }
+
+      $label.text(buttonLabel);
+      this.$target.append($label);
+      this.$target.addClass(classes);
 
       this.$target.on(
         "click",

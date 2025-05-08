@@ -144,6 +144,7 @@ var MFP = MFP || {};
       return {
         takeover: config["field"]["enableTakeover"],
         buttonLabel: config["field"]["buttonLabel"],
+        buttonIcon: config["field"]["buttonIcon"],
       };
     },
 
