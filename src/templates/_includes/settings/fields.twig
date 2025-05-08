@@ -33,7 +33,7 @@
                     name: 'enablePreviews',
                     title: Craft.t('matrix-field-preview', 'Previews Enabled'),
                     callback: function(value) {
-                        if (value === true) {
+                        if (value === 1) {
                             return '<img class="mfp-settings-table__icon" src="{{ assets.success }}" title="{{ 'Previews enabled for this field' | t('matrix-field-preview') }}">'
                         }
                         return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="{{ 'Previews not enabled for this field' | t('matrix-field-preview') }}" src="{{ assets.cancel }}">'
@@ -43,7 +43,7 @@
                     name: 'enableTakeover',
                     title: Craft.t('matrix-field-preview', 'Takeover Enabled'),
                     callback: function(value) {
-                        if (value === true) {
+                        if (value === 1) {
                             return '<img class="mfp-settings-table__icon" src="{{ assets.success }}" title="{{ 'Takeover enabled for this field' | t('matrix-field-preview') }}">'
                         }
                         return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="{{ 'Takeover not enabled for this field' | t('matrix-field-preview') }}" src="{{ assets.cancel }}">'
