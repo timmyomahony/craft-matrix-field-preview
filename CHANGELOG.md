@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - New "button label" field that lets you customise the text of the preview button on a per-field basis. Previously this was only possible at a "global" level via translations (see issue #135).
 - New button icons that let you customise the look of the preview button.
+- The ability to disable particular previews so that they don't show in the modal.
 
 ### Changed
 
