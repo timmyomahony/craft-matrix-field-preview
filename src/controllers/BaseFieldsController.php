@@ -71,6 +71,9 @@ abstract class BaseFieldsController extends Controller
      /**
      * Edit a field configuration
      * 
+     * Note that we're using the fieldId from Craft, and not our own fieldConfigId. This
+     * is because we are lazily creating our field previews, so we need to know the field
+     * to associated the config with if it doesn't already exist.
      */
     public function actionEdit(int $fieldId)
     {
@@ -87,40 +90,39 @@ abstract class BaseFieldsController extends Controller
     }
 
     /**
-     * Save the configuration of fields
+     * Save the matrix field configuration
      *
      */
-    // public function actionSave()
-    // {
-    //     $this->requirePostRequest();
-    //     $plugin = MatrixFieldPreview::getInstance();
-    //     $service = $this->getService($plugin);
+    public function actionSave()
+    {
+        $this->requirePostRequest();
 
-    //     $post = $this->request->post();
+        $plugin = MatrixFieldPreview::getInstance();
+        $service = $this->getService($plugin);
 
-    //     if (!$post['settings']) {
-    //         return null;
-    //     }
+        $fieldId = $this->request->getBodyParam('fieldId');
+        $fieldConfig = $service->getOrCreateByFieldId($fieldId);
+        if (!$fieldConfig) {
+            throw new BadRequestHttpException("Couldn't find field config. Invalid field id supplied: $fieldId");
+        }
 
-    //     foreach ($post['settings'] as $handle => $values) {
-    //         $fieldConfig = $service->getOrCreateByFieldHandle($handle);
-    //         if ($fieldConfig) {
-    //             $fieldConfig->enablePreviews = $values['enablePreviews'];
-    //             if (isset($values['enableTakeover'])) {
-    //                 $fieldConfig->enableTakeover = $values['enableTakeover'];
-    //             }
-    //             if ($fieldConfig->validate()) {
-    //                 $fieldConfig->save();
-    //             }
-    //         }
-    //     }
+        $fieldConfig->enablePreviews = $this->request->getBodyParam('enablePreviews');
+        $fieldConfig->enableTakeover = $this->request->getBodyParam('enableTakeover');
 
-    //     // $fields = $service->getAllFields();
-    //     // $fieldConfigs = $service->getAll();
+        if (! $service->save($fieldConfig)) {
+            $this->setFailFlash(Craft::t('matrix-field-preview', 'Couldn\'t save the field config.'));
 
-    //     $this->setSuccessFlash($this->getSuccessMessage());
-    //     return $this->redirectToPostedUrl();
-    // }
+            // Send user back to the template
+            Craft::$app->getUrlManager()->setRouteParams([
+                'fieldConfig' => $fieldConfig,
+            ]);
+
+            return null;
+        }
+
+        $this->setSuccessFlash(Craft::t('matrix-field-preview', 'Field config saved.'));
+        return $this->redirectToPostedUrl($fieldConfig);
+    }
 
     /**
      * Get the underlying service for the field type

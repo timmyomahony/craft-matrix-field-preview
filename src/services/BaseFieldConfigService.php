@@ -118,4 +118,15 @@ abstract class BaseFieldConfigService extends Component
         }
         return $fields;
     }
+
+    public function save($fieldConfig): bool {
+        if (! $fieldConfig->validate()) {
+            Craft::info("Field config not saved due to validation error", "matrix-field-preview");
+            return false;
+        }
+
+        $fieldConfig->save();
+
+        return true;
+    }
 }

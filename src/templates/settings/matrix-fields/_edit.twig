@@ -21,8 +21,7 @@
     {{ redirectInput('matrix-field-preview/settings/matrix-fields') }}
 
     {% if fieldConfig.field.id %}{{ hiddenInput('fieldId', fieldConfig.field.id) }}{% endif %}
-    {% if fieldConfig.id %}{{ hiddenInput('fieldConfigId', fieldConfig.id) }}{% endif %}
-
+    
     {% include "matrix-field-preview/_includes/settings/field.twig" with {
         type: "matrix",
     } %}
