@@ -164,6 +164,7 @@ abstract class BaseBlockTypesController extends Controller {
             throw new BadRequestHttpException("Invalid block type ID: $blockTypeId");
         }
 
+        $blockTypeConfig->enabled = $this->request->getBodyParam('enabled');
         $blockTypeConfig->description = $this->request->getBodyParam('description');
         $blockTypeConfig->categoryId = $this->request->getBodyParam('categoryId');
 

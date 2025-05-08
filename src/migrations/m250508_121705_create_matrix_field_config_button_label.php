@@ -55,8 +55,8 @@ class m250508_121705_create_matrix_field_config_button_label extends Migration
                 "{{%matrixfieldpreview_neo_fields_config}}",
                 "buttonLabel"
             );
-            return true;
         }
-        return false;
+
+        return true;
     }
 }

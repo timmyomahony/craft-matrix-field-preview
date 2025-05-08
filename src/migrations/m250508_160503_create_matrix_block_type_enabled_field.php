@@ -27,11 +27,25 @@ class m250508_160503_create_matrix_block_type_enabled_field extends Migration
             $this->boolean(true)
         );
 
+        // Update all existing rows to have enabled = true
+        $this->update(
+            "{{%matrixfieldpreview_blocktypes_config}}",
+            ['enabled' => true],
+            ['enabled' => null]
+        );
+
         if ($this->_neoInstalled()) {
             $this->addColumn(
                 "{{%matrixfieldpreview_neo_blocktypes_config}}",
                 "enabled",
                 $this->boolean(true)
+            );
+
+            // Update all existing Neo rows to have enabled = true
+            $this->update(
+                "{{%matrixfieldpreview_neo_blocktypes_config}}",
+                ['enabled' => true],
+                ['enabled' => null]
             );
         }
 
@@ -53,8 +67,8 @@ class m250508_160503_create_matrix_block_type_enabled_field extends Migration
                 "{{%matrixfieldpreview_neo_blocktypes_config}}",
                 "enabled"
             );
-            return true;
         }
-        return false;
+
+        return true;
     }
 }

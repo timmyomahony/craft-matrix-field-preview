@@ -13,8 +13,17 @@
 ]) %}
 
 {% block content %}
-    {{ forms.textareaField({
+    {{ forms.lightswitchField({
+        label: "Enabled"|t('matrix-field-preview'),
+        instructions: "Enable this preview"|t('matrix-field-preview'),
+        name: 'enabled',
+        id: 'enabled',
+        on: blockTypeConfig.enabled,
+        errors: blockTypeConfig.getErrors('enabled'),
         first: true,
+    }) }}
+
+    {{ forms.textareaField({
         label: "Description"|t('matrix-field-preview'),
         instructions: "A short description of this {type} preview. Can include markdown."|t('matrix-field-preview', params = {type: type | lower }),
         id: "description",

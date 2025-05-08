@@ -54,8 +54,8 @@ class m250508_125206_create_matrix_field_config_button_icon extends Migration
                 "{{%matrixfieldpreview_neo_fields_config}}",
                 "buttonIcon"
             );
-            return true;
         }
-        return false;
+
+        return true;
     }
 }
