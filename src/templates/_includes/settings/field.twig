@@ -37,4 +37,13 @@
         value: fieldConfig.buttonLabel,
         errors: fieldConfig.getErrors('buttonLabel')
     }) }}
+
+    {{ forms.iconPickerField({
+        label: 'Button Icon'|t('matrix-field-preview'),
+        instructions: "An optional icon to display on the preview button."|t('matrix-field-preview'),
+        id: 'buttonIcon',
+        name: 'buttonIcon',
+        value: fieldConfig.buttonIcon,
+        errors: fieldConfig.getErrors('buttonIcon'),
+    }) }}
 {% endblock %}

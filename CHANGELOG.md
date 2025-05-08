@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.1.0] - Unreleased
+
+### Added
+
+- New "button label" field that lets you customise the text of the preview button on a per-field basis. Previously this was only possible at a "global" level via translations (see issue #135).
+
+### Changed
+
+- Added the ability to edit each field configuration via a separate settings page, allowing for future per-field settings.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+- Fixed a bug with the preview button not properly "taking over" the default button.
+
+### Security
+
 ## 5.0.1 - 2025-01-30
 
 ### Fixed

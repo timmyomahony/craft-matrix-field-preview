@@ -62,6 +62,7 @@ class Install extends Migration
                     'enablePreviews' => $this->boolean(true),
                     'enableTakeover' => $this->boolean(true),
                     'buttonLabel' => $this->string(50)->notNull()->defaultValue(''),
+                    'buttonIcon' => $this->string(50)->notNull()->defaultValue(''),
                 ]
             );
         }
@@ -119,6 +120,7 @@ class Install extends Migration
                     'enablePreviews' => $this->boolean(true),
                     'enableTakeover' => $this->boolean(false),
                     'buttonLabel' => $this->string(50)->notNull()->defaultValue(''),
+                    'buttonIcon' => $this->string(50)->notNull()->defaultValue(''),
                 ]
             );
         }
