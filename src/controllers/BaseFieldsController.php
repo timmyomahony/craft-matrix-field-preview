@@ -65,6 +65,8 @@ abstract class BaseFieldsController extends Controller
                 'cancel' => Craft::$app->getAssetManager()->getPublishedUrl('@weareferal/matrixfieldpreview/assets/MatrixFieldPreviewSettings/dist/img/cancel.png', true)
             ],
             'tableData' => $tableData,
+            'fields' => $fields,
+            'settings' => $settings,
         ]);
     }
 

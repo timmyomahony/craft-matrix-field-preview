@@ -19,8 +19,7 @@
         <div class="instructions"><p>{{ "Use this page to configure the image and text previews that appear for your enabled {type} fields." | t('matrix-field-preview', params = { type: type | lower }) }}</p></div>
     </div>
     {% if fields | length <= 0 %}
-        <hr />
-        <p class="warning with-icon">{{ "No {type} fields have been created or enabled for previews yet. Please visit the 'Configure Fields' and enable image previews for your {type} fields."|t('matrix-field-preview', params = { type: type | lower }) }}</p>
+        <p class="warning with-icon">{{ "No {type} fields have been created or enabled for previews yet. Please visit 'Configure Fields' and enable image previews for your {type} fields."|t('matrix-field-preview', params = { type: type | lower }) }}</p>
     {% else %}
         {% js %}
             var notConfiguredText = Craft.t('matrix-field-preview', 'Not configured yet');
