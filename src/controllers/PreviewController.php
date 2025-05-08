@@ -88,6 +88,11 @@ class PreviewController extends Controller
         $blockTypeConfigs = $blockTypeService->getOrCreateByFieldHandle($fieldHandle);
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
+            // Skip block types that are not enabled
+            if (!$blockTypeConfig->enabled) {
+                continue;
+            }
+            // Skip Neo block types that are not enabled
             if ($type == "neo" && $blockType->hasAttribute('enabled') && !$blockType->enabled) {
                 continue;
             }
