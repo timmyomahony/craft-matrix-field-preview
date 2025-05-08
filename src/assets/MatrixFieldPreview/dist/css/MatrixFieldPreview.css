@@ -6,7 +6,7 @@
 }
 
 /* Takeover - hide the default buttons when takeover mode is enabled */
-.mfp-matrix-field.mfp-field--takeover > .buttons .btn:not(.mfp-modal-button),
+.mfp-matrix-field.mfp-field--takeover > .buttons .btn:not(.mfp-modal-button):not(.paste-btn),
 .mfp-matrix-field.mfp-field--takeover > .buttons .btngroup,
 .mfp-matrix-field.mfp-field--takeover > .buttons .menubtn {
   display: none !important;
