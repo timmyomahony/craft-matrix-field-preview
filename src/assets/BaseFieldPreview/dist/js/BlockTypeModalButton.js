@@ -22,7 +22,7 @@ var MFP = MFP || {};
 
       this.$target = $(target);
 
-      var classes = "mfp-modal-button btn flex flex-nowrap gap-xs";
+      var classes = "mfp-modal-button btn dashed flex flex-nowrap gap-xs";
       var $label = $("<span>");
       var $icon = $("<span>", {
         class: "mfp-modal-button__icon cp-icon small",
@@ -35,12 +35,6 @@ var MFP = MFP || {};
       if (buttonIcon) {
         $icon.append(buttonIcon);
         this.$target.append($icon);
-      }
-
-      if (!this.settings.takeover) {
-        classes += " mfp-modal-button--secondary dashed";
-      } else {
-        classes += " mfp-modal-button--primary dashed";
       }
 
       $label.text(buttonLabel);

@@ -1,18 +1,11 @@
 .mfp-matrix-field .mfp-modal-button {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-.mfp-matrix-field.matrix .buttons {
-  justify-content: space-between;
 }
 
 .mfp-matrix-field.matrix:last-child .buttons {
   margin-bottom: 0 !important;
 }
 
-/* Takeover */
+/* Takeover - hide the default buttons when takeover mode is enabled */
 .mfp-matrix-field.mfp-field--takeover > .buttons .btn:not(.mfp-modal-button),
 .mfp-matrix-field.mfp-field--takeover > .buttons .btngroup,
 .mfp-matrix-field.mfp-field--takeover > .buttons .menubtn {

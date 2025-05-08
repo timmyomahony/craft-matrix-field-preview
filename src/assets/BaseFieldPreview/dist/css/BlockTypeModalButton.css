@@ -4,15 +4,5 @@
   align-items: center;
 }
 
-.mfp-modal-button--primary {
-  margin-left: 10px;
-}
-
-.mfp-modal-button--secondary {
-  background-position: 10px 52%;
-  background-repeat: no-repeat;
-  background-size: 19px auto;
-}
-
 .mfp-modal-button__icon {
 }
