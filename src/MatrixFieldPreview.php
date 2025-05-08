@@ -220,7 +220,8 @@ class MatrixFieldPreview extends Plugin
                     $neoMigrations = [
                         new migrations\m201031_120401_add_neo_support(),
                         new migrations\m220606_112005_add_category_fk_to_neo(),
-                        new migrations\m220606_200131_add_neo_block_type_sort_order()
+                        new migrations\m220606_200131_add_neo_block_type_sort_order(),
+                        new migrations\m250508_164554_create_matrix_preview_additional_neo_fields()
                     ];
 
                     foreach ($neoMigrations as $neoMigration) {

@@ -42,8 +42,8 @@ class m220606_200131_add_neo_block_type_sort_order extends Migration
                 "{{%matrixfieldpreview_neo_blocktypes_config}}",
                 "sortOrder"
             );
-            return true;
         }
+
         return true;
     }
 }
