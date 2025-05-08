@@ -22,7 +22,10 @@
             type: type | lower
         }) }}</p>
     {% else %}
-    {% js %}
+        <div class="mfp-settings-table__table">
+            <div id="matrix-field-preview-fields-vue-admin-table"></div>
+        </div>
+        {% js %}
             var notEnabledText = Craft.t('matrix-field-preview', 'Not enabled');
             var columns = [
                 {
@@ -50,18 +53,13 @@
                     }
                 }
             ];
+            var type = "{{ type | lower }}";
+            new Craft.VueAdminTable({
+                columns: columns,
+                container: '#matrix-field-preview-fields-vue-admin-table',
+                emptyMessage: Craft.t('matrix-field-preview', 'No fields exist yet.'),
+                tableData: {{ tableData|json_encode|raw }}
+            });
         {% endjs %}
-        <div class="mfp-settings-table__table">
-            <div id="matrix-field-preview-fields-vue-admin-table"></div>
-            {% js %}
-                var type = "{{ type | lower }}";
-                new Craft.VueAdminTable({
-                    columns: columns,
-                    container: '#matrix-field-preview-fields-vue-admin-table',
-                    emptyMessage: Craft.t('matrix-field-preview', 'No fields exist yet.'),
-                    tableData: {{ tableData|json_encode|raw }}
-                });
-            {% endjs %}
-        </div>
     {% endif %}
 </div>

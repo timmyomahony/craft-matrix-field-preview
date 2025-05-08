@@ -12,7 +12,7 @@
   position: relative;
 }
 
-.mfp-settings-table table {
+.mfp-settings-table :not(:last-child) table {
   margin-bottom: 25px;
 }
 
