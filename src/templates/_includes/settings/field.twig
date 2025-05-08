@@ -26,4 +26,15 @@
         on: fieldConfig.enableTakeover,
         errors: fieldConfig.getErrors('enableTakeover')
     }) }}
+
+    {{ forms.textField({
+        label: "Button Label"|t('matrix-field-preview'),
+        type: "text",
+        instructions: "The text to display on the button used when adding a new entry/block/component via this field."|t('matrix-field-preview'),
+        placeholder: "New Entry",
+        name: 'buttonLabel',
+        id: 'buttonLabel',
+        value: fieldConfig.buttonLabel,
+        errors: fieldConfig.getErrors('buttonLabel')
+    }) }}
 {% endblock %}

@@ -108,6 +108,7 @@ abstract class BaseFieldsController extends Controller
 
         $fieldConfig->enablePreviews = $this->request->getBodyParam('enablePreviews');
         $fieldConfig->enableTakeover = $this->request->getBodyParam('enableTakeover');
+        $fieldConfig->buttonLabel = $this->request->getBodyParam('buttonLabel');
 
         if (! $service->save($fieldConfig)) {
             $this->setFailFlash(Craft::t('matrix-field-preview', 'Couldn\'t save the field config.'));
