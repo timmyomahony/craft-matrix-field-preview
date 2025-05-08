@@ -73,6 +73,7 @@ class Install extends Migration
                 '{{%matrixfieldpreview_blocktypes_config}}',
                 [
                     'id' => $this->primaryKey(),
+                    'enabled' => $this->boolean(true),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
@@ -131,6 +132,7 @@ class Install extends Migration
                 '{{%matrixfieldpreview_neo_blocktypes_config}}',
                 [
                     'id' => $this->primaryKey(),
+                    'enabled' => $this->boolean(true),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
