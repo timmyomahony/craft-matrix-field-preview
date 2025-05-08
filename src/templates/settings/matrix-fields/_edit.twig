@@ -1,11 +1,29 @@
 {% extends "matrix-field-preview/_layouts/settings" %}
 
-{% set title = fieldConfig.field.name ~ " Preview" %}
+
+{% set title = "Configure '" ~fieldConfig.field.name ~ "'" ~ " Matrix Field" %}
 
 {% set fullPageForm = true %}
 
-
+{% set crumbs = [
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    },
+    {
+        label: "Configure Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings/matrix-fields')
+    }
+] %}
 
 {% block content %}
-    test
+    {{ actionInput('matrix-field-preview/matrix-fields/save') }}
+    {{ redirectInput('matrix-field-preview/settings/matrix-fields') }}
+
+    {% if fieldConfig.field.id %}{{ hiddenInput('fieldId', fieldConfig.field.id) }}{% endif %}
+    {% if fieldConfig.id %}{{ hiddenInput('fieldConfigId', fieldConfig.id) }}{% endif %}
+
+    {% include "matrix-field-preview/_includes/settings/field.twig" with {
+        type: "matrix",
+    } %}
 {% endblock %}

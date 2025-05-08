@@ -1,0 +1,29 @@
+{% import '_includes/forms' as forms %}
+
+{% do view.registerTranslations('matrix-field-preview', [
+    "Enable Previews",
+    "Enable preview images & descriptions for this field",
+]) %}
+
+{% block content %}
+    <h2 class="first">'{{ fieldConfig.field.name }}' {{ type | capitalize }} Field</h2>
+    <hr />
+
+    {{ forms.lightswitchField({
+        label: "Enable Previews"|t('matrix-field-preview'),
+        instructions: "Enable preview images for this field"|t('matrix-field-preview'),
+        name: 'enablePreviews',
+        id: 'enablePreviews',
+        on: fieldConfig.enablePreviews,
+        errors: fieldConfig.getErrors('enablePreviews'),
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: "Enable Takeover"|t('matrix-field-preview'),
+        instructions: "Enable 'takeover' mode for this field (in takeover mode, the default field button is removed). <a target='_blank' href='https://craft-plugins.timmyomahony.com/matrix-field-preview/docs/usage#takeover'>Learn more</a>"|t('matrix-field-preview'),
+        name: 'enableTakeover',
+        id: 'enableTakeover',
+        on: fieldConfig.enableTakeover,
+        errors: fieldConfig.getErrors('enableTakeover')
+    }) }}
+{% endblock %}
