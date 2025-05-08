@@ -60,7 +60,8 @@ class Install extends Migration
                     'uid' => $this->uid(),
                     'fieldId' => $this->integer()->notNull(),
                     'enablePreviews' => $this->boolean(true),
-                    'enableTakeover' => $this->boolean(true)
+                    'enableTakeover' => $this->boolean(true),
+                    'buttonLabel' => $this->string(50)->notNull()->defaultValue(''),
                 ]
             );
         }
@@ -116,7 +117,8 @@ class Install extends Migration
                     'uid' => $this->uid(),
                     'fieldId' => $this->integer()->notNull(),
                     'enablePreviews' => $this->boolean(true),
-                    'enableTakeover' => $this->boolean(false)
+                    'enableTakeover' => $this->boolean(false),
+                    'buttonLabel' => $this->string(50)->notNull()->defaultValue(''),
                 ]
             );
         }
