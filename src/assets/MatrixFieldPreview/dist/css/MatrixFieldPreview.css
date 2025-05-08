@@ -13,6 +13,7 @@
 }
 
 /* Takeover */
+.mfp-matrix-field.mfp-field--takeover > .buttons .btn:not(.mfp-modal-button),
 .mfp-matrix-field.mfp-field--takeover > .buttons .btngroup,
 .mfp-matrix-field.mfp-field--takeover > .buttons .menubtn {
   display: none !important;
