@@ -31,14 +31,14 @@ var MFP = MFP || {};
       input.on(
         "entryAdded",
         function (ev) {
-          this.blockAdded(input, ev.$entry, config, true);
+          this.onEntryAdded(input, ev.$entry, config, true);
         }.bind(this)
       );
 
       input.on(
         "entryDeleted",
         function (ev) {
-          this.blockDeleted(input, ev.$entry, config);
+          this.onEntryDeleted(input, ev.$entry, config);
         }.bind(this)
       );
 
@@ -96,18 +96,16 @@ var MFP = MFP || {};
       var $blocks = input.$entriesContainer.children();
       $blocks.each(
         function (i, $block) {
-          this.blockAdded(input, $($block), config, false);
+          this.onEntryAdded(input, $($block), config, false);
         }.bind(this)
       );
     },
 
     /**
-     * Block Added
+     * Entry Added
      * 
-     * Respond to the matrix field adding a new block by setting
+     * Respond to the matrix field adding a new entry by setting
      * up MFP previews.
-     * 
-     * TODO: Rename to "onEntryAdded"
      *
      * @param {*} input
      * @param {*} $block
@@ -115,17 +113,17 @@ var MFP = MFP || {};
      * @param {*} updateButton
      * @returns
      */
-    blockAdded: function (input, $block, config, updateButton) {
+    onEntryAdded: function (input, $block, config, updateButton) {
       // Note that we are using the DOM element here and not the Garnish instance:
       // https://github.com/craftcms/cms/issues/7130
       var blockHandle = $block.attr("data-type");
       var blockConfig = config["blockTypes"][blockHandle];
 
-      console.debug("Block added to matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
+      console.debug("Entry added to matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
 
       // Add inline preview
       if (!blockConfig["image"] && !blockConfig["description"]) {
-        console.warn("No block types configured for this block");
+        console.warn("No entry types configured for this entry");
       } else {
         var inlinePreview = this.createInlinePreview(
           $block.find("> .fields"),
@@ -146,10 +144,10 @@ var MFP = MFP || {};
      * @param {*} $block
      * @param {*} config
      */
-    blockDeleted: function (input, $block, config) {
+    onEntryDeleted: function (input, $block, config) {
       var blockHandle = $block.attr("data-type");
 
-      console.debug("Block deleted from matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
+      console.debug("Entry deleted from matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
     
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
