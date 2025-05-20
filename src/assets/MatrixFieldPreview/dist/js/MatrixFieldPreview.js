@@ -114,7 +114,6 @@ var MFP = MFP || {};
      * @returns
      */
     onEntryAdded: function (input, $block, config, updateButton) {
-      console.log(config)
       // Note that we are using the DOM element here and not the Garnish instance:
       // https://github.com/craftcms/cms/issues/7130
       var blockHandle = $block.attr("data-type");
@@ -123,15 +122,15 @@ var MFP = MFP || {};
       console.debug("Entry added to matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
 
       // Add inline preview
-      if (!blockConfig["image"] && !blockConfig["description"]) {
-        console.warn("No entry types configured for this entry");
-      } else {
+      if (blockConfig && (blockConfig["image"] || blockConfig["description"])) {
         var inlinePreview = this.createInlinePreview(
           $block.find("> .fields"),
           blockConfig
         );
+      } else {
+        console.warn("No entry types configured for this entry");
       }
-
+      
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
