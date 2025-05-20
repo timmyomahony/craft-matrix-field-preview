@@ -114,6 +114,7 @@ var MFP = MFP || {};
      * @returns
      */
     onEntryAdded: function (input, $block, config, updateButton) {
+      console.log(config)
       // Note that we are using the DOM element here and not the Garnish instance:
       // https://github.com/craftcms/cms/issues/7130
       var blockHandle = $block.attr("data-type");

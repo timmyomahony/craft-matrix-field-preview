@@ -6,6 +6,7 @@
     'Block Type',
     'Configure {type} Field Previews',
     'Category',
+    'Enabled',
     'Description',
     'No block types exist yet.',
     "No {type} fields have been created or enabled for previews yet. Please visit the 'Configure Fields' and enable image previews for your {type} fields.",
@@ -27,6 +28,16 @@
                 {
                     name: '__slot:title',
                     title: Craft.t('matrix-field-preview', 'Block Type'),
+                },
+                {
+                    name: 'enabled',
+                    title: Craft.t('matrix-field-preview', 'Enabled'),
+                    callback: function(value) {
+                        if (value === 1) {
+                            return '<img class="mfp-settings-table__icon" title="' + value + '" src="{{ assets.success }}">'
+                        }
+                        return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="' + notConfiguredText + '" src="{{ assets.cancel }}">'
+                    }
                 },
                 {
                     name: 'description',
