@@ -1,0 +1,28 @@
+{% extends "matrix-field-preview/_layouts/settings" %}
+
+
+{% set title = "Configure Neo Field" %}
+
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    {
+        label: "Neo Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    },
+    {
+        label: "Configure Neo Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings/neo-fields')
+    }
+] %}
+
+{% block content %}
+    {{ actionInput('matrix-field-preview/neo-fields/save') }}
+    {{ redirectInput('matrix-field-preview/settings/neo-fields') }}
+
+    {% if fieldConfig.field.id %}{{ hiddenInput('fieldId', fieldConfig.field.id) }}{% endif %}
+    
+    {% include "matrix-field-preview/_includes/settings/field.twig" with {
+        type: "neo",
+    } %}
+{% endblock %}
