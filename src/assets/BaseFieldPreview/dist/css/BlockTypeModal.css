@@ -124,7 +124,7 @@
 
 /* Default image placeholder */
 .mfp-grid-item__button--default {
-  background-color: #f3f3f3;
+  background-color: #fff;
 }
 
 .mfp-grid-item__button--default img {
