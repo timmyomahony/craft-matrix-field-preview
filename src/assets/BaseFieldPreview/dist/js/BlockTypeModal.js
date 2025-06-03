@@ -68,10 +68,23 @@ var MFP = MFP || {};
       var sidebarNav = $('<nav class="mfp-modal__sidebar__nav" />');
       var sidebarUl = $('<ul class="mfp-modal__sidebar__ul" />');
 
+      // Keep track of the block types that have a category assigned
+      // so that we can only show the related categories
+      var activeCategories = Object.values(this.config.blockTypes).filter(function (blockType) {
+        return blockType.categoryId !== null;
+      }).map(function (blockType) {
+        return blockType.categoryId;
+      });
+
       // Add link for each category
       $.each(
         this.config["categories"],
         function (i, category) {
+          // Only show the category if it has a block type assigned
+          if (!activeCategories.includes(category.id)) {
+            return;
+          }
+
           var sidebarHref = $("<a class='mfp-modal__sidebar__a' />")
             .text(category.name)
             .attr("data-category", category.id);
@@ -280,8 +293,6 @@ var MFP = MFP || {};
      */
     buildModalHtml: function () {
       this.$container.addClass("mfp-modal modal elementselectormodal");
-
-      console.log(Object.values(this.config.blockTypes));
 
       // Only show categories sidebar if the user has configured categories
       // and if at least one block type has a category assigned
