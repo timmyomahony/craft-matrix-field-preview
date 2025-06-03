@@ -194,7 +194,7 @@ var MFP = MFP || {};
       var grid = $("<ul />", { class: "mfp-grid" });
 
       $.each(
-        this.config["blockTypes"],
+        Object.values(this.config.blockTypes),
         function (i, blockTypeConfig) {
           var gridItem = $("<li>", {
             class: "mfp-grid-item",
@@ -281,7 +281,13 @@ var MFP = MFP || {};
     buildModalHtml: function () {
       this.$container.addClass("mfp-modal modal elementselectormodal");
 
-      var includeCategories = this.config.categories.length > 0;
+      console.log(Object.values(this.config.blockTypes));
+
+      // Only show categories sidebar if the user has configured categories
+      // and if at least one block type has a category assigned
+      var includeCategories = this.config.categories.length > 0 && Object.values(this.config.blockTypes).some(function (blockType) {
+        return blockType.categoryId !== null;
+      });
 
       var body = $("<div />", {
         class: "mfp-modal__body body",
