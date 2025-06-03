@@ -166,7 +166,7 @@ var MFP = MFP || {};
             );
             neoInput["@newBlock"]({
               blockType: neoBlockType,
-              index: ev.insertionIndex,
+              index: neoInput.getBlocks().length,
               level: neoBlock.getLevel() + 1,
             });
             modal.hide();
