@@ -17,7 +17,7 @@
 ] %}
 
 {% block content %}
-    {{ actionInput('matrix-field-preview/neo-fields/save') }}
+    {{ actionInput('matrix-field-preview/neo-fields/save-field') }}
     {{ redirectInput('matrix-field-preview/settings/neo-fields') }}
 
     {% if fieldConfig.field.id %}{{ hiddenInput('fieldId', fieldConfig.field.id) }}{% endif %}

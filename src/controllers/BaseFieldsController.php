@@ -95,7 +95,7 @@ abstract class BaseFieldsController extends Controller
      * Save the matrix field configuration
      *
      */
-    public function actionSave()
+    public function actionSaveField()
     {
         $this->requirePostRequest();
 
