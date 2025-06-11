@@ -54,7 +54,7 @@ abstract class BaseBlockTypesController extends Controller {
             $fieldConfig = $fieldsConfigService->getOrCreateByFieldHandle($field->handle);
             $blockTypeConfigs = $blockTypeConfigService->getOrCreateByFieldHandle($field->handle);
 
-            if (! $fieldConfig->enablePreviews) {
+            if (! (bool)$fieldConfig->enablePreviews) {
                 continue;
             }
 
@@ -62,7 +62,7 @@ abstract class BaseBlockTypesController extends Controller {
             $tableData = [];
             foreach ($blockTypeConfigs as $blockTypeConfig) {
                 $url = UrlHelper::url($this->getEditAction((string) $blockTypeConfig->blockType->id));
-                $enabled = $blockTypeConfig->enabled;
+                $enabled = (bool)$blockTypeConfig->enabled;
                 $hasPreview = $blockTypeConfig->previewImageId !== null;
                 $category = $blockTypeConfig->categoryId !== null ? $blockTypeConfig->category->name : false;
                 $description = $blockTypeConfig->description;

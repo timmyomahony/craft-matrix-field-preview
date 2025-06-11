@@ -63,8 +63,8 @@ class PreviewController extends Controller
         $response['config']['field'] = [
             "name" => $fieldConfig->field->name,
             "handle" => $fieldConfig->field->handle,
-            "enablePreviews" => $fieldConfig->enablePreviews,
-            "enableTakeover" => $fieldConfig->enableTakeover,
+            "enablePreviews" => (bool)$fieldConfig->enablePreviews,
+            "enableTakeover" => (bool)$fieldConfig->enableTakeover,
             "buttonLabel" => $fieldConfig->buttonLabel,
             "buttonIcon" => "",
         ];
@@ -89,11 +89,11 @@ class PreviewController extends Controller
         foreach ($blockTypeConfigs as $blockTypeConfig) {
             $blockType = $blockTypeConfig->blockType;
             // Skip block types that are not enabled
-            if (!$blockTypeConfig->enabled) {
+            if (! (bool)$blockTypeConfig->enabled) {
                 continue;
             }
             // Skip Neo block types that are not enabled
-            if ($type == "neo" && $blockType->hasAttribute('enabled') && !$blockType->enabled) {
+            if ($type == "neo" && $blockType->hasAttribute('enabled') && ! (bool)$blockType->enabled) {
                 continue;
             }
             $result = [

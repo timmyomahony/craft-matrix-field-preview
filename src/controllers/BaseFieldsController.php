@@ -53,8 +53,8 @@ abstract class BaseFieldsController extends Controller
             array_push($tableData, [
                 "id" => $fieldConfig->id,
                 "title" => $fieldConfig->field->name,
-                "enablePreviews" => $fieldConfig->enablePreviews,
-                "enableTakeover" => $fieldConfig->enableTakeover,
+                "enablePreviews" => (bool)$fieldConfig->enablePreviews,
+                "enableTakeover" => (bool)$fieldConfig->enableTakeover,
                 "url" => $url
             ]);
         }

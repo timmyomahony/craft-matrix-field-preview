@@ -33,7 +33,7 @@
                     name: 'enabled',
                     title: Craft.t('matrix-field-preview', 'Enabled'),
                     callback: function(value) {
-                        if (value === 1) {
+                        if (value === true) {
                             return '<img class="mfp-settings-table__icon" title="' + value + '" src="{{ assets.success }}">'
                         }
                         return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="' + notConfiguredText + '" src="{{ assets.cancel }}">'
