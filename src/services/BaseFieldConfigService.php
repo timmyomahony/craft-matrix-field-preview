@@ -36,10 +36,11 @@ abstract class BaseFieldConfigService extends Component
             }
         }
 
-        // Get all configs
-        //
-        // FIXME: need to exclude or delete configs related to deleted fields
-        $fieldConfigs = $this->FieldRecordConfigClass::find()->all();
+        // Get all configs and filter out those where the field has been soft deleted
+        $fieldConfigs = $this->FieldRecordConfigClass::find()
+            ->joinWith(['field'])
+            ->where(['fields.dateDeleted' => null])
+            ->all();
 
         return $fieldConfigs;
     }
@@ -51,6 +52,7 @@ abstract class BaseFieldConfigService extends Component
     public function getOrCreateByFieldHandle($handle)
     {
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
+
 
         if ($field) {
             $record = $this->FieldRecordConfigClass::findOne([
@@ -121,6 +123,7 @@ abstract class BaseFieldConfigService extends Component
                 array_push($fields, $field);
             }
         }
+        
         return $fields;
     }
 

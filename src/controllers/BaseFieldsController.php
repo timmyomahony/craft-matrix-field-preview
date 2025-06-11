@@ -48,7 +48,7 @@ abstract class BaseFieldsController extends Controller
 
         // Tabledata is required for use with the existing Craft.VueAdminTable
         $tableData = [];
-        foreach ($fieldConfigs as $fieldConfig) {
+        foreach ($fieldConfigs as $fieldConfig) {                
             $url = UrlHelper::url($this->getEditAction((string) $fieldConfig->field->id));  // Note field id and not fieldConfig id
             array_push($tableData, [
                 "id" => $fieldConfig->id,
