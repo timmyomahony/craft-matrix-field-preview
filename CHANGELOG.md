@@ -15,17 +15,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Added the ability to edit each field configuration via a separate settings page, allowing for future per-field settings.
-
-### Deprecated
-
-### Removed
+- Preview modal sidebar will only show when a block has been assigned to a category.
+- Preview modal sidebar only shows categories now that have a block assigned to them.
+- Changed nested neo blocks to insert new blocks at the end rather than the start of the parent block.
 
 ### Fixed
 
 - Fixed a bug with the preview button not properly "taking over" the default button.
 - Fixed layout issue with button when pasting a matrix field (issue #136).
-
-### Security
 
 ## 5.0.1 - 2025-01-30
 

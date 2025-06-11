@@ -19,6 +19,8 @@ abstract class BaseFieldConfigService extends Component
      */
     public function getAll()
     {
+        // Create any missing field configs
+        //
         // TODO: performance can be improved here
         foreach ($this->getAllFields() as $field) {
             $record = $this->FieldRecordConfigClass::findOne([
@@ -34,6 +36,9 @@ abstract class BaseFieldConfigService extends Component
             }
         }
 
+        // Get all configs
+        //
+        // FIXME: need to exclude or delete configs related to deleted fields
         $fieldConfigs = $this->FieldRecordConfigClass::find()->all();
 
         return $fieldConfigs;
@@ -112,7 +117,7 @@ abstract class BaseFieldConfigService extends Component
         $fields = [];
         foreach (Craft::$app->getFields()->getAllFields() as $field) {
             // @fixme: is this really the best way to get matrix fields?
-            if (get_class($field) == $this->fieldType) {
+            if (get_class($field) == $this->fieldType && $field->dateDeleted == null) {
                 array_push($fields, $field);
             }
         }
