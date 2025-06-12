@@ -67,11 +67,13 @@ class PreviewController extends Controller
             "enableTakeover" => (bool)$fieldConfig->enableTakeover,
             "buttonLabel" => $fieldConfig->buttonLabel,
             "buttonIcon" => "",
+            "buttonIconSvg" => "",
         ];
 
         // Add button icon SVG if configured
         if ($fieldConfig->buttonIcon && $fieldConfig->buttonIcon !== "") {
-            $response['config']['field']['buttonIcon'] = Cp::iconSvg($fieldConfig->buttonIcon);
+            $response['config']['field']['buttonIcon'] = $fieldConfig->buttonIcon;
+            $response['config']['field']['buttonIconSvg'] = Cp::iconSvg($fieldConfig->buttonIcon);
         }
 
         // Add categories

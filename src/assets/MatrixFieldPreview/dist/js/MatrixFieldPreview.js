@@ -135,6 +135,9 @@ var MFP = MFP || {};
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
       });
+
+      // Add an inline action to the block
+      this.addAction(input, $block, config);
     },
 
     /**
@@ -152,6 +155,36 @@ var MFP = MFP || {};
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
+      });
+    },
+
+    /**
+     * Add Action
+     *
+     * Add an action to the matrix field. An action is an inline button in the dropdown menu
+     * to the top-right of every block that lets the user launch the preview modal. 
+     *
+     * @param {*} input 
+     * @param {*} $block 
+     * @param {*} config 
+     */
+    addAction: function (input, $block, config) {
+      var buttonLabel = config['field']['buttonLabel'] || Craft.t('matrix-field-preview', 'New Entry');
+      var buttonIcon = config['field']['buttonIcon'];
+   
+      var disclosureMenu = $block.find(".action-btn").data('disclosureMenu')
+      var item = disclosureMenu.addItem({
+        icon: async () => await Craft.ui.icon(buttonIcon),
+        label: buttonLabel,
+        // action: 'pluginstore/install',
+        // params: {
+        //   packageName: info.packageName,
+        //   handle: handle,
+        //   edition: info.licensedEdition,
+        //   version: info.latestVersion,
+        //   licenseKey: info.licenseKey,
+        //   return: 'settings/plugins',
+        // },
       });
     },
 
