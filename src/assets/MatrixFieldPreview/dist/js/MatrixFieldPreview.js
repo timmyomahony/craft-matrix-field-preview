@@ -136,8 +136,10 @@ var MFP = MFP || {};
         return input.canAddMoreEntries();
       });
 
-      // Add an inline action to the block
-      this.addAction(input, $block, config);
+      // Add menu action to the block
+      if (input.canAddMoreEntries()) {
+        this.insertMenuAction(input, $block, config);
+      }
     },
 
     /**
@@ -159,7 +161,7 @@ var MFP = MFP || {};
     },
 
     /**
-     * Add Action
+     * Insert Menu Action
      *
      * Add an action to the matrix field. An action is an inline button in the dropdown menu
      * to the top-right of every block that lets the user launch the preview modal. 
@@ -168,24 +170,26 @@ var MFP = MFP || {};
      * @param {*} $block 
      * @param {*} config 
      */
-    addAction: function (input, $block, config) {
+    insertMenuAction: function (input, $block, config) {
       var buttonLabel = config['field']['buttonLabel'] || Craft.t('matrix-field-preview', 'New Entry');
       var buttonIcon = config['field']['buttonIcon'];
-   
-      var disclosureMenu = $block.find(".action-btn").data('disclosureMenu')
-      var item = disclosureMenu.addItem({
-        icon: async () => await Craft.ui.icon(buttonIcon),
-        label: buttonLabel,
-        // action: 'pluginstore/install',
-        // params: {
-        //   packageName: info.packageName,
-        //   handle: handle,
-        //   edition: info.licensedEdition,
-        //   version: info.latestVersion,
-        //   licenseKey: info.licenseKey,
-        //   return: 'settings/plugins',
-        // },
-      });
+      
+      // The disclosure menu is not available immediately after the
+      // block is added, so we need to wait for it to be available.
+      setTimeout(function () {
+        var disclosureMenu = $block.find(".action-btn").data('disclosureMenu')
+
+        disclosureMenu.addHr();
+        disclosureMenu.addGroup();
+        var item =disclosureMenu.addItem({
+          icon: buttonIcon ? async () => await Craft.ui.icon(buttonIcon) : '',
+          label: buttonLabel,
+        });
+
+        $(item).on("click", function () {
+          input.modal.show();
+        });
+      }, 100);      
     },
 
     /**
