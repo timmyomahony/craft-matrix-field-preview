@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.2.0] - 2025-06-17
+
+### Fixed
+
+- The icon for the plugin wasn't appearing in the settings page when "allow admin changes" was false, making it unclear that you can always edit your previews in production. This has been fixed.
+- The breadcrumbs in the settings page were malformed and have now been fixed to make the settings page experience more consistant with other plugins. 
+
 ## [5.1.0] - 2025-06-11
 
 ### Added
