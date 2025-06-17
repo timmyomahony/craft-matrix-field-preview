@@ -8,11 +8,19 @@
 
 {% set crumbs = [
     {
-        label: "Neo Field Previews"|t('matrix-field-preview'),
-        url: url('neo-field-preview/settings')
+        label: 'Settings'|t('app'),
+        url: url('settings'),
     },
     {
-        label: "Configure Neo Field Previews"|t('matrix-field-preview'),
+        label: "Plugins"|t('app'),
+        url: url('settings/plugins')
+    },
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
+        url: url('matrix-field-preview/settings')
+    },
+    {
+        label: "Configure Previews"|t('matrix-field-preview'),
         url: url('matrix-field-preview/settings/neo-block-types')
     }
 ] %}

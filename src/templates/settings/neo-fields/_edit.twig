@@ -7,11 +7,19 @@
 
 {% set crumbs = [
     {
-        label: "Neo Field Previews"|t('matrix-field-preview'),
+        label: 'Settings'|t('app'),
+        url: url('settings'),
+    },
+    {
+        label: "Plugins"|t('app'),
+        url: url('settings/plugins')
+    },
+    {
+        label: "Matrix Field Previews"|t('matrix-field-preview'),
         url: url('matrix-field-preview/settings')
     },
     {
-        label: "Configure Neo Field Previews"|t('matrix-field-preview'),
+        label: "Configure Fields"|t('matrix-field-preview'),
         url: url('matrix-field-preview/settings/neo-fields')
     }
 ] %}
