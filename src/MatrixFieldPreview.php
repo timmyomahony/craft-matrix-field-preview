@@ -63,6 +63,7 @@ class MatrixFieldPreview extends Plugin
 
     public string $schemaVersion = '5.0.0';
     public bool $hasCpSettings = true;
+    public bool $hasReadOnlyCpSettings = true;
     public bool $hasCpSection = false;
 
     public function init()
@@ -84,6 +85,13 @@ class MatrixFieldPreview extends Plugin
     }
 
     public function getSettingsResponse(): mixed
+    {
+        return Craft::$app->controller->redirect(
+            UrlHelper::cpUrl('matrix-field-preview/settings')
+        );
+    }
+
+    public function getReadOnlySettingsResponse(): mixed
     {
         return Craft::$app->controller->redirect(
             UrlHelper::cpUrl('matrix-field-preview/settings')
