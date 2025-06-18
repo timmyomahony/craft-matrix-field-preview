@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.2.1] - 2025-06-18
+
+### Fixed
+
+- Added minimum version of Craft 5.6 for recent release (support for read-only settings page functionality)
+
 ## [5.2.0] - 2025-06-17
+
+### Bug
+
+- This was released without a constraint on the compatible Craft version. Craft 5.6 is required (support for read-only settings page functionality)
 
 ### Fixed
 
