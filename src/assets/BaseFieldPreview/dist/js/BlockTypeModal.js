@@ -19,6 +19,8 @@ var MFP = MFP || {};
     category: undefined,
     // Used for Neo only: when inserting a block "above" we need to track positioning
     insertionIndex: undefined,
+    // Used for Matrix only: when inserting a block "above" we need to track positioning
+    targetEntry: undefined,
   
     /**
      * 
@@ -273,7 +275,8 @@ var MFP = MFP || {};
           var onClickHandler = function () {
             this.trigger("gridItemClicked", {
               config: blockTypeConfig,
-              insertionIndex: this.insertionIndex
+              insertionIndex: this.insertionIndex,
+              targetEntry: this.targetEntry
             });
           };
           imgContainer.on("click", onClickHandler.bind(this));

@@ -80,12 +80,17 @@ var MFP = MFP || {};
         modal.show();
       });
 
-      // When modal item is clicked
+      // Listen for a modal item being clicked
       modal.on(
         "gridItemClicked",
         {},
         function (event) {
-          input.addEntry(event.config.handle);
+          if (event.targetEntry) {
+            input.addEntry(event.config.handle, event.targetEntry);
+            modal.targetEntry = null;
+          } else {
+            input.addEntry(event.config.handle);
+          }
           modal.hide();
         }.bind(this)
       );
@@ -178,6 +183,11 @@ var MFP = MFP || {};
       // block is added, so we need to wait for it to be available.
       setTimeout(function () {
         var disclosureMenu = $block.find(".action-btn").data('disclosureMenu')
+        
+        if (!disclosureMenu) {
+          console.warn("Disclosure menu not found");
+          return;
+        }
 
         // Create a new HR and item
         disclosureMenu.addHr();
@@ -189,6 +199,10 @@ var MFP = MFP || {};
 
         // Add click handler to the new menu item
         $(item).on("click", function () {
+          // Need to track where the click came from so we knoww here to add the item
+          input.modal.targetEntry = $block;
+
+          // Show the preview modal
           input.modal.show();
         });
 
@@ -205,7 +219,7 @@ var MFP = MFP || {};
           dstHr.remove()
           dstUl.remove()
         }
-      }, 100);      
+      }, 250);      
     },
 
     /**
