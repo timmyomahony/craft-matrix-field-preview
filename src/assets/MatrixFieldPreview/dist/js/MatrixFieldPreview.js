@@ -135,6 +135,11 @@ var MFP = MFP || {};
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
       });
+
+      // Add menu action to the block
+      if (input.canAddMoreEntries()) {
+        this.insertMenuAction(input, $block, config);
+      }
     },
 
     /**
@@ -153,6 +158,54 @@ var MFP = MFP || {};
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
       });
+    },
+
+    /**
+     * Insert Menu Action
+     *
+     * Add an action to the matrix field. An action is an inline button in the dropdown menu
+     * to the top-right of every block that lets the user launch the preview modal. 
+     *
+     * @param {*} input 
+     * @param {*} $block 
+     * @param {*} config 
+     */
+    insertMenuAction: function (input, $block, config) {
+      var buttonLabel = config['field']['buttonLabel'] || Craft.t('matrix-field-preview', 'New Entry');
+      var buttonIcon = config['field']['buttonIcon'];
+      
+      // HACK: The disclosure menu is not available immediately after the
+      // block is added, so we need to wait for it to be available.
+      setTimeout(function () {
+        var disclosureMenu = $block.find(".action-btn").data('disclosureMenu')
+
+        // Create a new HR and item
+        disclosureMenu.addHr();
+        disclosureMenu.addGroup();
+        var item = disclosureMenu.addItem({
+          icon: buttonIcon ? async () => await Craft.ui.icon(buttonIcon) : '',
+          label: buttonLabel,
+        });
+
+        // Add click handler to the new menu item
+        $(item).on("click", function () {
+          input.modal.show();
+        });
+
+        // Move the new hr and menu item "up" so its directly below the native matrix field items
+        var dstHr = disclosureMenu.$container.children('hr').eq(3);
+        var dstUl = disclosureMenu.$container.children('ul').eq(3);
+        var srcHr = disclosureMenu.$container.children('hr').last()
+        var srcUl = disclosureMenu.$container.children('ul').last()
+        $(srcHr).insertAfter(dstHr);
+        $(srcUl).insertAfter(dstHr);
+
+        // If the field has "takeover" enabled, remove the native menu items
+        if (config['field']['enableTakeover'] == true) {
+          dstHr.remove()
+          dstUl.remove()
+        }
+      }, 100);      
     },
 
     /**

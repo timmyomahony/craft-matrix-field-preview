@@ -15,6 +15,7 @@ var MFP = MFP || {};
           takeover: false,
           buttonLabel: "",
           buttonIcon: "",
+          buttonIconSvg: "",
           extraClasses: "",
         },
         settings
@@ -29,11 +30,11 @@ var MFP = MFP || {};
       });
 
       var buttonLabel = this.settings.buttonLabel || Craft.t('matrix-field-preview', 'New Entry');
-      var buttonIcon = this.settings.buttonIcon;
+      var buttonIconSvg = this.settings.buttonIconSvg;
 
       // Set an optional button icon
-      if (buttonIcon) {
-        $icon.append(buttonIcon);
+      if (buttonIconSvg) {
+        $icon.append(buttonIconSvg);
         this.$target.append($icon);
       }
 

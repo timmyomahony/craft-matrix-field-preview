@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [5.3.0] - 2025-06-19
+
+### Added
+
+- New inline action menu item for content previews
+
 ## [5.2.1] - 2025-06-18
 
 ### Fixed
