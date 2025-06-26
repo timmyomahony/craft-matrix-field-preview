@@ -39,7 +39,7 @@ abstract class BaseFieldConfigService extends Component
         // Get all configs and filter out those where the field has been soft deleted
         $fieldConfigs = $this->FieldRecordConfigClass::find()
             ->joinWith(['field'])
-            ->where(['fields.dateDeleted' => null])
+            ->where(['{{%fields}}.dateDeleted' => null])
             ->all();
 
         return $fieldConfigs;
