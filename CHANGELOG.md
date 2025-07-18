@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.3.1] - 2025-06-26
+
+### Fixed
+
+- Fixed issue with field config query not using the correct table prefix for fields.dateDeleted, which could cause errors on installs with a custom table prefix.
 
 ## [5.3.0] - 2025-06-19
 
