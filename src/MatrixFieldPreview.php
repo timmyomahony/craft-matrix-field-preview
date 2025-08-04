@@ -6,7 +6,7 @@
  * Gives you the ability to configure a preview for all your matrix field blocks, giving your clients a better publishing experience.
  *
  * @link      https://weareferal.com
- * @copyright Copyright (c) 2020 Timmy O'Mahony 
+ * @copyright Copyright (c) 2020 Timmy O'Mahony
  */
 
 namespace weareferal\matrixfieldpreview;
@@ -49,7 +49,7 @@ use yii\base\Event;
  *
  * https://craftcms.com/docs/plugins/introduction
  *
- * @author    Timmy O'Mahony 
+ * @author    Timmy O'Mahony
  * @package   MatrixFieldPreview
  * @since     1.0.0
  *
@@ -61,7 +61,7 @@ class MatrixFieldPreview extends Plugin
 {
     public static $plugin;
 
-    public string $schemaVersion = '5.0.0';
+    public string $schemaVersion = '5.3.2';
     public bool $hasCpSettings = true;
     public bool $hasReadOnlyCpSettings = true;
     public bool $hasCpSection = false;
