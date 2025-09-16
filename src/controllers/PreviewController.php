@@ -4,6 +4,7 @@ namespace weareferal\matrixfieldpreview\controllers;
 
 use Craft;
 use craft\helpers\Cp;
+use craft\helpers\Json;
 use craft\web\Controller;
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 use yii\helpers\Markdown;
@@ -59,6 +60,22 @@ class PreviewController extends Controller
             return $this->asJson($response);
         }
 
+        // It's possible to override the handle for entry types in matrix fields. These overrides
+        // appear to only be stored on the matrix field settings object. So we create a lookup
+        // object here for this situation
+        //
+        // https://github.com/timmyomahony/craft-matrix-field-preview/issues/137
+        // https://github.com/craftcms/cms/pull/16453
+        $entryTypeOverrides = [];
+        $fieldSettings = Json::decode($fieldConfig->field->settings);
+        if (isset($fieldSettings['entryTypes'])) {
+            foreach ($fieldSettings['entryTypes'] as $entryType) {
+                if (isset($entryType['handle'])) {
+                    $entryTypeOverrides[$entryType['uid']] = $entryType['handle'];
+                }
+            }
+        }
+
         // Add field info
         $response['config']['field'] = [
             "name" => $fieldConfig->field->name,
@@ -68,6 +85,7 @@ class PreviewController extends Controller
             "buttonLabel" => $fieldConfig->buttonLabel,
             "buttonIcon" => "",
             "buttonIconSvg" => "",
+            "entryTypeOverrides" => $entryTypeOverrides
         ];
 
         // Add button icon SVG if configured
@@ -101,12 +119,19 @@ class PreviewController extends Controller
             $result = [
                 "name" => $blockType->name,
                 "handle" => $blockType->handle,
+                "uid" => $blockType->uid,  // the entry type uid, not ours
                 "description" => $blockTypeConfig->description,
                 "descriptionHTML" => Markdown::process($blockTypeConfig->description),
                 "categoryId" => $blockTypeConfig->categoryId,
                 "image" => null,
                 "thumb" => null,
             ];
+
+            // Deal with the situation where a handle has been overridden, discussed above
+            if (isset($entryTypeOverrides[$blockType->uid])) {
+                $result["handle"] = $entryTypeOverrides[$blockType->uid];
+            }
+
             if ($blockTypeConfig->previewImageId) {
                 $asset = Craft::$app->assets->getAssetById($blockTypeConfig->previewImageId);
                 $result["imageId"] = $blockTypeConfig->previewImageId;

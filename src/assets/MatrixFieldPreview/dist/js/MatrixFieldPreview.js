@@ -18,7 +18,7 @@ var MFP = MFP || {};
      * Initialise Input
      *
      * Create listeners on the input
-     * 
+     *
      * @param {*} input
      * @param {*} config
      */
@@ -85,6 +85,7 @@ var MFP = MFP || {};
         "gridItemClicked",
         {},
         function (event) {
+          console.log(event)
           if (event.targetEntry) {
             input.addEntry(event.config.handle, event.targetEntry);
             modal.targetEntry = null;
@@ -108,7 +109,7 @@ var MFP = MFP || {};
 
     /**
      * Entry Added
-     * 
+     *
      * Respond to the matrix field adding a new entry by setting
      * up MFP previews.
      *
@@ -135,7 +136,7 @@ var MFP = MFP || {};
       } else {
         console.warn("No entry types configured for this entry");
       }
-      
+
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
@@ -158,7 +159,7 @@ var MFP = MFP || {};
       var blockHandle = $block.attr("data-type");
 
       console.debug("Entry deleted from matrix field '" + config.field.handle + "' : '" + blockHandle + "'");
-    
+
       // Update the modal button
       this.updateModalButton(input.modalButton, function () {
         return input.canAddMoreEntries();
@@ -169,21 +170,21 @@ var MFP = MFP || {};
      * Insert Menu Action
      *
      * Add an action to the matrix field. An action is an inline button in the dropdown menu
-     * to the top-right of every block that lets the user launch the preview modal. 
+     * to the top-right of every block that lets the user launch the preview modal.
      *
-     * @param {*} input 
-     * @param {*} $block 
-     * @param {*} config 
+     * @param {*} input
+     * @param {*} $block
+     * @param {*} config
      */
     insertMenuAction: function (input, $block, config) {
       var buttonLabel = config['field']['buttonLabel'] || Craft.t('matrix-field-preview', 'New Entry');
       var buttonIcon = config['field']['buttonIcon'];
-      
+
       // HACK: The disclosure menu is not available immediately after the
       // block is added, so we need to wait for it to be available.
       setTimeout(function () {
         var disclosureMenu = $block.find(".action-btn").data('disclosureMenu')
-        
+
         if (!disclosureMenu) {
           console.warn("Disclosure menu not found");
           return;
@@ -219,7 +220,7 @@ var MFP = MFP || {};
           dstHr.remove()
           dstUl.remove()
         }
-      }, 250);      
+      }, 250);
     },
 
     /**
@@ -251,12 +252,12 @@ var MFP = MFP || {};
 
     /**
      * Get Field Handle
-     * 
+     *
      * FIXME: Ideally there would be a better approach to getting the matrix
      * field handle from Craft's matrix field implementations, but that information
      * doesn't seem to be stored so we have to use the element's CSS ID along with
      * some regex to pull it.
-     * 
+     *
      * @param {*} input
      * @returns
      */
