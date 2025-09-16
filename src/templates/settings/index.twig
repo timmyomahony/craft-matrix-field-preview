@@ -36,7 +36,7 @@
     <input type="hidden" name="action" value="plugins/save-plugin-settings">
 
     {% namespace 'settings' %}
-        {# 
+        {#
             Adapted from:
             https://github.com/craftcms/cms/blob/develop/src/templates/settings/users/settings.html
         #}
@@ -62,5 +62,36 @@
                 label: "Preview Image Location"|t('matrix-field-preview'),
             }, '<p class="warning with-icon">' ~ "No volumes exist yet."|t('matrix-field-preview') ~ '</p>') }}
         {% endif %}
+
+        <hr />
+
+        <h2>{{ "Advanced settings" |t('matrix-field-preview') }}</h2>
+        <p>{{ "Control the default behaviour for new fields and previews." |t('matrix-field-preview') }} <a target='_blank' href='https://craft-plugins.timmyomahony.com/matrix-field-preview/docs/configuration#advanced-configuration'>{{ "Learn more"|t("matrix-field-preview") }}</a></p>
+
+        <div class="pane">
+            {{ forms.lightswitchField({
+                label: "Default field enabled setting"|t('matrix-field-preview'),
+                instructions: "Control if new field are enabled by default"|t('matrix-field-preview'),
+                name: 'defaultFieldEnabledSetting',
+                id: 'defaultFieldEnabledSetting',
+                on: settings.defaultFieldEnabledSetting
+            }) }}
+
+            {{ forms.lightswitchField({
+                label: "Default field takeover setting"|t('matrix-field-preview'),
+                instructions: "Control if new fields takeover the interface by default"|t('matrix-field-preview'),
+                name: 'defaultFieldTakeoverSetting',
+                id: 'defaultFieldTakeoverSetting',
+                on: settings.defaultFieldTakeoverSetting
+            }) }}
+
+            {{ forms.lightswitchField({
+                label: "Default preview enabled setting"|t('matrix-field-preview'),
+                instructions: "Control if new previews are enabled by default"|t('matrix-field-preview'),
+                name: 'defaultPreviewEnabledSetting',
+                id: 'defaultPreviewEnabledSetting',
+                on: settings.defaultPreviewEnabledSetting
+            }) }}
+        </div>
     {% endnamespace %}
 {% endblock %}

@@ -5,15 +5,27 @@ namespace weareferal\matrixfieldpreview\services;
 use Craft;
 use craft\base\Component;
 
+use weareferal\matrixfieldpreview\MatrixFieldPreview;
 
 abstract class BaseFieldConfigService extends Component
 {
     protected $FieldRecordConfigClass;
     protected $fieldType;
 
+    public function createFieldConfig($field)
+    {
+        $settings = MatrixFieldPreview::getInstance()->getSettings();
+        $record = new $this->FieldRecordConfigClass();
+        $record->fieldId = $field->id ?? null;
+        $record->enablePreviews = $settings->defaultFieldEnabledSetting ?? true;
+        $record->enableTakeover = $settings->defaultFieldTakeoverSetting ?? true;
+        $record->save();
+        return $record;
+    }
+
     /**
      * Get All
-     * 
+     *
      * Get or create new field configs for every matrix field currently
      * saved in the system
      */
@@ -28,11 +40,7 @@ abstract class BaseFieldConfigService extends Component
             ]);
 
             if (!$record) {
-                $fieldConfig = new $this->FieldRecordConfigClass();
-                $fieldConfig->fieldId = $field->id ?? null;
-                $fieldConfig->enablePreviews = true;
-                $fieldConfig->enableTakeover = true;
-                $fieldConfig->save();
+                $record = $this->createFieldConfig($field);
             }
         }
 
@@ -47,7 +55,7 @@ abstract class BaseFieldConfigService extends Component
 
     /**
      * Get or create a MFP Field Config given the underlying field handle
-     * 
+     *
      */
     public function getOrCreateByFieldHandle($handle)
     {
@@ -60,11 +68,7 @@ abstract class BaseFieldConfigService extends Component
             ]);
 
             if ($record == null) {
-                $record = new $this->FieldRecordConfigClass();
-                $record->fieldId = $field->id ?? null;
-                $record->enablePreviews = true;
-                $record->enableTakeover = true;
-                $record->save();
+                $record = $this->createFieldConfig($field);
             }
 
             return $record;
@@ -75,7 +79,7 @@ abstract class BaseFieldConfigService extends Component
 
     /**
      * Get or create a MFP Field Config given the underlying field ID
-     * 
+     *
      */
     public function getOrCreateByFieldId($fieldId)
     {
@@ -87,11 +91,7 @@ abstract class BaseFieldConfigService extends Component
             ]);
 
             if ($record == null) {
-                $record = new $this->FieldRecordConfigClass();
-                $record->fieldId = $field->id ?? null;
-                $record->enablePreviews = true;
-                $record->enableTakeover = true;
-                $record->save();
+                $record = $this->createFieldConfig($field);
             }
 
             return $record;
@@ -102,16 +102,16 @@ abstract class BaseFieldConfigService extends Component
 
     /**
      * Get all fields
-     * 
+     *
      * There is already a method in the fields service to get all fields
      * by a particular element type:
-     * 
+     *
      * https://docs.craftcms.com/api/v3/craft-services-fields.html#public-methods
-     * 
+     *
      * but this method is misleading as there is no matrix element type, just
      * a matrix _block_ element types. So you can only use it to search for matrix
-     * blocks by type, not actual matrix fields themselves. 
-     * 
+     * blocks by type, not actual matrix fields themselves.
+     *
      * So instead, we have our own function here
      */
     public function getAllFields()
@@ -123,7 +123,7 @@ abstract class BaseFieldConfigService extends Component
                 array_push($fields, $field);
             }
         }
-        
+
         return $fields;
     }
 

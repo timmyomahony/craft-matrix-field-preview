@@ -5,6 +5,8 @@ namespace weareferal\matrixfieldpreview\services;
 use Craft;
 use craft\base\Component;
 
+use weareferal\matrixfieldpreview\MatrixFieldPreview;
+
 
 abstract class BaseBlockTypeConfigService extends Component
 {
@@ -12,7 +14,7 @@ abstract class BaseBlockTypeConfigService extends Component
 
     /**
      * Get All
-     * 
+     *
      * Get all block type config rows
      */
     public function getAll()
@@ -24,7 +26,7 @@ abstract class BaseBlockTypeConfigService extends Component
 
     /**
      * Get By ID
-     * 
+     *
      * Get an individual block type *config* by its ID
      */
     public function getById($id)
@@ -65,11 +67,13 @@ abstract class BaseBlockTypeConfigService extends Component
 
     /**
      * Get By Block Type ID
-     * 
+     *
      * Get all block type *config* rows from their related block type ID
      */
     public function getOrCreateByBlockTypeId($blockTypeId, $create = true)
     {
+        $settings = MatrixFieldPreview::getInstance()->getSettings();
+
         $record = $this->BlockTypeRecordConfigClass::findOne([
             'blockTypeId' => $blockTypeId
         ]);
@@ -78,6 +82,7 @@ abstract class BaseBlockTypeConfigService extends Component
             if ($create) {
                 $blockType = $this->getBlockTypeById($blockTypeId);
                 $record = new $this->BlockTypeRecordConfigClass();
+                $record->enabled = $settings->defaultPreviewEnabledSetting ?? true;
                 $record->description = "";
                 $record->fieldId = $blockType->field->id;
                 $record->blockTypeId = $blockType->id;
@@ -92,12 +97,14 @@ abstract class BaseBlockTypeConfigService extends Component
 
     /**
      * Get Or Create By Field Handle
-     * 
+     *
      * Get all block type *config* rows from their related field handle and
      * create them if they don't already exist
      */
     public function getOrCreateByFieldHandle($handle)
     {
+        $settings = MatrixFieldPreview::getInstance()->getSettings();
+
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
 
         $blockTypes = $this->getBlockTypeByFieldHandle($field->handle);
@@ -111,6 +118,7 @@ abstract class BaseBlockTypeConfigService extends Component
 
             if ($record == null) {
                 $record = new $this->BlockTypeRecordConfigClass();
+                $record->enabled = $settings->defaultPreviewEnabledSetting ?? true;
                 $record->description = "";
                 $record->fieldId = $field->id;
                 $record->blockTypeId = $blockType->id;
@@ -132,7 +140,7 @@ abstract class BaseBlockTypeConfigService extends Component
 
     /**
      * Get Block Type by ID
-     * 
+     *
      * Get a block type (not config) by ID
      */
     public function getBlockTypeById($blockTypeId)
@@ -142,7 +150,7 @@ abstract class BaseBlockTypeConfigService extends Component
 
     /**
      * Get Block Type by Field Handle
-     * 
+     *
      * Get a block type (not config) by ID
      */
     public function getBlockTypeByFieldHandle($handle)
