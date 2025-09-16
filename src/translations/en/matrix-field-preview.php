@@ -57,4 +57,13 @@ return [
     "Use this page to configure which matrix fields will display previews." => "Use this page to configure which matrix fields will display previews.",
     "Upload a preview image" => "Upload a preview image",
     "Where do you want to store matrix field preview images?" => "Where do you want to store matrix field preview images?",
+    "Advanced settings" => "Advanced settings",
+    "Control the default behaviour for new fields and previews." => "Control the default behaviour for new fields and previews.",
+    "Default field enabled setting" => "Default field enabled setting",
+    "Control if new field are enabled by default" => "Control if new field are enabled by default",
+    "Default field takeover setting" => "Default field takeover setting",
+    "Control if new fields takeover the interface by default" => "Control if new fields takeover the interface by default",
+    "Default preview enabled setting" => "Default preview enabled setting",
+    "Control if new previews are enabled by default" => "Control if new previews are enabled by default",
+    "Learn more" => "Learn more",
 ];

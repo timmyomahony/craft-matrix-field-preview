@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Plugin Settings
+ *
+ * These are the project.yaml settings, not the custom database settings that use within the plugin
+ */
+
 namespace weareferal\matrixfieldpreview\models;
 
 use craft\base\Model;
@@ -15,6 +21,11 @@ class Settings extends Model
     // FIXME: Booleans are being saved as "" and "1"
     public $neoDisableForSingleChilden = false;
 
+    // Controls the default behaviour for new fields and previews
+    public $defaultFieldEnabledSetting = true;
+    public $defaultFieldTakeoverSetting = true;
+    public $defaultPreviewEnabledSetting = true;
+
     public function rules(): array
     {
         return [
@@ -27,6 +38,24 @@ class Settings extends Model
             [
                 [
                     'neoDisableForSingleChilden',
+                ],
+                'boolean',
+            ],
+            [
+                [
+                    'defaultFieldEnabledSetting',
+                ],
+                'boolean',
+            ],
+            [
+                [
+                    'defaultFieldTakeoverSetting',
+                ],
+                'boolean',
+            ],
+            [
+                [
+                    'defaultPreviewEnabledSetting',
                 ],
                 'boolean',
             ],
