@@ -54,6 +54,16 @@ abstract class BaseFieldConfigService extends Component
     }
 
     /**
+     * Get By ID
+     *
+     * Get an individual field config by its ID
+     */
+    public function getById($id)
+    {
+        return $this->FieldRecordConfigClass::findOne(['id' => $id]);
+    }
+
+    /**
      * Get or create a MFP Field Config given the underlying field handle
      *
      */

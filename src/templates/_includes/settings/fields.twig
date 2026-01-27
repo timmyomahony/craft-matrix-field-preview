@@ -9,6 +9,10 @@
     "Neo Field",
     "Takeover",
     "Use this page to configure which {type} fields will display previews.",
+    "Previews enabled for this field",
+    "Previews not enabled for this field",
+    "Takeover enabled for this field",
+    "Takeover not enabled for this field",
 ]) %}
 
 <div class="field mfp-settings-table">
@@ -25,7 +29,6 @@
             <div id="matrix-field-preview-fields-vue-admin-table"></div>
         </div>
         {% js %}
-            var notEnabledText = Craft.t('matrix-field-preview', 'Not enabled');
             var columns = [
                 {
                     name: '__slot:title',
@@ -34,21 +37,35 @@
                 {
                     name: 'enablePreviews',
                     title: Craft.t('matrix-field-preview', 'Previews Enabled'),
-                    callback: function(value) {
-                        if (value === true) {
-                            return '<img class="mfp-settings-table__icon" src="{{ assets.success }}" title="{{ 'Previews enabled for this field' | t('matrix-field-preview') }}">'
-                        }
-                        return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="{{ 'Previews not enabled for this field' | t('matrix-field-preview') }}" src="{{ assets.cancel }}">'
+                    callback: function(data) {
+                        // data is {id: fieldConfigId, value: boolean}
+                        var onClass = data.value ? ' on' : '';
+                        var ariaChecked = data.value ? 'true' : 'false';
+                        var title = data.value
+                            ? Craft.t('matrix-field-preview', 'Previews enabled for this field')
+                            : Craft.t('matrix-field-preview', 'Previews not enabled for this field');
+                        return '<button type="button" class="lightswitch small' + onClass + '" ' +
+                               'role="switch" aria-checked="' + ariaChecked + '" ' +
+                               'title="' + title + '" ' +
+                               'data-id="' + data.id + '" data-setting="enablePreviews">' +
+                               '<div class="lightswitch-container"><div class="handle"></div></div></button>';
                     }
                 },
                 {
                     name: 'enableTakeover',
                     title: Craft.t('matrix-field-preview', 'Takeover Enabled'),
-                    callback: function(value) {
-                        if (value === true) {
-                            return '<img class="mfp-settings-table__icon" src="{{ assets.success }}" title="{{ 'Takeover enabled for this field' | t('matrix-field-preview') }}">'
-                        }
-                        return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="{{ 'Takeover not enabled for this field' | t('matrix-field-preview') }}" src="{{ assets.cancel }}">'
+                    callback: function(data) {
+                        // data is {id: fieldConfigId, value: boolean}
+                        var onClass = data.value ? ' on' : '';
+                        var ariaChecked = data.value ? 'true' : 'false';
+                        var title = data.value
+                            ? Craft.t('matrix-field-preview', 'Takeover enabled for this field')
+                            : Craft.t('matrix-field-preview', 'Takeover not enabled for this field');
+                        return '<button type="button" class="lightswitch small' + onClass + '" ' +
+                               'role="switch" aria-checked="' + ariaChecked + '" ' +
+                               'title="' + title + '" ' +
+                               'data-id="' + data.id + '" data-setting="enableTakeover">' +
+                               '<div class="lightswitch-container"><div class="handle"></div></div></button>';
                     }
                 }
             ];
@@ -58,6 +75,42 @@
                 container: '#matrix-field-preview-fields-vue-admin-table',
                 emptyMessage: Craft.t('matrix-field-preview', 'No fields exist yet.'),
                 tableData: {{ tableData|json_encode|raw }}
+            });
+
+            // Handle lightswitch toggle clicks
+            $('#matrix-field-preview-fields-vue-admin-table').on('click', '.lightswitch', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var $lightswitch = $(this);
+                var isOn = $lightswitch.hasClass('on');
+                var id = $lightswitch.data('id');
+                var setting = $lightswitch.data('setting');
+                var newValue = !isOn;
+
+                // Toggle visual state immediately
+                $lightswitch.toggleClass('on');
+                $lightswitch.attr('aria-checked', newValue ? 'true' : 'false');
+
+                // Update title
+                var titleKey = setting === 'enablePreviews'
+                    ? (newValue ? 'Previews enabled for this field' : 'Previews not enabled for this field')
+                    : (newValue ? 'Takeover enabled for this field' : 'Takeover not enabled for this field');
+                $lightswitch.attr('title', Craft.t('matrix-field-preview', titleKey));
+
+                // Save to server
+                Craft.sendActionRequest('POST', 'matrix-field-preview/' + type + '-fields/toggle', {
+                    data: {
+                        id: id,
+                        setting: setting,
+                        value: newValue ? 1 : 0
+                    }
+                }).catch(function(error) {
+                    // Revert on error
+                    $lightswitch.toggleClass('on');
+                    $lightswitch.attr('aria-checked', isOn ? 'true' : 'false');
+                    Craft.cp.displayError(Craft.t('matrix-field-preview', 'Couldn\'t save the field config.'));
+                });
             });
         {% endjs %}
     {% endif %}
