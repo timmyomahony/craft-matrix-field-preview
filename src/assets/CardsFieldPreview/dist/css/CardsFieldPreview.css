@@ -49,23 +49,3 @@
   margin-left: 0;
 }
 
-/* Card preview indicator */
-.mfp-card-view-with-preview {
-  position: relative;
-}
-
-.mfp-card-view-preview-indicator {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 8px;
-  height: 8px;
-  background-color: var(--ui-control-color, #3f4d5a);
-  border-radius: 50%;
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.mfp-card-view-with-preview:hover .mfp-card-view-preview-indicator {
-  opacity: 1;
-}

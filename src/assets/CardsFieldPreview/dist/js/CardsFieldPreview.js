@@ -184,9 +184,6 @@ var MFP = MFP || {};
         }.bind(this)
       );
 
-      // Setup existing cards with hover previews
-      this.setupExistingCards(input, config);
-
       // Initial button state update
       this.updateModalButtonState(input, modalButton);
     },
@@ -253,59 +250,8 @@ var MFP = MFP || {};
         }.bind(this)
       );
 
-      // Setup existing elements
-      this.setupExistingCards(input, config);
-
       // Initial button state update
       this.updateModalButtonState(input, modalButton);
-    },
-
-    /**
-     * Build Entry Type ID Lookup
-     *
-     * Create a map from entry type ID to block type config for quick lookups.
-     * This is needed because card elements only have entryTypeId, not the handle.
-     *
-     * @param {*} config
-     * @returns {Object} Map of entryTypeId -> blockConfig
-     */
-    buildEntryTypeIdLookup: function (config) {
-      var lookup = {};
-      $.each(config.blockTypes, function (handle, blockConfig) {
-        if (blockConfig.id) {
-          lookup[blockConfig.id] = blockConfig;
-        }
-      });
-      return lookup;
-    },
-
-    /**
-     * Get Block Config For Card
-     *
-     * Get the block type config for a card element by checking both
-     * the entry type ID and the type data attribute.
-     *
-     * @param {*} $card
-     * @param {*} config
-     * @returns {Object|null}
-     */
-    getBlockConfigForCard: function ($card, config) {
-      // First try the entryTypeId (used by cards view)
-      var entryTypeId = $card.data("entry-type-id") || $card.data("entryTypeId");
-      if (entryTypeId) {
-        var lookup = this.buildEntryTypeIdLookup(config);
-        if (lookup[entryTypeId]) {
-          return lookup[entryTypeId];
-        }
-      }
-
-      // Fallback to type handle (used by blocks view)
-      var typeHandle = $card.data("type");
-      if (typeHandle && config.blockTypes[typeHandle]) {
-        return config.blockTypes[typeHandle];
-      }
-
-      return null;
     },
 
     /**
@@ -344,31 +290,11 @@ var MFP = MFP || {};
      * Handle new elements being added to the cards view.
      *
      * @param {*} input
-     * @param {*} elements
+     * @param {*} _elements - Unused but kept for event signature
      * @param {*} config
      */
-    onElementsAdded: function (input, elements, config) {
-      if (!elements || elements.length === 0) {
-        return;
-      }
-
-      elements.forEach(
-        function (element) {
-          var $element = $(element);
-          var blockConfig = this.getBlockConfigForCard($element, config);
-
-          if (blockConfig) {
-            console.debug(
-              "Element added to cards field '" +
-                config.field.handle +
-                "' : '" +
-                blockConfig.handle +
-                "'"
-            );
-            this.addCardTooltip($element, blockConfig);
-          }
-        }.bind(this)
-      );
+    onElementsAdded: function (input, _elements, config) {
+      console.debug("Elements added to cards field '" + config.field.handle + "'");
 
       // Update button state
       this.updateModalButtonState(input, input.modalButton);
@@ -392,65 +318,6 @@ var MFP = MFP || {};
       this.updateModalButtonState(input, input.modalButton);
     },
 
-    /**
-     * Setup Existing Cards
-     *
-     * Add tooltips to existing card elements.
-     *
-     * @param {*} input
-     * @param {*} config
-     */
-    setupExistingCards: function (input, config) {
-      var $cards = input.$container.find(".element.card, .element[data-type]");
-      $cards.each(
-        function (_, card) {
-          var $card = $(card);
-          var blockConfig = this.getBlockConfigForCard($card, config);
-          if (blockConfig) {
-            this.addCardTooltip($card, blockConfig);
-          }
-        }.bind(this)
-      );
-    },
-
-    /**
-     * Add Card Tooltip
-     *
-     * Add a preview tooltip to a card element showing the block type
-     * description and/or preview image.
-     *
-     * @param {*} $card
-     * @param {*} blockConfig
-     */
-    addCardTooltip: function ($card, blockConfig) {
-      if ($card.data("mfp-card-view-tooltip-added")) {
-        return;
-      }
-
-      $card.data("mfp-card-view-tooltip-added", true);
-      $card.addClass("mfp-card-view-with-preview");
-
-      // Build tooltip content
-      var tooltipParts = [];
-      if (blockConfig.name) {
-        tooltipParts.push(blockConfig.name);
-      }
-      if (blockConfig.description) {
-        tooltipParts.push(blockConfig.description);
-      }
-
-      if (tooltipParts.length > 0) {
-        $card.attr("title", tooltipParts.join(" - "));
-      }
-
-      // Add preview indicator if there's an image
-      if (blockConfig.image) {
-        var $previewIndicator = $("<span>", {
-          class: "mfp-card-view-preview-indicator",
-        });
-        $card.append($previewIndicator);
-      }
-    },
 
     /**
      * Update Modal Button State
