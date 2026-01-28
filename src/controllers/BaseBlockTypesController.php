@@ -24,7 +24,7 @@ abstract class BaseBlockTypesController extends Controller {
 
     /**
      * Enforce admin privileges
-     * 
+     *
      * But ignore the settings `allowAdminChanges`, allowing users to
      * configure the plugin while on production.
      */
@@ -36,7 +36,7 @@ abstract class BaseBlockTypesController extends Controller {
 
     /**
      * List all block type configurations
-     * 
+     *
      */
     public function actionIndex($templateVars = [])
     {
@@ -48,7 +48,7 @@ abstract class BaseBlockTypesController extends Controller {
 
         $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
         $fieldsConfigService = $this->getFieldsConfigService($plugin);
-    
+
         $fields = [];
         foreach ($fieldsConfigService->getAllFields() as $field) {
             $fieldConfig = $fieldsConfigService->getOrCreateByFieldHandle($field->handle);
@@ -60,7 +60,7 @@ abstract class BaseBlockTypesController extends Controller {
 
             // Tabledata is required for use with the existing Craft.VueAdminTable
             // Note: VueAdminTable callbacks only receive the column value, not the full row,
-            // so we include the ID in the enabled value as a composite object.
+            // so we include the ID and fieldId in the enabled value as a composite object.
             $tableData = [];
             foreach ($blockTypeConfigs as $blockTypeConfig) {
                 $url = UrlHelper::url($this->getEditAction((string) $blockTypeConfig->blockType->id));
@@ -156,7 +156,7 @@ abstract class BaseBlockTypesController extends Controller {
 
     /**
      * Edit a block type configuration
-     * 
+     *
      * Note that we receive the "blockTypeId" not the "blockTypeConfigId". This
      * is because at the time of loading this action we don't know if the
      * block type configuration actually exists yet.
@@ -169,7 +169,7 @@ abstract class BaseBlockTypesController extends Controller {
 
         $uploadAction = $this->getUploadAction();
         $deleteAction = $this->getDeleteAction();
-    
+
         // Set some frontend variables to help with JavaScript
         $this->view->registerJsVar('uploadImageUrl', $uploadAction);
         $this->view->registerJsVar('deleteImageUrl', $deleteAction);
@@ -180,7 +180,7 @@ abstract class BaseBlockTypesController extends Controller {
         }
 
         $categories = $plugin->categoryService->getAll();
-    
+
         return $this->renderTemplate($this->getEditTemplate(), [
             'blockType' => $blockTypeConfig->blockType,
             'blockTypeConfig' => $blockTypeConfig,
@@ -191,11 +191,11 @@ abstract class BaseBlockTypesController extends Controller {
 
     /**
      * Save a block type configuration
-     * 
+     *
      */
     public function actionSave() {
         $this->requirePostRequest();
-        
+
         $plugin = MatrixFieldPreview::getInstance();
         $settings = $plugin->getSettings();
         $blockTypeConfigService = $this->getBlockTypeConfigService($plugin);
@@ -228,10 +228,10 @@ abstract class BaseBlockTypesController extends Controller {
 
     /**
      * Upload a preview to a block type configuration
-     * 
+     *
      * This image will be uploaded and stored as an asset, viewable just like
      * any other asset.
-     * 
+     *
      * NOTE: We are sending the block type config ID, not the block type ID.
      */
     public function actionUploadPreview()
@@ -287,7 +287,7 @@ abstract class BaseBlockTypesController extends Controller {
 
     /**
      * Delete a preview belonging to a block type configuration
-     * 
+     *
      * NOTE: We are sending the block type config ID, not the block type ID.
      */
     public function actionDeletePreview()
@@ -330,12 +330,12 @@ abstract class BaseBlockTypesController extends Controller {
 
     protected function getFieldsConfigService($plugin)
     {
-        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     protected function getBlockTypeConfigService($plugin)
     {
-        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented')); 
+        throw new \BadMethodCallException(Craft::t('matrix-field-preview', 'Not implemented'));
     }
 
     protected function getIndexTemplate()

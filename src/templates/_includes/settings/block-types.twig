@@ -94,14 +94,10 @@
 
         {% js %}
             // Handle the toggling of the inline lightswitches in the block types tables.
-            // This is a little bit hacky as we have to use a timeout to wait for the
-            // VueAdminTable to finish rendering the lightswitches as part of the callback
-            // for each column. The Craft VueAdminTable implementation implicitly calls
-            // initUiElements to set up the lightswitches, but there's no easy way to add
-            // a click/change handler, so we simply wait until they're ready and add a
-            // handler manually.
+            // Use a timeout to wait for VueAdminTable to finish rendering and
+            // initializing the lightswitches via initUiElements.
             setTimeout(function() {
-                $('.mfp-settings-table__table .lightswitch').on('change', function() {
+                $('.mfp-settings-table .lightswitch').on('change', function() {
                     var $lightswitch = $(this);
                     var lightswitchInstance = $lightswitch.data('lightswitch');
                     var isOn = lightswitchInstance.on;
@@ -126,7 +122,7 @@
                         Craft.cp.displayError(Craft.t('matrix-field-preview', 'Couldn\'t save the block type config.'));
                     });
                 });
-            }, 500);
+            }, 100);
         {% endjs %}
     {% endif %}
 </div>
