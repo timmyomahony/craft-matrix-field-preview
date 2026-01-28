@@ -1,5 +1,3 @@
-{% import '_includes/forms' as forms %}
-
 {% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
 
 {% do view.registerTranslations('matrix-field-preview', [
@@ -12,6 +10,7 @@
     "No {type} fields have been created or enabled for previews yet. Please visit the 'Configure Fields' and enable image previews for your {type} fields.",
     'Not configured yet',
     'Preview Image',
+    "Couldn't save the block type config.",
 ]) %}
 
 <div class="field mfp-settings-table">
@@ -23,6 +22,7 @@
         <p class="warning with-icon">{{ "No {type} fields have been created or enabled for previews yet. Please visit 'Configure Fields' and enable image previews for your {type} fields."|t('matrix-field-preview', params = { type: type | lower }) }}</p>
     {% else %}
         {% js %}
+            var type = "{{ type | lower }}";
             var notConfiguredText = Craft.t('matrix-field-preview', 'Not configured yet');
             var columns = [
                 {
@@ -32,11 +32,16 @@
                 {
                     name: 'enabled',
                     title: Craft.t('matrix-field-preview', 'Enabled'),
-                    callback: function(value) {
-                        if (value === true) {
-                            return '<img class="mfp-settings-table__icon" title="' + value + '" src="{{ assets.success }}">'
-                        }
-                        return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="' + notConfiguredText + '" src="{{ assets.cancel }}">'
+                    callback: function(data) {
+                        // data is {id: blockTypeConfigId, value: boolean}
+                        // Add an inline lightswitch to the column allowing the user to update
+                        // this setting without having to visit the page directly
+                        var onClass = data.value ? ' on' : '';
+                        var ariaChecked = data.value ? 'true' : 'false';
+                        return '<button type="button" class="lightswitch small' + onClass + '" ' +
+                               'role="switch" aria-checked="' + ariaChecked + '" ' +
+                               'data-id="' + data.id + '" data-setting="enabled" data-type="' + type + '" >' +
+                               '<div class="lightswitch-container"><div class="handle"></div></div></button>';
                     }
                 },
                 {
@@ -74,9 +79,8 @@
         {% for field in fields %}
             <h4><em>{{ field.name }}</em> {{ type | capitalize ~ " Field" | t("matrix-field-preview") }}</h4>
             <div class="mfp-settings-table__table">
-                <div id="matrix-field-preview-block-types-vue-admin-table-{{ field.id }}"></div>
+                <div id="matrix-field-preview-block-types-vue-admin-table-{{ field.id }}" class="mfp-block-types-table"></div>
                 {% js %}
-                    var type = "{{ type | lower }}";
                     new Craft.VueAdminTable({
                         columns: columns,
                         container: '#matrix-field-preview-block-types-vue-admin-table-{{ field.id }}',
@@ -87,5 +91,42 @@
                 {% endjs %}
             </div>
         {% endfor %}
+
+        {% js %}
+            // Handle the toggling of the inline lightswitches in the block types tables.
+            // This is a little bit hacky as we have to use a timeout to wait for the
+            // VueAdminTable to finish rendering the lightswitches as part of the callback
+            // for each column. The Craft VueAdminTable implementation implicitly calls
+            // initUiElements to set up the lightswitches, but there's no easy way to add
+            // a click/change handler, so we simply wait until they're ready and add a
+            // handler manually.
+            setTimeout(function() {
+                $('.mfp-settings-table__table .lightswitch').on('change', function() {
+                    var $lightswitch = $(this);
+                    var lightswitchInstance = $lightswitch.data('lightswitch');
+                    var isOn = lightswitchInstance.on;
+                    var id = $lightswitch.data('id');
+                    var setting = $lightswitch.data('setting');
+                    var blockType = $lightswitch.data('type');
+
+                    // Save to server
+                    Craft.sendActionRequest('POST', 'matrix-field-preview/' + blockType + '-block-types/toggle', {
+                        data: {
+                            id: id,
+                            setting: setting,
+                            value: isOn ? 1 : 0
+                        }
+                    }).catch(function() {
+                        // Revert using Craft's lightswitch API
+                        if (isOn) {
+                            lightswitchInstance.turnOff();
+                        } else {
+                            lightswitchInstance.turnOn();
+                        }
+                        Craft.cp.displayError(Craft.t('matrix-field-preview', 'Couldn\'t save the block type config.'));
+                    });
+                });
+            }, 500);
+        {% endjs %}
     {% endif %}
 </div>
