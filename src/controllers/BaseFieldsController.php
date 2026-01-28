@@ -5,6 +5,8 @@ use Craft;
 use craft\web\Controller;
 use craft\helpers\UrlHelper;
 
+use yii\web\BadRequestHttpException;
+
 use weareferal\matrixfieldpreview\assets\MatrixFieldPreviewSettings\MatrixFieldPreviewSettingsAsset;
 use weareferal\matrixfieldpreview\MatrixFieldPreview;
 
@@ -47,14 +49,16 @@ abstract class BaseFieldsController extends Controller
         $fieldConfigs = $service->getAll($sort = true);
 
         // Tabledata is required for use with the existing Craft.VueAdminTable
+        // Note: VueAdminTable callbacks only receive the column value, not the full row,
+        // so we include the ID in each toggle value as a composite object.
         $tableData = [];
-        foreach ($fieldConfigs as $fieldConfig) {                
+        foreach ($fieldConfigs as $fieldConfig) {
             $url = UrlHelper::url($this->getEditAction((string) $fieldConfig->field->id));  // Note field id and not fieldConfig id
             array_push($tableData, [
                 "id" => $fieldConfig->id,
                 "title" => $fieldConfig->field->name,
-                "enablePreviews" => (bool)$fieldConfig->enablePreviews,
-                "enableTakeover" => (bool)$fieldConfig->enableTakeover,
+                "enablePreviews" => ["id" => $fieldConfig->id, "value" => (bool)$fieldConfig->enablePreviews],
+                "enableTakeover" => ["id" => $fieldConfig->id, "value" => (bool)$fieldConfig->enableTakeover],
                 "url" => $url
             ]);
         }
@@ -126,6 +130,46 @@ abstract class BaseFieldsController extends Controller
 
         $this->setSuccessFlash(Craft::t('matrix-field-preview', 'Field config saved.'));
         return $this->redirectToPostedUrl($fieldConfig);
+    }
+
+    /**
+     * Toggle a field configuration setting via AJAX
+     *
+     * Used for inline lightswitch toggles in the fields table.
+     */
+    public function actionToggle()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $plugin = MatrixFieldPreview::getInstance();
+        $service = $this->getService($plugin);
+
+        $fieldConfigId = $this->request->getRequiredBodyParam('id');
+        $setting = $this->request->getRequiredBodyParam('setting');
+        $value = $this->request->getRequiredBodyParam('value');
+
+        // Validate the setting name
+        $allowedSettings = ['enablePreviews', 'enableTakeover'];
+        if (!in_array($setting, $allowedSettings)) {
+            throw new BadRequestHttpException("Invalid setting: $setting");
+        }
+
+        $fieldConfig = $service->getById($fieldConfigId);
+        if (!$fieldConfig) {
+            throw new BadRequestHttpException("Invalid field config ID: $fieldConfigId");
+        }
+
+        $fieldConfig->$setting = (bool)$value;
+
+        if (!$service->save($fieldConfig)) {
+            return $this->asJson([
+                'success' => false,
+                'error' => Craft::t('matrix-field-preview', 'Couldn\'t save the field config.')
+            ]);
+        }
+
+        return $this->asJson(['success' => true]);
     }
 
     /**

@@ -1,14 +1,14 @@
-{% import '_includes/forms' as forms %}
-
 {% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
 
 {% do view.registerTranslations('matrix-field-preview', [
-    "Enabled",
-    "Matrix Field",
+    "Configure {type} fields",
     "No {type} fields exist yet. Create some fields via the control panel and return here to enable image previews.",
-    "Neo Field",
-    "Takeover",
     "Use this page to configure which {type} fields will display previews.",
+    "Field name",
+    "Previews Enabled",
+    "Takeover Enabled",
+    "No fields exist yet.",
+    "Couldn't save the field config.",
 ]) %}
 
 <div class="field mfp-settings-table">
@@ -25,7 +25,7 @@
             <div id="matrix-field-preview-fields-vue-admin-table"></div>
         </div>
         {% js %}
-            var notEnabledText = Craft.t('matrix-field-preview', 'Not enabled');
+            var type = "{{ type | lower }}";
             var columns = [
                 {
                     name: '__slot:title',
@@ -34,31 +34,72 @@
                 {
                     name: 'enablePreviews',
                     title: Craft.t('matrix-field-preview', 'Previews Enabled'),
-                    callback: function(value) {
-                        if (value === true) {
-                            return '<img class="mfp-settings-table__icon" src="{{ assets.success }}" title="{{ 'Previews enabled for this field' | t('matrix-field-preview') }}">'
-                        }
-                        return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="{{ 'Previews not enabled for this field' | t('matrix-field-preview') }}" src="{{ assets.cancel }}">'
+                    callback: function(data) {
+                        // Add an inline lightswitch to the column allowing the user to update
+                        // this setting without having to visit the page directly
+                        var onClass = data.value ? ' on' : '';
+                        var ariaChecked = data.value ? 'true' : 'false';
+                        return '<button type="button" class="lightswitch small' + onClass + '" ' +
+                               'role="switch" aria-checked="' + ariaChecked + '" ' +
+                               'data-id="' + data.id + '" data-setting="enablePreviews" data-type="' + type + '" >' +
+                               '<div class="lightswitch-container"><div class="handle"></div></div></button>';
                     }
                 },
                 {
                     name: 'enableTakeover',
                     title: Craft.t('matrix-field-preview', 'Takeover Enabled'),
-                    callback: function(value) {
-                        if (value === true) {
-                            return '<img class="mfp-settings-table__icon" src="{{ assets.success }}" title="{{ 'Takeover enabled for this field' | t('matrix-field-preview') }}">'
-                        }
-                        return '<img class="mfp-settings-table__icon mfp-settings-table__icon--cancel" title="{{ 'Takeover not enabled for this field' | t('matrix-field-preview') }}" src="{{ assets.cancel }}">'
+                    callback: function(data) {
+                        // Add an inline lightswitch to the column allowing the user to update
+                        // this setting without having to visit the page directly
+                        var onClass = data.value ? ' on' : '';
+                        var ariaChecked = data.value ? 'true' : 'false';
+                        return '<button type="button" class="lightswitch small' + onClass + '" ' +
+                               'role="switch" aria-checked="' + ariaChecked + '" ' +
+                               'data-id="' + data.id + '" data-setting="enableTakeover" data-type="' + type + '" >' +
+                               '<div class="lightswitch-container"><div class="handle"></div></div></button>';
                     }
                 }
             ];
-            var type = "{{ type | lower }}";
+
             new Craft.VueAdminTable({
                 columns: columns,
                 container: '#matrix-field-preview-fields-vue-admin-table',
                 emptyMessage: Craft.t('matrix-field-preview', 'No fields exist yet.'),
                 tableData: {{ tableData|json_encode|raw }}
             });
+
+            // Handle the toggling of the inline lightswitches in the table. This is a little bit
+            // hacky as we have to use a timeout to wait for the VueAdminTable to finish rendering the
+            // lightswitches as part of the callback for each column. The Craft VueAdminTable implementation
+            // implicitly calls the initUiElements to set up the lightswitches, but there's no easy
+            // way to add a click/change handler, so we simply wait until they're ready and add a
+            // handler manually
+            setTimeout(function() {
+                $('#matrix-field-preview-fields-vue-admin-table .lightswitch').on('change', function() {
+                    var $lightswitch = $(this);
+                    var lightswitchInstance = $lightswitch.data('lightswitch');
+                    var isOn = lightswitchInstance.on;
+                    var id = $lightswitch.data('id');
+                    var setting = $lightswitch.data('setting');
+
+                    // Save to server
+                    Craft.sendActionRequest('POST', 'matrix-field-preview/' + type + '-fields/toggle', {
+                        data: {
+                            id: id,
+                            setting: setting,
+                            value: isOn ? 1 : 0
+                        }
+                    }).catch(function() {
+                        // Revert using Craft's lightswitch API
+                        if (isOn) {
+                            lightswitchInstance.turnOff();
+                        } else {
+                            lightswitchInstance.turnOn();
+                        }
+                        Craft.cp.displayError(Craft.t('matrix-field-preview', 'Couldn\'t save the field config.'));
+                    });
+                });
+            }, 100);
         {% endjs %}
     {% endif %}
 </div>
