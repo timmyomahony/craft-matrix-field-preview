@@ -1,14 +1,13 @@
-{% import '_includes/forms' as forms %}
-
 {% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
 
 {% do view.registerTranslations('matrix-field-preview', [
-    "Enabled",
-    "Matrix Field",
+    "Configure {type} fields",
     "No {type} fields exist yet. Create some fields via the control panel and return here to enable image previews.",
-    "Neo Field",
-    "Takeover",
     "Use this page to configure which {type} fields will display previews.",
+    "Field name",
+    "Previews Enabled",
+    "Takeover Enabled",
+    "No fields exist yet.",
     "Couldn't save the field config.",
 ]) %}
 
@@ -90,7 +89,7 @@
                             setting: setting,
                             value: isOn ? 1 : 0
                         }
-                    }).catch(function(error) {
+                    }).catch(function() {
                         // Revert using Craft's lightswitch API
                         if (isOn) {
                             lightswitchInstance.turnOff();
@@ -100,7 +99,7 @@
                         Craft.cp.displayError(Craft.t('matrix-field-preview', 'Couldn\'t save the field config.'));
                     });
                 });
-            }, 100)
+            }, 100);
         {% endjs %}
     {% endif %}
 </div>
