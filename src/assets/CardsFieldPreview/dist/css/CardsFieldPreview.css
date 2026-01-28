@@ -1,0 +1,71 @@
+/**
+ * Card view ("cards" and "cards" grid)
+ */
+
+/* Button toolbar */
+.mfp-cards-view > .flex.flex-inline {
+  gap: 7px;
+}
+
+/* Button */
+.mfp-cards-view .mfp-cards-view-button-container {
+  display: inline-flex;
+}
+
+.mfp-cards-view .mfp-cards-view-button-container .mfp-modal-button {
+  display: inline-flex;
+}
+
+/* Takeover mode */
+.mfp-cards-view.mfp-field--takeover > .flex.flex-inline > .btn {
+  display: none !important;
+}
+
+/**
+ * Index view
+ */
+
+
+/* Button container positioning for cards view */
+.mfp-cards-view .mfp-cards-button-container {
+  margin-bottom: 14px;
+}
+
+.mfp-cards-view .mfp-cards-button-container .mfp-modal-button {
+  display: inline-flex;
+}
+
+/* Takeover mode - hide native create buttons */
+.mfp-cards-view.mfp-field--takeover .nested-element-cards > .btn.add,
+.mfp-cards-view.mfp-field--takeover .nested-element-cards > .flex > .btn.add,
+.mfp-cards-view.mfp-field--takeover .nested-element-cards .menubtn,
+.mfp-cards-view.mfp-field--takeover > .flex.flex-inline > .btn {
+  display: none !important;
+}
+
+.mfp-cards-view.mfp-field--takeover .mfp-cards-button-container .mfp-modal-button,
+.mfp-cards-view.mfp-field--takeover .mfp-cards-view-button-container .mfp-modal-button {
+  position: static;
+  margin-left: 0;
+}
+
+/* Card preview indicator */
+.mfp-card-view-with-preview {
+  position: relative;
+}
+
+.mfp-card-view-preview-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--ui-control-color, #3f4d5a);
+  border-radius: 50%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.mfp-card-view-with-preview:hover .mfp-card-view-preview-indicator {
+  opacity: 1;
+}
