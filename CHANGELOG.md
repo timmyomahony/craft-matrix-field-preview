@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.5] - 2026-01-29
+
+### Added
+
+- Added support for the remaining 3 view modes; "card", "cards grid" and "index".
+
 ## [5.4] - 2026-01-28
 
 ### Added
