@@ -21,6 +21,8 @@ var MFP = MFP || {};
     insertionIndex: undefined,
     // Used for Matrix only: when inserting a block "above" we need to track positioning
     targetEntry: undefined,
+    // Track focused grid item index for keyboard navigation
+    focusedGridItemIndex: -1,
   
     /**
      * 
@@ -44,6 +46,126 @@ var MFP = MFP || {};
       this.desiredHeight = 1000;
       this.desiredWidth = 1200;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
+
+      // Setup keyboard navigation
+      this.setupKeyboardNavigation();
+    },
+
+    /**
+     * Setup keyboard navigation for grid items
+     */
+    setupKeyboardNavigation: function () {
+      // Handle keydown on the modal container for arrow key navigation
+      this.$container.on("keydown", this.handleKeyDown.bind(this));
+
+      // Handle tab from search input to first grid item
+      this.$container.on("keydown", ".mfp-modal__toolbar__search__input", function (ev) {
+        if (ev.key === "Tab" && !ev.shiftKey) {
+          var $visibleItems = this.getVisibleGridItems();
+          if ($visibleItems.length > 0) {
+            ev.preventDefault();
+            this.focusGridItem(0);
+          }
+        }
+      }.bind(this));
+    },
+
+    /**
+     * Handle keydown events for grid navigation
+     * @param {Event} ev
+     */
+    handleKeyDown: function (ev) {
+      // Only handle navigation when a grid item or its child is focused
+      var $focused = $(document.activeElement);
+      var $gridItem = $focused.closest(".mfp-grid-item");
+
+      if ($gridItem.length === 0) {
+        return;
+      }
+
+      var $visibleItems = this.getVisibleGridItems();
+      var currentIndex = $visibleItems.index($gridItem);
+      var columnsPerRow = this.getColumnsPerRow();
+      var newIndex = currentIndex;
+
+      switch (ev.key) {
+        case "ArrowRight":
+          newIndex = Math.min(currentIndex + 1, $visibleItems.length - 1);
+          ev.preventDefault();
+          break;
+        case "ArrowLeft":
+          newIndex = Math.max(currentIndex - 1, 0);
+          ev.preventDefault();
+          break;
+        case "ArrowDown":
+          newIndex = Math.min(currentIndex + columnsPerRow, $visibleItems.length - 1);
+          ev.preventDefault();
+          break;
+        case "ArrowUp":
+          newIndex = Math.max(currentIndex - columnsPerRow, 0);
+          ev.preventDefault();
+          break;
+        case "Enter":
+        case " ":
+          // Trigger click on the grid item button
+          $gridItem.find(".mfp-grid-item__button").first().trigger("click");
+          ev.preventDefault();
+          return;
+        case "Tab":
+          if (ev.shiftKey && currentIndex === 0) {
+            // Shift+Tab from first item goes back to search
+            ev.preventDefault();
+            this.$container.find(".mfp-modal__toolbar__search__input").focus();
+            this.focusedGridItemIndex = -1;
+            return;
+          }
+          break;
+        default:
+          return;
+      }
+
+      if (newIndex !== currentIndex) {
+        this.focusGridItem(newIndex);
+      }
+    },
+
+    /**
+     * Get the number of columns per row based on grid layout
+     * @returns {number}
+     */
+    getColumnsPerRow: function () {
+      var $grid = this.$container.find(".mfp-grid");
+      if ($grid.length === 0) {
+        return 1;
+      }
+      var gridWidth = $grid.width();
+      var $firstItem = this.getVisibleGridItems().first();
+      if ($firstItem.length === 0) {
+        return 1;
+      }
+      var itemWidth = $firstItem.outerWidth(true);
+      return Math.max(1, Math.floor(gridWidth / itemWidth));
+    },
+
+    /**
+     * Get visible grid items (not hidden by filter)
+     * @returns {jQuery}
+     */
+    getVisibleGridItems: function () {
+      return this.$container.find(".mfp-grid-item:visible");
+    },
+
+    /**
+     * Focus a grid item by index
+     * @param {number} index
+     */
+    focusGridItem: function (index) {
+      var $visibleItems = this.getVisibleGridItems();
+      if (index >= 0 && index < $visibleItems.length) {
+        this.focusedGridItemIndex = index;
+        var $item = $visibleItems.eq(index);
+        $item.find(".mfp-grid-item__button").first().focus();
+      }
     },
 
     /**
@@ -374,6 +496,9 @@ var MFP = MFP || {};
         this.hideEmpty();
         $activeGridItems.show();
       }
+
+      // Reset focused index when filter changes
+      this.focusedGridItemIndex = -1;
     },
 
     /**
