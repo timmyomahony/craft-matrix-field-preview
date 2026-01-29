@@ -1,0 +1,30 @@
+/**
+ * Card view ("cards" and "cards" grid)
+ */
+
+/* Button toolbar */
+.mfp-cards-view > .flex.flex-inline {
+  gap: 7px;
+}
+
+/* Button */
+.mfp-cards-view .mfp-cards-view-button-container {
+  display: inline-flex;
+}
+
+.mfp-cards-view .mfp-cards-view-button-container .mfp-modal-button {
+  display: inline-flex;
+}
+
+/* Takeover mode */
+.mfp-cards-view.mfp-field--takeover > .flex.flex-inline > .btn {
+  display: none !important;
+}
+
+/**
+ * Index view
+ */
+.mfp-index-view.mfp-field--takeover .toolbar > .btn.icon.menubtn {
+  display: none !important;
+}
+

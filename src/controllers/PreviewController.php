@@ -117,6 +117,7 @@ class PreviewController extends Controller
                 continue;
             }
             $result = [
+                "id" => $blockType->id,  // the entry type id, used for cards view lookup
                 "name" => $blockType->name,
                 "handle" => $blockType->handle,
                 "uid" => $blockType->uid,  // the entry type uid, not ours
