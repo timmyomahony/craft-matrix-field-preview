@@ -19,7 +19,7 @@
 
 /* Toolbar */
 .mfp-modal__toolbar {
-
+  padding: 0 5px;
 }
 
 /* Empty */
@@ -51,6 +51,7 @@
 .mfp-modal__grid {
   flex: 0 1 auto;
   overflow-y: auto;
+  padding: 5px;
 }
 
 .mfp-grid {
@@ -68,26 +69,18 @@
   }
 }
 
-.mfp-grid-item__button.focus-visible {
-  border: 3px solid #d5d5d5;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  transform: scale(1.005);
-}
-
-.mfp-grid-item:hover .mfp-grid-item__button {
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-}
-
 /* Button & image */
 .mfp-grid-item__button {
   position: relative;
   display: flex;
   box-sizing: border-box;
+  box-shadow: none;
   width: 100%;
   height: 300px;
   border-radius: 5px;
   align-items: center;
   justify-content: center;
+  outline: none;
   transition: transform 100ms linear, box-shadow 200ms linear, border 10ms linear;
   cursor: pointer;
   border: 1px solid #d5d5d5;
@@ -97,6 +90,10 @@
 .mfp-grid-item__button img {
   max-height: 100%;
   max-width: 100%;
+}
+
+.mfp-grid-item__button:not(:focus):not(:focus-visible):hover {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 /* Preview */

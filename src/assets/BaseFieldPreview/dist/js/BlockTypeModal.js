@@ -21,13 +21,15 @@ var MFP = MFP || {};
     insertionIndex: undefined,
     // Used for Matrix only: when inserting a block "above" we need to track positioning
     targetEntry: undefined,
-  
+    // Track focused grid item index for keyboard navigation
+    focusedGridItemIndex: -1,
+
     /**
-     * 
-     * @param {*} container 
-     * @param {*} settings 
-     * @param {*} config 
-     * @param {*} defaultImageUrl 
+     *
+     * @param {*} container
+     * @param {*} settings
+     * @param {*} config
+     * @param {*} defaultImageUrl
      */
     init: function (container, settings, config, defaultImageUrl) {
       this.config = config;
@@ -44,12 +46,144 @@ var MFP = MFP || {};
       this.desiredHeight = 1000;
       this.desiredWidth = 1200;
       Garnish.Modal.prototype.updateSizeAndPosition.call(this);
+
+      // Setup keyboard navigation
+      this.setupKeyboardNavigation();
     },
 
     /**
-     * 
-     * @param {*} ev 
-     * @returns 
+     * Setup keyboard navigation for grid items
+     */
+    setupKeyboardNavigation: function () {
+      // Handle movement within the grid items when using arrow keys
+      this.$container.on("keydown", ".mfp-grid", this.handleArrowPress.bind(this));
+
+      // Handle switch from search input to first grid item via "tab" or "down" arrow
+      this.$container.on("keydown", ".mfp-modal__toolbar__search__input", function (ev) {
+        if ((ev.key === "Tab" || ev.key === "ArrowDown") && !ev.shiftKey) {
+          var $visibleItems = this.getVisibleGridItems();
+          if ($visibleItems.length > 0) {
+            ev.preventDefault();
+            this.focusGridItem(0);
+          }
+        }
+      }.bind(this));
+
+      // Handle switch from sidebar to first grid item via "right" arrow
+      this.$container.on("keydown", ".mfp-modal__sidebar", function (ev) {
+        console.log('test');
+        if (ev.key === "ArrowRight" && !ev.shiftKey) {
+          var $visibleItems = this.getVisibleGridItems();
+          if ($visibleItems.length > 0) {
+            ev.preventDefault();
+            this.focusGridItem(0);
+          }
+        }
+      }.bind(this));
+    },
+
+    /**
+     * Handle keydown events for grid navigation
+     * @param {Event} ev
+     */
+    handleArrowPress: function (ev) {
+      // Only handle navigation when a grid item or its child is focused
+      var $focused = $(document.activeElement);
+      var $gridItem = $focused.closest(".mfp-grid-item");
+
+      if ($gridItem.length === 0) {
+        return;
+      }
+
+      var $visibleItems = this.getVisibleGridItems();
+      var currentIndex = $visibleItems.index($gridItem);
+      var columnsPerRow = this.getColumnsPerRow();
+      var newIndex = currentIndex;
+
+      switch (ev.key) {
+        case "ArrowRight":
+          newIndex = Math.min(currentIndex + 1, $visibleItems.length - 1);
+          ev.preventDefault();
+          break;
+        case "ArrowLeft":
+          newIndex = Math.max(currentIndex - 1, 0);
+          ev.preventDefault();
+          break;
+        case "ArrowDown":
+          newIndex = Math.min(currentIndex + columnsPerRow, $visibleItems.length - 1);
+          ev.preventDefault();
+          break;
+        case "ArrowUp":
+          newIndex = Math.max(currentIndex - columnsPerRow, 0);
+          ev.preventDefault();
+          break;
+        case "Enter":
+        case " ":
+          // Trigger click on the grid item button
+          $gridItem.find(".mfp-grid-item__button").first().trigger("click");
+          ev.preventDefault();
+          return;
+        case "Tab":
+          if (ev.shiftKey && currentIndex === 0) {
+            // Shift+Tab from first item goes back to search
+            ev.preventDefault();
+            this.$container.find(".mfp-modal__toolbar__search__input").focus();
+            this.focusedGridItemIndex = -1;
+            return;
+          }
+          break;
+        default:
+          return;
+      }
+
+      if (newIndex !== currentIndex) {
+        this.focusGridItem(newIndex);
+      }
+    },
+
+    /**
+     * Get the number of columns per row based on grid layout
+     * @returns {number}
+     */
+    getColumnsPerRow: function () {
+      var $grid = this.$container.find(".mfp-grid");
+      if ($grid.length === 0) {
+        return 1;
+      }
+      var gridWidth = $grid.width();
+      var $firstItem = this.getVisibleGridItems().first();
+      if ($firstItem.length === 0) {
+        return 1;
+      }
+      var itemWidth = $firstItem.outerWidth(true);
+      return Math.max(1, Math.floor(gridWidth / itemWidth));
+    },
+
+    /**
+     * Get visible grid items (not hidden by filter)
+     * @returns {jQuery}
+     */
+    getVisibleGridItems: function () {
+      return this.$container.find(".mfp-grid-item:visible");
+    },
+
+    /**
+     * Focus a grid item by index
+     * @param {number} index
+     */
+    focusGridItem: function (index) {
+      var $visibleItems = this.getVisibleGridItems();
+      if (index >= 0 && index < $visibleItems.length) {
+        this.focusedGridItemIndex = index;
+        var $item = $visibleItems.eq(index);
+        $item.find(".mfp-grid-item__button").first().focus();
+      }
+    },
+
+    /**
+     *
+     * @param {*} ev
+     * @returns
      */
     selectCategory: function (ev) {
       var $href = $(ev.target);
@@ -62,8 +196,8 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     buildSidebarHtml: function () {
       var sidebar = $('<aside class="mfp-modal__sidebar sidebar"/>');
@@ -124,8 +258,8 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     buildFooterHtml: function () {
       var footer = $("<footer />", {
@@ -374,39 +508,42 @@ var MFP = MFP || {};
         this.hideEmpty();
         $activeGridItems.show();
       }
+
+      // Reset focused index when filter changes
+      this.focusedGridItemIndex = -1;
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getGridItems: function () {
       return this.$container.find(".mfp-grid-item");
     },
 
     /**
-     * 
+     *
      */
     showAll: function () {
       this.getGridItems().show();
     },
 
     /**
-     * 
+     *
      */
     showEmpty: function () {
       this.$container.find(".mfp-modal__empty").show().css("display", "flex");
     },
 
     /**
-     * 
+     *
      */
     hideEmpty: function () {
       this.$container.find(".mfp-modal__empty").hide();
     },
 
     /**
-     * 
+     *
      */
     resetSearch: function () {
       this.$container.find(".mfp-modal__empty").val("");
@@ -416,11 +553,11 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @param {*} func 
-     * @param {*} wait 
-     * @param {*} immediate 
-     * @returns 
+     *
+     * @param {*} func
+     * @param {*} wait
+     * @param {*} immediate
+     * @returns
      */
     debounce: function (func, wait, immediate) {
       var timeout;
