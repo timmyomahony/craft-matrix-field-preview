@@ -24,7 +24,6 @@
 
 /* Empty */
 .mfp-modal__empty {
-  position: absolute;
   height: 100%;
   width: 100%;
   color: #8f98a3;
@@ -33,7 +32,6 @@
   display: none;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
 }
 
 /* Sidebar */
