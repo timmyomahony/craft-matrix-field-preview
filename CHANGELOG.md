@@ -4,13 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [5.5] - 2026-01-29
+## [5.5.1] - 2026-01-29
+
+### Fixed
+
+- There was a bug with how new entry types were being added via the new view modes
+
+## [5.5.0] - 2026-01-29
 
 ### Added
 
 - Added support for the remaining 3 view modes; "card", "cards grid" and "index".
 
-## [5.4] - 2026-01-28
+## [5.4.0] - 2026-01-28
 
 ### Added
 

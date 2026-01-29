@@ -140,7 +140,8 @@ var MFP = MFP || {};
         "gridItemClicked",
         {},
         function (event) {
-          this.createEntry(input, event.config.handle);
+          // NestedElementManager.createElement expects an entry type ID, not a handle
+          this.createEntry(input, event.config.id);
           modal.hide();
         }.bind(this)
       );
@@ -206,7 +207,8 @@ var MFP = MFP || {};
         "gridItemClicked",
         {},
         function (event) {
-          this.createEntry(input, event.config.handle);
+          // NestedElementManager.createElement expects an entry type ID, not a handle
+          this.createEntry(input, event.config.id);
           modal.hide();
         }.bind(this)
       );
@@ -237,25 +239,25 @@ var MFP = MFP || {};
      * Create a new entry of the specified type using the NestedElementManager.
      *
      * @param {*} input - The Craft.NestedElementManager instance
-     * @param {*} typeHandle - The entry type handle
+     * @param {*} typeId - The entry type ID (from Craft's EntryType)
      */
-    createEntry: function (input, typeHandle) {
-      // NestedElementManager has a createElement method
+    createEntry: function (input, typeId) {
+      // NestedElementManager.createElement expects an attributes object with typeId
       if (typeof input.createElement === "function") {
-        input.createElement(typeHandle);
+        input.createElement({ typeId: typeId });
       } else if (typeof input.createEntry === "function") {
         // Fallback for older versions
-        input.createEntry(typeHandle);
+        input.createEntry(typeId);
       } else {
         // Last resort: try to find and click the create button with correct type
         var $createBtn = input.$container.find(
-          '[data-type="' + typeHandle + '"]'
+          '[data-type-id="' + typeId + '"]'
         );
         if ($createBtn.length > 0) {
           $createBtn.trigger("click");
         } else {
           console.warn(
-            "Could not find method to create entry of type: " + typeHandle
+            "Could not find method to create entry of type ID: " + typeId
           );
         }
       }
