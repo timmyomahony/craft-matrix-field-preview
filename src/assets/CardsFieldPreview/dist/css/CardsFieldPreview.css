@@ -24,28 +24,7 @@
 /**
  * Index view
  */
-
-
-/* Button container positioning for cards view */
-.mfp-cards-view .mfp-cards-button-container {
-  margin-bottom: 14px;
-}
-
-.mfp-cards-view .mfp-cards-button-container .mfp-modal-button {
-  display: inline-flex;
-}
-
-/* Takeover mode - hide native create buttons */
-.mfp-cards-view.mfp-field--takeover .nested-element-cards > .btn.add,
-.mfp-cards-view.mfp-field--takeover .nested-element-cards > .flex > .btn.add,
-.mfp-cards-view.mfp-field--takeover .nested-element-cards .menubtn,
-.mfp-cards-view.mfp-field--takeover > .flex.flex-inline > .btn {
+.mfp-index-view.mfp-field--takeover .toolbar > .btn.icon.menubtn {
   display: none !important;
-}
-
-.mfp-cards-view.mfp-field--takeover .mfp-cards-button-container .mfp-modal-button,
-.mfp-cards-view.mfp-field--takeover .mfp-cards-view-button-container .mfp-modal-button {
-  position: static;
-  margin-left: 0;
 }
 

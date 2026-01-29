@@ -1,7 +1,7 @@
 /* Modal trigger button */
 .mfp-modal-button {
-  justify-items: center;
-  align-items: center;
+  justify-items: center !important;
+  align-items: center !important;
 }
 
 .mfp-modal-button__icon {

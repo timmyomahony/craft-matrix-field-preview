@@ -48,36 +48,13 @@ var MFP = MFP || {};
     },
 
     /**
-     * Is Matrix Field
-     *
-     * Check if this NestedElementManager is for a Matrix field by looking
-     * for Matrix-specific DOM structures.
-     *
-     * @param {*} input
-     * @returns {boolean}
-     */
-    isMatrixField: function (input) {
-      // Check if the parent field container has Matrix field characteristics
-      var $fieldContainer = input.$container.closest(".field");
-      if ($fieldContainer.length === 0) {
-        return false;
-      }
-      // Matrix fields have a data attribute or specific class patterns
-      // We can also check for nested-element-cards which is Matrix-specific
-      return (
-        input.$container.find(".nested-element-cards").length > 0 ||
-        input.$container.hasClass("element-index")
-      );
-    },
-
-    /**
      * Is Cards View
      *
      * @param {*} input
      * @returns {boolean}
      */
     isIndexView: function (input) {
-      return input.$container.find(".nested-element-cards").length > 0;
+      return input.$container.hasClass("element-index")
     },
 
     /**
@@ -98,7 +75,6 @@ var MFP = MFP || {};
      * @param {*} input
      */
     onInputLoaded: function (input) {
-      console.log(this.isIndexView(input), this.isCardsView(input))
       // Only process if this looks like a Matrix field in cards/index view
       if (!this.isIndexView(input) && !this.isCardsView(input)) {
         return;
@@ -138,15 +114,16 @@ var MFP = MFP || {};
     setupIndexView: function (input, config) {
       input.$container.addClass("mfp-index-view");
 
-      var $nestedCards = input.$container.find(".nested-element-cards");
+      var $existingBtn = input.$container.find('.toolbar > .search-container').siblings('.btn').first()
 
       // Create modal button and position it above the cards
       var $buttonContainer = $("<div>", {
         class: "mfp-index-view-button-container",
       });
-      $nestedCards.before($buttonContainer);
+      $existingBtn.after($buttonContainer);
 
       var modalButton = this.createModalButton($buttonContainer, config);
+      modalButton.$target.removeClass('dashed')
       input.modalButton = modalButton;
 
       // Create modal
