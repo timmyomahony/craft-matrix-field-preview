@@ -23,13 +23,13 @@ var MFP = MFP || {};
     targetEntry: undefined,
     // Track focused grid item index for keyboard navigation
     focusedGridItemIndex: -1,
-  
+
     /**
-     * 
-     * @param {*} container 
-     * @param {*} settings 
-     * @param {*} config 
-     * @param {*} defaultImageUrl 
+     *
+     * @param {*} container
+     * @param {*} settings
+     * @param {*} config
+     * @param {*} defaultImageUrl
      */
     init: function (container, settings, config, defaultImageUrl) {
       this.config = config;
@@ -55,12 +55,24 @@ var MFP = MFP || {};
      * Setup keyboard navigation for grid items
      */
     setupKeyboardNavigation: function () {
-      // Handle keydown on the modal container for arrow key navigation
-      this.$container.on("keydown", this.handleKeyDown.bind(this));
+      // Handle movement within the grid items when using arrow keys
+      this.$container.on("keydown", ".mfp-grid", this.handleArrowPress.bind(this));
 
-      // Handle tab from search input to first grid item
+      // Handle switch from search input to first grid item via "tab" or "down" arrow
       this.$container.on("keydown", ".mfp-modal__toolbar__search__input", function (ev) {
-        if (ev.key === "Tab" && !ev.shiftKey) {
+        if ((ev.key === "Tab" || ev.key === "ArrowDown") && !ev.shiftKey) {
+          var $visibleItems = this.getVisibleGridItems();
+          if ($visibleItems.length > 0) {
+            ev.preventDefault();
+            this.focusGridItem(0);
+          }
+        }
+      }.bind(this));
+
+      // Handle switch from sidebar to first grid item via "right" arrow
+      this.$container.on("keydown", ".mfp-modal__sidebar", function (ev) {
+        console.log('test');
+        if (ev.key === "ArrowRight" && !ev.shiftKey) {
           var $visibleItems = this.getVisibleGridItems();
           if ($visibleItems.length > 0) {
             ev.preventDefault();
@@ -74,7 +86,7 @@ var MFP = MFP || {};
      * Handle keydown events for grid navigation
      * @param {Event} ev
      */
-    handleKeyDown: function (ev) {
+    handleArrowPress: function (ev) {
       // Only handle navigation when a grid item or its child is focused
       var $focused = $(document.activeElement);
       var $gridItem = $focused.closest(".mfp-grid-item");
@@ -169,9 +181,9 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @param {*} ev 
-     * @returns 
+     *
+     * @param {*} ev
+     * @returns
      */
     selectCategory: function (ev) {
       var $href = $(ev.target);
@@ -184,8 +196,8 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     buildSidebarHtml: function () {
       var sidebar = $('<aside class="mfp-modal__sidebar sidebar"/>');
@@ -246,8 +258,8 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     buildFooterHtml: function () {
       var footer = $("<footer />", {
@@ -502,36 +514,36 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @returns 
+     *
+     * @returns
      */
     getGridItems: function () {
       return this.$container.find(".mfp-grid-item");
     },
 
     /**
-     * 
+     *
      */
     showAll: function () {
       this.getGridItems().show();
     },
 
     /**
-     * 
+     *
      */
     showEmpty: function () {
       this.$container.find(".mfp-modal__empty").show().css("display", "flex");
     },
 
     /**
-     * 
+     *
      */
     hideEmpty: function () {
       this.$container.find(".mfp-modal__empty").hide();
     },
 
     /**
-     * 
+     *
      */
     resetSearch: function () {
       this.$container.find(".mfp-modal__empty").val("");
@@ -541,11 +553,11 @@ var MFP = MFP || {};
     },
 
     /**
-     * 
-     * @param {*} func 
-     * @param {*} wait 
-     * @param {*} immediate 
-     * @returns 
+     *
+     * @param {*} func
+     * @param {*} wait
+     * @param {*} immediate
+     * @returns
      */
     debounce: function (func, wait, immediate) {
       var timeout;
